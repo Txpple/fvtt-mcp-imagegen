@@ -218,6 +218,24 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   walls trace a patch, so read the kept `-drifted` render and judge it by eye. A patch can also
   hold a *state*: the Hearth's Door is painted open, with a closed-Door patch on top for the
   story. Hide the tile (and unhide the daylight light) on the day it opens.
+- **Overhead features are the one exception to "never another draft" (owner rule 2026-10-12).**
+  Anything a token should pass *under* (shoring beams, lintels, arches, hanging racks, bridges,
+  canopies) is painted into a bought map, so a token walks on top of it. Take every one off with
+  ONE whole-map `edit-image` `kind: "battlemap"` that names the *kind* of thing and never a
+  position: "Remove every wooden shoring beam, timber post and plank on the whole map … Do not add
+  any new beams or objects. Keep every lantern and its glow, [the other objects] exactly where they
+  are." A five-beam instruction by position on The Breach removed the wrong beams, kept three of
+  the five and painted in a new one, and still passed the drift check (it checks layout, not
+  content), so judge the result by eye. Then cut each feature from the ORIGINAL map (local PIL): a
+  hand-drawn polygon per feature from pixel-ruler crops, dilated about 8 px (`MaxFilter(17)`; 4 px
+  shaved the edge off three of sixteen beams) and feathered about 2 px, saved as an alpha PNG at
+  its bbox. Composite every cut over the edited map and compare tile by tile with the original
+  before uploading; an outline a few pixels off only shows once the tile fades. Install the edited
+  map as the background (below) and each cut at its bbox plus `sceneX`/`sceneY` as an overhead
+  tile: elevation 20, `occlusionMode` 1 (Fade: the whole tile ghosts while a token is under it;
+  the owner preferred it to 4, Radial, which clears only a circle), `occlusionAlpha` 0.25. Check
+  with `screenshot-scene` `asToken` and a token moved under a beam. First used on The Breach
+  (echoes-of-halruaa): sixteen timbers, about $0.23.
 
 **Installing a restyled map** (molten5e): `upload-asset` the WebP the tool wrote to
 `worlds/<world>/assets/maps/<name>.webp`, then `manage-scenes` `update` with `sceneIdentifier`
