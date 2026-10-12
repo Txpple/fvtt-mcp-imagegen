@@ -188,6 +188,19 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   the open floor open. When a big solid piece matters (a long table, a pen), either paint it
   where the pack already has a wall loop, or add a movement wall around it after the repaint
   and say so.
+- **Dressing a whole scene is one light pass; tiles are for specific fixes (owner rule
+  2026-10-12).** When a scene needs dressing throughout (a sleeping area in every room, hearths,
+  fungus), do not scatter `prop` tiles across it by hand: on the Family Chambers that put beds into
+  walls and a mushroom in mid-floor. Run ONE whole-map `edit-image` `kind: "battlemap"` that names
+  each kind of dressing and where it belongs ("one sleeping area flush against the cave wall, never
+  on or across the wall line", "one small hearth in the open middle of each larger chamber", "a few
+  glowing clusters at the base of the walls, never in the open floor"), then "keep it sparse and
+  low: leave the open floor open, put nothing in the tunnels or narrow passages, add no tables,
+  furniture, crates or tall objects". It comes out consistent, and light enough to pass the drift
+  check (the drift check flags the new pieces themselves; look at each flagged spot, as added
+  dressing is fine and a moved wall is not). Remove the old tiles, then move each scene light onto
+  its painted source (a fire's light centred on the flame by a crop) and add one only where the
+  map paints a source. Tiles come after, and only for a specific fix the pass got wrong.
 - **Closing a corridor is two steps: the wall, then the fade (owner rule 2026-10-12).** Painting a
   rock wall across a tunnel leaves the tunnel's old rims running on to the map edge past it, and a
   hard-edged black block between them; players see both. Second pass on a crop: "remove the leftover
