@@ -178,6 +178,20 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   gets its own pass that makes the two halves one continuous painting (water one water, rock
   one rock), fitted again afterwards. Until that pass exists, call the stitch a draft.
 
+- **Fine edits are tiles, never another draft of the map (owner rule 2026-10-11).** Once a
+  map is painted, a change to one thing on it (put the Lamp on the shrine, add a brazier, swap
+  a chest) is a separate `prop`, placed as a Foundry tile over the background. Never re-run the
+  whole map for it: every full pass redraws everything, drifts the layout (the drift check
+  refused a bench swap on the Great Hall twice) and quietly breaks details it was told to keep
+  (the shrine's seven stars went). The recipe: `generate-image` `kind: "prop"` with `footprint`,
+  a crop of the map around the spot attached as `role: "style"` so ink and palette match;
+  `upload-asset` to `worlds/<world>/assets/tiles/props/<area>/<slug>_<W>x<H>.png`; find the
+  spot's centre on the painting (crop it with a pixel ruler), add the scene's `sceneX`/`sceneY`;
+  `manage-placeables { kind: "tiles", action: "create" }` sized in the SCENE's pixels (a prop
+  renders at 300 px per cell; on a 140 px grid a small object is about 0.6 of a cell), centred,
+  `locked: true`; move any light that belongs to the object onto it; `screenshot-scene` and look.
+  First used for the Lamp of 1391 on the Great Hall's shrine (echoes-of-halruaa).
+
 **Installing a restyled map** (molten5e): `upload-asset` the WebP the tool wrote to
 `worlds/<world>/assets/maps/<name>.webp`, then `manage-scenes` `update` with `sceneIdentifier`
 and `backgroundPath` only. Never pass width, height, or gridSize: the walls are in the scene's
