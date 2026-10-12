@@ -188,6 +188,13 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   the open floor open. When a big solid piece matters (a long table, a pen), either paint it
   where the pack already has a wall loop, or add a movement wall around it after the repaint
   and say so.
+- **Closing a corridor is two steps: the wall, then the fade (owner rule 2026-10-12).** Painting a
+  rock wall across a tunnel leaves the tunnel's old rims running on to the map edge past it, and a
+  hard-edged black block between them; players see both. Second pass on a crop: "remove the leftover
+  tunnel rims and the black block; give the new wall's outer side the same soft pale rock shoulder
+  fading into pure black as the other outer edges". Blend only the area beyond the new wall
+  (feathered), so the wall line and floor that the walls trace stay put, and look again at the whole
+  map: a stub often hides further along (Party Camp's lower rim needed its own pass).
 - **Fine edits are tiles, never another draft of the map (owner rule 2026-10-11).** Once a
   map is painted, a change to one thing on it (put the Lamp on the shrine, add a brazier, swap
   a chest) is a separate `prop`, placed as a Foundry tile over the background. Never re-run the
