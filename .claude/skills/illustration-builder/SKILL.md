@@ -423,6 +423,15 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    light polish on good art (the party's tokens barely changed, so do not spend on good art).
    One slip: a cream cat came back Siamese-coloured; name the colours explicitly when they
    matter.
+   **The camera angle is the base token's, and no edit changes it (owner, 2026-10-11).** When
+   a library token becomes a campaign NPC, pick a base that is already steeply overhead (head
+   and shoulders large, legs tucked under), because the restyle keeps whatever angle it has.
+   A `character` reference (a portrait) makes it worse: it drags the face toward the camera,
+   and on the canvas a frontal figure reads as lying on its back. For Cassia
+   (echoes-of-halruaa), six passes of angle wording and `pose` references on a frontal base
+   failed. Restarting from an overhead library token, restyled from a written description with
+   only a `style` reference (another NPC's finished token), fixed it in two calls. If the angle
+   is wrong, start over from a better base; don't keep editing.
    **Generate from words only for a creature the library does not have** (a flying sword, a
    new NPC) or when the owner asks for a redesign. The tool's framing covers both body plans:
    upright figures face up, four-legged and crawling creatures are seen along the back in a
