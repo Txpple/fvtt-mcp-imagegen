@@ -189,13 +189,14 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   spot's centre on the painting (crop it with a pixel ruler), add the scene's `sceneX`/`sceneY`;
   `manage-placeables { kind: "tiles", action: "create" }` sized in the SCENE's pixels (a prop
   renders at 300 px per cell; on a 140 px grid a small object is about 0.6 of a cell), centred,
-  `locked: true`; move any light that belongs to the object onto it; `screenshot-scene` and look.
+  and **unlocked** (a locked tile can't be clicked or box-selected on the Tiles layer, so to the
+  owner it looks missing; owner, 2026-10-11); move any light that belongs to the object onto it; `screenshot-scene` and look.
   First used for the Lamp of 1391 on the Great Hall's shrine (echoes-of-halruaa).
   **To change or remove something already painted** (close a painted door, paint out a chest),
   the tile is an opaque *patch*, not a prop, because the prop kind cuts to alpha and would throw
   the floor away. Crop the scene image a little wider than the change, run `edit-image`
   `kind: "battlemap"` on the crop, resize the result to the crop, feather its alpha about 50 px
-  at the edges (local PIL), and place it at the crop's pixels plus `sceneX`/`sceneY`, locked.
+  at the edges (local PIL), and place it at the crop's pixels plus `sceneX`/`sceneY`, unlocked.
   On a small crop the drift check refuses a removal, because the change itself reads as drift. No
   walls trace a patch, so read the kept `-drifted` render and judge it by eye. A patch can also
   hold a *state*: the Hearth's Door is painted open, with a closed-Door patch on top for the
