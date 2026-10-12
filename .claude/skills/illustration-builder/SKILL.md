@@ -178,6 +178,16 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   gets its own pass that makes the two halves one continuous painting (water one water, rock
   one rock), fitted again afterwards. Until that pass exists, call the stitch a draft.
 
+- **Dress lightly: the walls only know what the pack drew (owner rule 2026-10-11).** A repaint
+  keeps the pack's walls, and those walls only enclose what was on the original map. Every solid
+  thing the repaint adds to the floor (beds, tables, cabinets, a forge, stacks of crates) has no
+  wall, so tokens walk straight through it, which looks wrong to players. An over-dressed map also
+  drifts the layout (a heavily dressed family-chambers repaint drifted 62 of 115 tiles). So keep
+  new dressing low and sparse: floor-level things a body could plausibly cross (rugs, baskets,
+  scattered tools, a firepit ring, bedrolls) and pieces set flush against existing walls. Leave
+  the open floor open. When a big solid piece matters (a long table, a pen), either paint it
+  where the pack already has a wall loop, or add a movement wall around it after the repaint
+  and say so.
 - **Fine edits are tiles, never another draft of the map (owner rule 2026-10-11).** Once a
   map is painted, a change to one thing on it (put the Lamp on the shrine, add a brazier, swap
   a chest) is a separate `prop`, placed as a Foundry tile over the background. Never re-run the
