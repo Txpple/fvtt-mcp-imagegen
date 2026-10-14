@@ -501,6 +501,11 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    the old one in place: a three-legged figure that passed a careless flaw pass (2026-10-14).
    After any limb or pose edit, count legs and arms on the preview again, out loud. If a
    base's limbs are wrong, pick another base.
+   **Size a weapon when it first appears; an edit will not resize it.** "Make the sword longer"
+   failed four times on a drawn blade, with and without a reference, once its tip touched the
+   frame. Going back one step and drawing the sword into the empty hand with its length written
+   out ("a long hand-and-a-half sword, the blade longer than her arm and torso together") worked
+   first time (2026-10-14). Same for any prop whose size matters.
    **Generate from words only for a creature the library does not have** (a flying sword, a
    new NPC) or when the owner asks for a redesign. The tool's framing covers both body plans:
    upright figures face up, four-legged and crawling creatures are seen along the back in a
