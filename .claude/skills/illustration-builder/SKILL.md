@@ -490,6 +490,17 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    failed. Restarting from an overhead library token, restyled from a written description with
    only a `style` reference (another NPC's finished token), fixed it in two calls. If the angle
    is wrong, start over from a better base; don't keep editing.
+   **Search the library by pose, never by race (owner, 2026-10-14).** The restyle changes
+   species, skin, hair, horns and gear in one pass; it never changes the pose or the angle. So
+   read file names across every race folder for the *pose* the character needs (a sword in
+   one hand and a spell in the other, crouched overhead, standing idle) and take the
+   best-angled base whatever it was drawn as: a male human warlock base makes a better tiefling
+   woman than a tiefling base in the wrong stance. Two restyles from a well-posed base beat
+   five edits on a badly posed one.
+   **Never edit anatomy; re-base instead.** A "fix the leg" edit redrew a splayed leg and left
+   the old one in place: a three-legged figure that passed a careless flaw pass (2026-10-14).
+   After any limb or pose edit, count legs and arms on the preview again, out loud. If a
+   base's limbs are wrong, pick another base.
    **Generate from words only for a creature the library does not have** (a flying sword, a
    new NPC) or when the owner asks for a redesign. The tool's framing covers both body plans:
    upright figures face up, four-legged and crawling creatures are seen along the back in a
