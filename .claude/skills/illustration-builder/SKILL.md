@@ -506,6 +506,16 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    frame. Going back one step and drawing the sword into the empty hand with its length written
    out ("a long hand-and-a-half sword, the blade longer than her arm and torso together") worked
    first time (2026-10-14). Same for any prop whose size matters.
+   **A pose the owner hands you is sacred: restyle it in light passes, never one big one
+   (owner, 2026-10-14).** Three bases the owner chose came back in different poses because
+   each instruction asked for seven changes at once (face, beard, hair, armour, shield, weapon,
+   cape) plus a frontal portrait crop as `character`; past a few changes the model redraws the
+   figure in its default stance, and a frontal face reference pulls the camera frontal. What
+   held all three poses exactly: no character reference, and three edits in a row, each opening
+   with `keep the exact pose, body position, limb placement, camera angle and silhouette;` then
+   one group of changes: (1) head and weapon, (2) armour, shield and cloak, (3) the painterly
+   refresh wording above with the subject's details named. Put the base and each pass side by
+   side before showing anything, and compare the *pose*, not just the kit.
    **Generate from words only for a creature the library does not have** (a flying sword, a
    new NPC) or when the owner asks for a redesign. The tool's framing covers both body plans:
    upright figures face up, four-legged and crawling creatures are seen along the back in a
