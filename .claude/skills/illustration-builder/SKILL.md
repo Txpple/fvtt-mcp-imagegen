@@ -481,6 +481,16 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    light polish on good art (the party's tokens barely changed, so do not spend on good art).
    One slip: a cream cat came back Siamese-coloured; name the colours explicitly when they
    matter.
+   **Default for a PC or a key NPC: draw the top-down token from words (owner, 2026-10-14).**
+   `generate-image` kind `token`, flash tier, with three things: the pose written as a camera
+   would see it ("seen from steeply overhead, he crouches low and leans forward into a charge
+   toward the viewer, head and shoulders filling the upper frame, legs tucked under him, a
+   battleaxe gripped low in his right hand, a round shield on his left arm held out beside
+   him"), a crop of just the face from the approved portrait as `character`, and one existing
+   high-quality token (the character's own, or a finished sibling's) as `style` for the finish.
+   Flash matched pro on this recipe side by side, so pro is not the lever; the words are.
+   Library restyles are for background NPCs and for the case where the owner wants one exact
+   library pose kept; everything below about bases applies to that case only.
    **The camera angle is the base token's, and no edit changes it (owner, 2026-10-11).** When
    a library token becomes a campaign NPC, pick a base that is already steeply overhead (head
    and shoulders large, legs tucked under), because the restyle keeps whatever angle it has.
@@ -524,8 +534,9 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    a written pose ("seen from steeply overhead, he crouches low and leans forward into a
    charge toward the viewer ... axe gripped low in his right hand ... shield on his left arm
    held out beside him"), the portrait's face crop as `character`, and the character's existing
-   high-quality token as `style`. So: when the owner wants a *pose* kept, edit the base in
-   light passes; when the owner wants *quality*, write the pose and generate fresh.
+   high-quality token as `style`; flash and pro came out level. So: when the owner wants a
+   *pose* kept, edit the base in light passes; when the owner wants *quality*, write the pose
+   and generate fresh, on flash.
    **Generate from words only for a creature the library does not have** (a flying sword, a
    new NPC) or when the owner asks for a redesign. The tool's framing covers both body plans:
    upright figures face up, four-legged and crawling creatures are seen along the back in a
