@@ -516,6 +516,16 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    one group of changes: (1) head and weapon, (2) armour, shield and cloak, (3) the painterly
    refresh wording above with the subject's details named. Put the base and each pass side by
    side before showing anything, and compare the *pose*, not just the kit.
+   **But quality comes from words, not from a base (owner, 2026-10-14).** The pose-locked passes
+   above hold a pose; they cannot lift a flat library ink to the finish of a token the model
+   drew itself, on flash or on pro (six passes, two of them pro, all short of the bar). A
+   `pose` reference does not help either: given a finished token as the pose, generate copied
+   its drawing wholesale. What matched the bar first time: `generate-image` kind `token` from
+   a written pose ("seen from steeply overhead, he crouches low and leans forward into a
+   charge toward the viewer ... axe gripped low in his right hand ... shield on his left arm
+   held out beside him"), the portrait's face crop as `character`, and the character's existing
+   high-quality token as `style`. So: when the owner wants a *pose* kept, edit the base in
+   light passes; when the owner wants *quality*, write the pose and generate fresh.
    **Generate from words only for a creature the library does not have** (a flying sword, a
    new NPC) or when the owner asks for a redesign. The tool's framing covers both body plans:
    upright figures face up, four-legged and crawling creatures are seen along the back in a
