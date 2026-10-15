@@ -43,7 +43,10 @@ kept. **Any humanoid with a body type in the library starts from a mannequin.**
 | Variants by editing a finished render (darker, cloak, runes) | Pose held | One mannequin gives a whole wardrobe; fix faults with a flaw pass, never a re-roll. |
 | Kicking, jumping, running, kneeling presets (looked at from above) | Legs barely read top-down | **Only the silhouette reads from above:** arms and weapons, not legs. |
 
-## The library: 5 bodies × 4 poses = 20 captures
+## The library: 19 poses, 28 files
+
+Five bodies × four poses, less the big frame's one-hand pose: 19 poses. With the free gear swaps
+(bow, shield off) it is 28 exported files.
 
 ### Bodies
 
@@ -118,7 +121,7 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 
 ## Build-out steps
 
-1. **Capture** the 20 poses in the order above (owner, in HeroForge).
+1. **Capture** the 19 poses (28 files) in the order above (owner, in HeroForge).
 2. **Store** the captures privately: the owner's art repo (`fvtt-assets-actors`, private) or the
    campaign repo, never here. Record the path in step 4.
 3. **Prove** each new body with three tokens (a caster, a one-hander, a two-hander) before

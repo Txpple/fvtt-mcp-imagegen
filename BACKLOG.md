@@ -13,7 +13,7 @@ through fvtt-mcp. Plan, lessons and proof-of-concept code in
 
 ## 0b · Tokens from a mannequin pose library
 
-Twenty grey HeroForge captures (5 bodies × 4 ways of holding) that `edit-image` turns into any
+Nineteen grey HeroForge poses (5 bodies × 4 ways of holding, no one-hander for the big frame) that `edit-image` turns into any
 humanoid token with a locked pose and camera. Tested 2026-10-14/15; the captures are next, then a
 mannequin route in `illustration-builder`. Everything is in
 [notes/mannequin-tokens/PLAN.md](notes/mannequin-tokens/PLAN.md).
