@@ -179,7 +179,7 @@ The three artifacts and their almost certain data causes:
 
 ### Action: the corpus needs rebuilding, not retuning
 
-Owner is hand-picking ~100 from the full pool, copied to `Z:\Shared\TableArt` (858 journal-art
+Owner is hand-picking ~100 from the full pool, copied to `<shared drive>/TableArt` (858 journal-art
 plates in `01-journal-art`, plus cutouts/tokens/icons; `_claude-picked-133` holds the current set
 with captions for reference). Rejection criteria, all three learned the hard way:
 

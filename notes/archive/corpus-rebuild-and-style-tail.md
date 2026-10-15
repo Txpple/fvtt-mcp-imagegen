@@ -8,7 +8,7 @@ hand-picked 65 from the 858-plate pool; joint review cut it to **46** (comic/whi
 book covers, a rules diagram, an undersized plate, pastel outliers, and two per-plate calls).
 
 - **Canonical location: `<local-ai>\lora-corpus-dnd24art\prepared\`** (46 PNG +
-  46 caption .txt). The Desktop working folders and `Z:\Shared\TableArt` are gone — this is the
+  46 caption .txt). The Desktop working folders and `<shared drive>/TableArt` are gone — this is the
   only copy. The old Desktop corpus path in configs A–C is dead.
 - **12 artist signatures found** (11 by corner-sheet review + `phb-ranger` caught by the owner).
   All sat in the bottom ~3%, so every plate carries a blanket **8% bottom crop**. Detection was

@@ -10,7 +10,13 @@ a small set of **Foundry-specific** tools so Claude can author prompts, generate
 them, and hand the winners to the Foundry pipeline (`upload-asset` → `set-actor-art` /
 `add-journal-image` in `fvtt-mcp-dnd5e`).
 
-Status: **v1.0.0 shipped 2026-09-19 on the Gemini API.** The first version of this server wrapped
+**State (2026-10-15).** At **1.3.1**, released: the server key is `imagegen`, and `imagegen-status`
+and `npm run doctor` check the setup; seven kinds (icon, token, prop, portrait, illustration,
+battlemap, overland), every one on flash by default. `main` carries the `illustration-builder`
+skill's newer owner rules for maps, tiles and tokens past 1.3.1, with no tool change. Release detail
+is the GitHub release notes; the dated journal is `docs/log/YYYY-MM.md`.
+
+The server runs on the Gemini API. The first version of this server wrapped
 a local ComfyUI install with FLUX models and a trained house-style LoRA. That direction is dead:
 the local pipeline took many iterations per usable image, the LoRA never delivered a consistent
 look, and the owner was already feeding its output to Nano Banana to fix. ComfyUI, the models, the
@@ -53,8 +59,8 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
   classic-level, via the Foundry CLI). A new dependency with an install script shows as an npm
   `allow-scripts` warning; judge it and add it there.
 - Small server: `generate-image`, `edit-image`, `cutout-image`, `imagegen-status`. Resist tool
-  sprawl. New work arrives as a `kind`, not a tool (props 2026-09-24, battlemaps 2026-10-02, overland
-  maps 2026-10-03).
+  sprawl. New work arrives as a `kind`, not a tool (props, battlemaps and overland maps all
+  came that way).
 
 ## Models and tiers
 
@@ -63,7 +69,7 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
 | `flash` (default for every kind) | Nano Banana 2.1 (`gemini-nano-banana-2.1`) | everything unless the owner opts up | ~3¢ at 1K, ~5¢ at 2K, ~11¢ at 4K |
 | `pro` (opt-in) | Nano Banana Pro (Gemini 3 Pro Image) | offered for portraits and illustrations "for a bit extra"; crowded scenes, text-heavy handouts | ~13¢ at 1K/2K, ~24¢ at 4K |
 
-Facts that shape the design (verified against Google's docs 2026-09-19):
+Facts that shape the design (verified against Google's docs and the spike at the rebuild):
 
 - Both take up to 14 reference images. Flash holds identity for up to 4 characters; Pro for 5.
 - The docs say only Pro takes style references (up to 3); in practice they work on Flash too.
@@ -73,7 +79,7 @@ Facts that shape the design (verified against Google's docs 2026-09-19):
   **no 16:10**. The 2560×1600 table format is produced by generating 16:9 and cropping.
 - Every output carries an invisible SynthID watermark. Irrelevant for a private table.
 - The API returns JPEG; the server converts to PNG. Style references work on Flash in practice
-  despite the docs listing them as Pro-only (spike, 2026-09-19).
+  despite the docs listing them as Pro-only (the spike).
 - The content policy says nothing specific about fantasy violence. The spike rendered blood,
   corpses, and a severed head on both tiers with zero refusals; treat the filter as a non-issue for
   table art until proven otherwise.
@@ -93,13 +99,13 @@ default tier, and its post-processing:
 | `battlemap` | flash, **edit-image only** | the source padded (mirrored margin) to the nearest API aspect, sent at most 4096 px on the long side, rendered at 4K, layout-locking keep line | mapped back onto the source's pixel grid at a whole-number scale (1 for an HD source, more for a small one), shipped as WebP, drift check (layout moved ⇒ one re-render, then refuse), checkerboard of source and result written beside it | restyled scene background for a bought map |
 | `overland` | flash, **edit-image only** | the battlemap geometry, with a keep line that locks the geography and paints out every name, marker, road, compass rose and scale bar | as battlemap, but the drift check refuses only gross drift (over 25% of tiles, or under a quarter locking on) | a regional or world map, painted bare; names are lettered on afterwards by script |
 
-**Nothing ever clips off a token or a prop (owner rule 2026-09-24).** A sword, wing, or foot
+**Nothing ever clips off a token or a prop (owner rule).** A sword, wing, or foot
 cut by the frame edge makes the token unusable. The framing and the token edit line both demand a margin on
 every side, and `render()` counts subject pixels in the plate's outer 3 px (`src/edge.ts`): over
 20 means clipped, the render is redone once (both calls billed), and a second clip is refused
 with both plates kept for inspection. Never deliver or show a clipped token or prop.
 
-**Nothing moves on a battlemap (owner rule 2026-10-02).** Battlemaps are bought as UVTT packs
+**Nothing moves on a battlemap (owner rule).** Battlemaps are bought as UVTT packs
 and imported with their walls; this server never paints a map from scratch (`generate-image`
 refuses `kind: "battlemap"`). What it does is restyle a bought map in place, for the owner's two
 goals: upscale and improve older art, and give art from different authors (Tom Cartos, Mad
@@ -109,7 +115,7 @@ the layout must not move. The API scales its input to cover the output and trims
 mapped onto its own grid (`src/battlemap.ts`). Then `src/drift.ts` phase-correlates edge
 strength tile by tile: more than 3% of tiles displaced by over 0.4% of the long side, or under
 half the textured tiles locking on, is drift. The render is redone once (both billed), and a
-second drift is refused with both kept. Calibrated on 24 live renders across 8 maps (2026-10-02):
+second drift is refused with both kept. Calibrated on 24 live renders across 8 maps:
 passes sit at a median of 0.1‰ with 0 to 3 outlier tiles, all of them repainted texture (grass
 strokes, floor grain), never moved structure. The two kinds of real failure (reshaped cliffs on
 one render; a map used as a style reference swapping in its whole layout, twice) scored 8% and
@@ -123,42 +129,28 @@ was clean on all three of the worst offenders), but the flaw pass still reads ev
 keep line that also pinned colours and daylight smothered the restyle; the owner preferred the
 bolder render, so palette and finish stay with the instruction (the skill).
 
-Props are the exception the owner asked for (2026-09-24): single objects placed on a map as
+Props are the exception the owner asked for: single objects placed on a map as
 tiles. They are never tokens: the token
 wording ("keep the face, hair") grew a man on an armchair, a dryad on an oak, and a dwarf on a
 crate, so props have their own object-only wording. A prop edit pads the source with a margin
 before sending (a tile-filling crate otherwise came back clipped twice) and puts the new art in
 the box the original occupied, so it drops into the same tile slot at the same scale.
 
-**The Pro cost gate (owner rule 2026-09-19, revised the same day):** every kind defaults to
+**The Pro cost gate (owner rule, revised the day it was made):** every kind defaults to
 flash. `tier: "pro"` refuses unless `confirmPro: true` is passed, and the refusal states the
 estimated cost. The skill mentions once that Pro is available for a bit extra when the owner
 asks for a portrait or illustration, and passes the confirm only after they say yes. The server keeps a running estimated-spend counter per session; `imagegen-status`
 reports it. Tools enforce, skills ask.
 
-## Setup order (done 2026-09-19; kept as the record)
-
-1. Spike (throwaway script, not the server): both tiers on one icon, one token, a party scene
-   with the four portraits as character references, and a combat scene with weapons and a
-   wounded monster. Measure refusal rate, style-reference hold across ten images, icon
-   consistency across twenty. Go/no-go for everything below.
-2. Backend swap: Gemini client replaces the ComfyUI client; presets become ratio + size;
-   `sharp` does crop and resize; `workflows/`, `src/comfy.ts`, `upscale-image`, and the live
-   ComfyUI test suite are deleted. Tests run on recorded fixtures, never the live API.
-3. Cutout port: the `token-cutout` script and its judgment move here from fvtt-mcp-dnd5e as
-   `cutout-image`; `kind: "token"` chains it; the fvtt-mcp-dnd5e copy is retired.
-4. Pro gate and spend counter.
-5. `illustration-builder` skill rewrite for the edit-first, reference-driven workflow.
-6. Docs and release: tag `v1.0.0`. New tools ⇒ Claude Code restart (the owner restarts, the
-   session can't).
-
 ## Conventions inherited from the family
 
 - Commit direct to `main`.
-- Kernel-grade quality bar: tools are tested and own correctness; no judgment in tools.
+- Kernel-grade quality bar: tools are tested and own correctness; no judgment in tools. Tests run
+  on recorded fixtures, never the live API.
+- A new or renamed tool needs a Claude Code restart, which only the owner can do.
 - Output filenames: `<kind>-<slug>-<id>.png`, kebab-case, kind-prefixed, matching the campaign
   repos' `art/` shelf, so generate → curate → upload needs no glue. Battlemaps are the one
-  exception (owner 2026-10-02): `.webp`, since a restyled map is 20 to 70 MB as PNG and about
+  exception (the owner's call): `.webp`, since a restyled map is 20 to 70 MB as PNG and about
   4 MB as WebP, and players download it on every scene load. A map past WebP's 16383 px
   limit falls back to PNG.
 - The API key lives in `.env` (gitignored), never in a skill, a prompt, or a commit.

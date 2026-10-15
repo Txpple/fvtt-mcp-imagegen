@@ -11,13 +11,13 @@ is wrong, and the finished file lands on disk ready to upload into Foundry.
 ## What you can make
 
 - **Item, spell, and feature icons.** Twenty icons from one style line come back as one
-  matching set. About 7 cents each.
+  matching set. About 3 cents each.
 - **Tokens.** Top-down, full-body, cut to transparency, centred on a square so Foundry's scale
   1.0 is right: 512 px, or 1024 px for Large and bigger creatures. Humanoids face up at the
   camera; beasts are seen along the back. No shadow, and nothing ever clips off the edge: a
   render with a sword or wing cut by the frame is redone, and refused if it clips twice. Hand it
   one of your existing tokens as a style reference and new ones match the angle and look. About
-  7 cents each.
+  3 cents each.
 - **Token refreshes.** Point it at an old, low-res token and it repaints it at higher quality
   while keeping the pose, silhouette, design, and colours your players know. It can also turn
   one creature into another in the same pose (a rat's token into a squirrel).
@@ -40,11 +40,11 @@ is wrong, and the finished file lands on disk ready to upload into Foundry.
   source's own pixel grid. An old low-res map comes back at a whole-number upscale (a
   1125×1500 map at 3375×4500). Every render is checked against the original, and one whose
   layout moved is redone once, then refused. Maps ship as WebP, about 4 MB where a PNG would
-  be 40 to 70. About 15 cents a map.
+  be 40 to 70. About 11 cents a map.
 - **Overland maps.** A regional or world map from a sourcebook or a sketch, repainted in the
   house style with the geography locked and every label, marker, road, compass rose, and scale
   bar painted out. Names go back on afterwards by script, spelled right and movable, instead of
-  being left to the model. A busy map takes two or three passes to come clean; each is about 15
+  being left to the model. A busy map takes two or three passes to come clean; each is about 11
   cents.
 - **Portraits.** Actor sheet art at 3:4. Hand it a previous portrait or two as style
   references and the new one matches your table's look.
@@ -173,7 +173,7 @@ Ask Claude for what you want in table terms:
 - "Cut the background off this token."
 
 Claude reads every render before showing it to you and fixes obvious flaws (an extra limb, a
-duplicated spell effect) with one edit. Files are named `<kind>-<slug>-<id>.png` so they drop
+duplicated spell effect) with one edit. Files are named `<kind>-<slug>-<id>.png` (`.webp` for a map) so they drop
 straight into a Foundry asset folder.
 
 ## With a Foundry MCP server: art grounded in your world
