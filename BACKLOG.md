@@ -11,6 +11,13 @@ fit walls and lights, and hand the LLM `.uvtt` / scene JSON plus teleporter pair
 through fvtt-mcp. Plan, lessons and proof-of-concept code in
 [notes/map-builder/PLAN.md](notes/map-builder/PLAN.md) (2026-10-05).
 
+## 0b · Tokens from a mannequin pose library
+
+Twenty grey HeroForge captures (5 bodies × 4 ways of holding) that `edit-image` turns into any
+humanoid token with a locked pose and camera. Tested 2026-10-14/15; the captures are next, then a
+mannequin route in `illustration-builder`. Everything is in
+[notes/mannequin-tokens/PLAN.md](notes/mannequin-tokens/PLAN.md).
+
 ## 1 · Icon sets as a first-class workflow
 
 A homebrew item, spell, or feature set with matching icons is a bigger visual upgrade to a

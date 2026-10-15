@@ -491,6 +491,10 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    Flash matched pro on this recipe side by side, so pro is not the lever; the words are.
    Library restyles are for background NPCs and for the case where the owner wants one exact
    library pose kept; everything below about bases applies to that case only.
+   **Coming: a mannequin route for every humanoid** (grey HeroForge captures, one `edit-image`
+   each, words plus the mannequin and nothing else). The library is not captured yet; once it
+   is, it replaces the words-only default for humanoids. Read
+   `notes/mannequin-tokens/PLAN.md` before any token work.
    **The camera angle is the base token's, and no edit changes it (owner, 2026-10-11).** When
    a library token becomes a campaign NPC, pick a base that is already steeply overhead (head
    and shoulders large, legs tucked under), because the restyle keeps whatever angle it has.
