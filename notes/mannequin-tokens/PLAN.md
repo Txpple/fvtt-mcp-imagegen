@@ -179,9 +179,10 @@ shields).
 8. Name `mannequin-<body>-<pose>-<setup>.png`: `mannequin-human-male-combat-sword-shield.png`,
    `mannequin-dwarf-twohand.png`, `mannequin-small-down.png`.
 
-**Licensing:** HeroForge captures are a private intermediate. They never go in this repo (it is
-public) or any other public repo. For anything commercial, read HeroForge's terms or swap the
-capture step to an open source (PoseMy.Art, MakeHuman).
+**Licensing (ruled 2026-10-16):** the captures are unpainted grey poses with no copyright of their
+own, so they live in this public repo under `mannequins/`. They were first kept in the private
+`fvtt-assets-actors`, which the owner reserves for finished art. For anything commercial, read
+HeroForge's terms or swap the capture step to an open source (PoseMy.Art, MakeHuman).
 
 ## The render recipe
 
@@ -224,11 +225,12 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 2. **Capture** the rest of the human body: two-hand, down (and cast, if step 1 says so).
 3. **Prove** the small and large bodies with two or three renders each before capturing all
    their setups; then capture dwarf, small and large.
-4. **Store** the captures in the owner's private art repo `fvtt-assets-actors`, under
-   `mannequins/` (never here). Its `npm run mannequin -- check` reads HeroForge's exports in
-   `~/Downloads` against the capture rules (1024 square, alpha, clear pixels on every side,
-   frame fill) and `npm run mannequin -- take <file> <body> <pose> <setup>` files a passing
-   one under its name; `mannequins/README.md` there carries the shot list.
+4. **Store** the captures in this repo under `mannequins/` (moved here from the private
+   `fvtt-assets-actors` on 2026-10-16). `npm run mannequin -- check` reads HeroForge's exports
+   in `~/Downloads` against the capture rules (1024 square, alpha, clear pixels on every side,
+   frame fill), `npm run mannequin -- take <file> <body> <sex> <pose> <setup>` files a passing
+   one under its name, `takeset` files a whole set in the fixed order, and `grid` shows the
+   library from the files; `mannequins/README.md` carries the shot list.
 5. **Skill: done 2026-10-15.** `illustration-builder`'s token rules (Step 4, item 5) open with the
    mannequin route: when to use it, picking a capture (pose, then grip, then body and sex), the
    recipe, and the rules learned here. It is the default for every humanoid PC and NPC; the
@@ -240,8 +242,8 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 ## Status (2026-10-15, night)
 
 **The library is captured: 312 files**, six bodies (large, human, small, dwarf, orc, elf) in both
-sexes, in `fvtt-assets-actors/mannequins/` (its README is the shot list; `npm run mannequin --
-grid` shows it from the files). Every body and sex was verified; no flags are open.
+sexes, in this repo's `mannequins/` (its README is the shot list; `npm run mannequin -- grid`
+shows it from the files). Every body and sex was verified; no flags are open.
 
 | Pose | Setups |
 | --- | --- |

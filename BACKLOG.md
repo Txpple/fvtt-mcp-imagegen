@@ -14,7 +14,7 @@ through fvtt-mcp. Plan, lessons and proof-of-concept code in
 ## 0b · Tokens from a mannequin pose library (done 2026-10-15)
 
 312 grey HeroForge captures (six bodies in both sexes; combat, stand, twohand, dead and prone poses,
-26 setups) in the private `fvtt-assets-actors/mannequins/`, turned into any humanoid token by one
+26 setups) in this repo's `mannequins/`, turned into any humanoid token by one
 `edit-image` call. The `illustration-builder` skill carries the route as the default for humanoids.
 The record is [notes/mannequin-tokens/PLAN.md](notes/mannequin-tokens/PLAN.md).
 

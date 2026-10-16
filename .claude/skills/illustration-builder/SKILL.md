@@ -485,9 +485,9 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    One slip: a cream cat came back Siamese-coloured; name the colours explicitly when they
    matter.
    **Default for every humanoid PC and NPC: the mannequin route (owner, 2026-10-15).** A
-   library of 312 grey HeroForge captures lives in the owner's private art repo,
-   `fvtt-assets-actors/mannequins/` (its README is the shot list; `npm run mannequin -- grid`
-   there lists it). One `edit-image` call, kind `token`, flash, the capture as `sourceImage`,
+   library of 312 grey HeroForge captures lives in this repo under `mannequins/` (its README is
+   the shot list; `npm run mannequin -- grid` lists it from the files). One `edit-image` call,
+   kind `token`, flash, the capture as `sourceImage`,
    turns a capture into a finished token at about 3 cents: the mannequin guides pose, camera,
    proportions and grip; the words supply race, sex, age, face, kit, colours and finish. **A
    known character also gets one reference: a head-to-waist crop of the approved portrait as

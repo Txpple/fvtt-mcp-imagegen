@@ -19,7 +19,8 @@
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "knip": "knip",
-    "doctor": "node scripts/doctor.mjs"
+    "doctor": "node scripts/doctor.mjs",
+    "mannequin": "node scripts/mannequin.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
