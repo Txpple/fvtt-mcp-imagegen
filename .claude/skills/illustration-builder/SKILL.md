@@ -580,7 +580,9 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
      rendered from the portrait is not needed for this, and a frontal token head attached as a
      `pose` reference pulls the face frontal: never attach one. Compare every head to the target
      in the flaw pass anyway, and name the footwear: the mannequin is barefoot, and a figure
-     described without boots came back barefoot.
+     described without boots came back barefoot. The same sentence held on the combat and
+     two-handed captures, read as alert on `prone`, and did no harm on `dead`, where "lying
+     dead, eyes closed" won, so the tool applies it to every mannequin edit.
    - **The dwarf `dead` capture loses the dwarf build**: twice it came back lean, older and grey,
      with and without the crop. One flaw pass naming build, age and hair fixed it both times;
      expect it.
@@ -624,10 +626,11 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
      `stand-open` and `stand-dagger-open` with tools written into the hands. Vary body and sex
      within the race too. Reuse a capture only when the group is meant to look drilled and
      identical (a line of the same soldiers), and say so.
-   - **`thinking: "high"` is a lever, not yet a rule (2026-10-16).** Both render tools take it;
-     Nano Banana 2.1 thinks at medium by default, high costs a few cents more and the result
-     reports `thinkingTokens`. Try it in an A/B on a prompt that carries many constraints (a
-     mannequin token with a face and gear to match) before relying on it.
+   - **`thinking: "high"` bought nothing on tokens (2026-10-16, two pairs).** Both render tools
+     take it and report `thinkingTokens`; Nano Banana 2.1 thinks at medium by default, about 600
+     to 1600 tokens a token render, under a cent. At high the counts stayed in the same band,
+     Cecil came out the same and Tychon's stance drifted into a lean the mannequin lacks. Leave
+     it unset for tokens.
    **Drawing a token from words** (`generate-image` kind `token`, flash: the pose written as a
    camera would see it, a face crop as `character`, one finished token as `style`) is now the
    route only for non-humanoid bodies. It matched pro side by side, so pro is not the lever.

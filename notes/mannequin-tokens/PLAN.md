@@ -303,5 +303,15 @@ with the dagger and the off hand open, is filed as a new setup, `human-female-co
 (the owner's call, 2026-10-16), and the grid shows the other bodies and the male as missing until
 the owner captures them. Side lessons: name the
 footwear (the mannequin is barefoot and Tychon came back barefoot); thinking at the default medium
-runs 600 to 1600 tokens a token render, under a cent, and is now in the estimate. Not yet tested:
-`thinking: "high"`.
+runs 600 to 1600 tokens a token render, under a cent, and is now in the estimate.
+
+**Round two (2026-10-16, six renders, $0.26; `imagegentests/head-test-2`).** `thinking: "high"` on
+Cecil and Tychon standing: the thinking counts stayed in the medium band (1184 and 1535), Cecil
+came out the same, Tychon's stance drifted into a lean the mannequin lacks; leave it unset for
+tokens. The lifting sentence on the other poses: Cecil on `combat-empty` (dagger in the low fist,
+motes from the raised hand) and Tychon on `twohand-staff-level` both landed with the head at the
+target and the pose kept; Lysandra on `prone` came back kneeling with her head up, alert, which
+reads well; Kartor on `dead` lay on his back with his eyes closed, the sentence overruled by "lying
+dead, eyes closed", so the tool may carry it on every mannequin edit. The tool-side placement
+(`MANNEQUIN_EDIT_SOURCE`) is still unverified: the server process predates that build, so every
+test here carried the sentence in the instruction; the first render after the next restart tells.
