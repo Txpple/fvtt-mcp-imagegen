@@ -227,29 +227,23 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 
 ## Status (2026-10-15, night)
 
-- **The combat pose is complete:** 12 setups for all six bodies, male and female, 144 captures in
-  `fvtt-assets-actors/mannequins/` (shot list and checks in its README). The setups are spear and
-  shield, dagger and shield, sword and shield, longsword and kite, sword and open hand, longsword
-  and open hand, both hands empty, crossbow at the hip, crossbow pointing down, longbow low, two
-  daggers, and sword and dagger. Crossbow and shield was dropped: add the shield in words.
-- **Verified:** every capture's body and sex, against a set exported in the owner's fixed order
-  (human, large, small, dwarf, orc, elf; male then female). From that set on, `npm run mannequin --
-  takeset` files a whole set in that order.
-- **Scale is the token's, not the capture's:** the cut fits every figure to its square, so capture
-  scale (the 0.89 crossbow-down orcs included) does not matter for tokens.
-- **Tested:** 18 body renders, 12 gear renders, 3 coverage renders, and a dwarf with sword and
-  dagger and with axe and dagger. Everything is on the owner's Desktop, `Manny Tests`.
-- **Caster question answered:** the empty-handed combat pose makes casters; `cast` is dropped.
-- **Standing pose tested:** two captures per body cover it (empty fists, short blade and shield);
-  16 renders, all clean, including worn gear on the back and hip.
-- **Adventurer test:** three characters across combat, standing, dead and a kneeling "prone"
-  capture, 12 renders, all clean (Desktop, `Manny Tests/Adventurers`). The kneeling capture works.
-- **Prone and bow-draw filed:** prone (kneeling on the fists) and a standing bow at full draw for
-  all six bodies; the library is 228 captures. Full draw renders well but its string stays undrawn.
-- **Two-handed tested:** the owner's capture covers greatsword, greataxe, halberd, maul,
-  quarterstaff and glaive (12 renders, Desktop `Manny Tests/Two Hand`).
-- **Two-handed filed:** right and left stances for all six bodies (24 captures; the library is 252).
-  Eight more tests across both, all clean (Desktop, `Manny Tests/Two Hand`).
-- **Bows at full draw:** the leafy longbow captures were replaced by a plain longbow, and a plain
-  recurve shortbow was added (264 captures).
-- **The shot list is complete.** Next: step 5, the skill's mannequin route.
+**The library is captured: 312 files**, six bodies (large, human, small, dwarf, orc, elf) in both
+sexes, in `fvtt-assets-actors/mannequins/` (its README is the shot list; `npm run mannequin --
+grid` shows it from the files). Every body and sex was verified; no flags are open.
+
+| Pose | Setups |
+| --- | --- |
+| combat (was crouch) | spear-shield, dagger-shield, sword-shield, longsword-kite, sword-open, longsword-open, empty, crossbow-hip, crossbow-down, bow, twodaggers, sword-dagger |
+| stand | dagger-shield, dagger-open, empty, open, bow, bow-draw, shortbow-draw |
+| twohand | right, left, staff-level, staff-diagonal, staff-brace |
+| dead | (none) |
+| prone | (none) |
+
+Tested on the way (about 120 renders, all on the owner's Desktop, `Manny Tests`): every body
+and race, gear limits, coverage, casters, the standing pose, worn gear, four poses for one
+character, full-draw bows, and the two-handed stances. The lessons are in the tables above. Three
+staff setups (level, diagonal, brace) are captured but not yet rendered.
+
+**Next: step 5, the skill.** Add the mannequin route to `illustration-builder`: when to use it,
+how to pick a capture (pose, then what the hands hold, then body and sex), the render recipe, and
+the rules learned here. It becomes the default for humanoid PCs and NPCs.
