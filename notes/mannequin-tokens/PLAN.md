@@ -74,8 +74,11 @@ humanoid whose body is in the library starts from a mannequin.**
 | **Small** (a slim halfling body) | halfling, gnome, goblin, kobold | not yet; prove with 2–3 renders first. A stocky body may stretch a goblin the way the early human stretched a dwarf |
 | **Large** (a heavy body) | goliath, orc, bugbear, ogre, hill giant | not yet; prove first. Token size is separate (`creatureSize: "large"` gives the 1024 token) |
 
-A female human body was captured once (the spear-and-shield crouch) for the test above; it is
-optional.
+**What the owner captures (2026-10-15):** six bodies, each in both sexes: large, human (medium),
+dwarf, small, orc and elf. That goes past the table above. The sex test says one human body
+covers both sexes, and one human body covers every race, but captures cost nothing. Having
+the orc and elf bodies, and both sexes of each, gives the edit less to change. The skill
+picks the nearest body and sex. The table above stays the floor of what the library must cover.
 
 ### Poses and setups
 
@@ -186,15 +189,10 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 
 ## Status (2026-10-15, evening)
 
-- **Nothing is in the library yet.** The two bodies from the sex test (the spear-and-shield
-  crouch, male and female) are the only captures so far; they are on the owner's Desktop
-  (`male-vs-female-body-test/source-*.png`) and re-exported into `~/Downloads` this evening.
-  The spear tip sits 4 to 18 px from the right edge on every one of them: it rendered, but the
-  shot list asks for 24 px clear, so the saved camera should pull back a touch before the first
-  real session.
-- **The library's home exists:** `fvtt-assets-actors/mannequins/` with the checker, the naming
-  script and the shot list (step 4). The human session starts with `crouch-empty`, because step 1
-  needs it.
+- **Filed:** `crouch-spear-shield` for all six bodies, male and female (12 captures), in
+  `fvtt-assets-actors/mannequins/`. The shot list there is a grid of setup by body. The owner
+  captures one setup at a time across every body.
+- **Next setup:** `crouch-empty`, then step 1 (the caster question) can run on it.
 - **Test renders** are local only (the owner's Desktop, `male-vs-female-body-test`,
   `Backup/class-samples`).
-- **Next:** the owner captures the human body from the shot list; then step 1, then step 2.
+- **Not yet proven:** the small and large bodies (step 3).
