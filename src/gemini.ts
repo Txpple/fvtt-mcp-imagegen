@@ -30,6 +30,16 @@ export const PRICE: Record<Tier, Record<ImageSize, number>> = {
 /** USD per 1M output text tokens, the rate thinking is billed at (Google's price table, 2026-10-16). */
 export const TEXT_OUT_PRICE: Record<Tier, number> = { flash: 7.5, pro: 12 };
 
+/** The vision text model the head check asks: the cheapest non-preview flash lite the key lists (2026-10-16). */
+export const JUDGE_MODEL = 'gemini-3.5-flash-lite';
+/** A flat estimate per judge call: a 1024 plate in, one word out, well under a tenth of a cent. */
+export const JUDGE_USD = 0.0005;
+
+export interface JudgeRequest {
+  prompt: string;
+  image: InlineImage;
+}
+
 /** Token counts the API reports for one call; thinking is billed as output text. */
 export interface TokenUsage {
   prompt: number;
@@ -168,6 +178,45 @@ export class Gemini {
       throw new Error(`Gemini HTTP ${res.status}: ${msg}`);
     }
     return parseResponse(json, model);
+  }
+
+  /**
+   * One short text answer about an image from the judge model, for a check no pixel measure
+   * can make (the head check, head.ts). Temperature 0 so the same plate gets the same word.
+   */
+  async judge(req: JudgeRequest): Promise<string> {
+    if (!this.hasKey) throw new Error('GEMINI_API_KEY is not set in .env');
+    const body = {
+      contents: [
+        {
+          parts: [
+            {
+              inline_data: {
+                mime_type: req.image.mimeType,
+                data: req.image.data.toString('base64'),
+              },
+            },
+            { text: req.prompt },
+          ],
+        },
+      ],
+      generationConfig: { temperature: 0 },
+    };
+    const res = await this.fetchFn(`${this.baseUrl}/models/${JUDGE_MODEL}:generateContent`, {
+      method: 'POST',
+      headers: { 'x-goog-api-key': this.opts.apiKey, 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(this.opts.timeoutMs),
+    });
+    const json: any = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const msg = json?.error?.message ?? JSON.stringify(json).slice(0, 300);
+      throw new Error(`Gemini HTTP ${res.status} judging: ${msg}`);
+    }
+    return (json?.candidates?.[0]?.content?.parts ?? [])
+      .map((p: any) => p?.text)
+      .filter(Boolean)
+      .join(' ');
   }
 
   /**

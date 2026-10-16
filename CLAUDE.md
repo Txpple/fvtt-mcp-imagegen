@@ -15,10 +15,10 @@ and `npm run doctor` check the setup; seven kinds (icon, token, prop, portrait, 
 battlemap, overland), every one on flash by default. `main` carries, past 1.3.1: the mannequin
 library (`mannequins/`, 312 grey captures, `scripts/mannequin.mjs`), the `illustration-builder`
 skill's newer owner rules for maps, tiles and tokens, and the token changes of 2026-10-16:
-`edit-image` takes `source: "mannequin"`, references take role `object`, both render tools take
-`thinking` and report `thinkingTokens`, and the token framing and the character preamble describe
-the head instead of tilting it to the camera. Release detail is the GitHub release notes; the
-dated journal is `docs/log/YYYY-MM.md`.
+`edit-image` takes `source: "mannequin"` (with a judge-model head check, `src/head.ts`), references
+take role `object`, both render tools take `thinking` and report `thinkingTokens`, and the token
+framing and the character preamble describe the head instead of tilting it to the camera. Release
+detail is the GitHub release notes; the dated journal is `docs/log/YYYY-MM.md`.
 
 The server runs on the Gemini API. The first version of this server wrapped
 a local ComfyUI install with FLUX models and a trained house-style LoRA. That direction is dead:
@@ -65,6 +65,13 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
 - Small server: `generate-image`, `edit-image`, `cutout-image`, `imagegen-status`. Resist tool
   sprawl. New work arrives as a `kind`, not a tool (props, battlemaps and overland maps all
   came that way).
+- **The head check** (`src/head.ts`, an owner rule): a mannequin token's face looks ahead,
+  never bowed into the chest or up at the camera. No pixel measure tells those apart across
+  races, hoods and helmets, so the plate is shown to `JUDGE_MODEL` (a flash-lite vision model,
+  temperature 0, a flat `JUDGE_USD` in the session total) for one word. A bowed or up first
+  render is redone once, both billed; the result reports `head`; two bad verdicts still deliver,
+  flagged, since the judge can be wrong and the skill's flaw pass reads every token. A judge
+  that cannot be reached never blocks a render. Tests mock the judge like every other call.
 
 ## Models and tiers
 

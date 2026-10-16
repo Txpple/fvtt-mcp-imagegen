@@ -194,7 +194,9 @@ export class EditImageTool {
           "plate keyed to the token's own colours, and cut to alpha on the 512 square in the " +
           'same call. "give this an updated painterly style" restyles a world token in place. ' +
           'source: "mannequin" paints a grey pose capture into a token with the pose, camera, ' +
-          'grip and head angle bound to the capture. ' +
+          'grip and head angle bound to the capture, then asks a judge model whether the head ' +
+          'came out ahead, bowed or up; a bowed or up head is rendered once more and the ' +
+          'result reports `head` (read it; a second bad verdict is delivered, flagged). ' +
           'Props (kind "prop") get object-only wording (no figures added) and come back cut at ' +
           "the source file's exact pixel size, ready for the same tile slot. Battlemaps " +
           '(kind "battlemap") restyle a bought map with the layout locked: the result lands on ' +
@@ -267,6 +269,7 @@ export class EditImageTool {
       slug: p.slug,
       ...(p.creatureSize ? { creatureSize: p.creatureSize } : {}),
       ...(p.thinking ? { thinking: p.thinking } : {}),
+      ...(p.source === 'mannequin' ? { headCheck: true } : {}),
       ...propFit,
     });
   }

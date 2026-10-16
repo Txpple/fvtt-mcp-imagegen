@@ -582,6 +582,15 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
      described without boots came back barefoot. The same sentence held on the combat and
      two-handed captures, read as alert on `prone`, and did no harm on `dead`, where "lying
      dead, eyes closed" won, so the tool applies it to every mannequin edit.
+   - **The tool checks the head and says so (2026-10-16).** After a mannequin render the tool
+     shows the plate to a cheap vision model and asks one word: `ahead`, `bowed`, `up` or
+     `unclear`. A bowed or up first render is rendered once more (both billed, the first plate
+     kept as `-head-<verdict>.png`), and the result's `head` reports the verdict, the first
+     verdict and whether it retried. Two bad verdicts still deliver, flagged, because the judge
+     can be wrong: read `head` before the flaw pass, and treat `bowed` or `up` on a delivered
+     token as a re-render, not an edit. `unclear` with an `error` means the judge was not
+     reached and the token went through unchecked; `unclear` without one is a hooded, helmeted
+     or lying figure, which is fine.
    - **The dwarf `dead` capture loses the dwarf build**: twice it came back lean, older and grey,
      with and without the crop. One flaw pass naming build, age and hair fixed it both times;
      expect it.

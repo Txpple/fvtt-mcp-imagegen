@@ -318,4 +318,7 @@ reads well; Kartor on `dead` lay on his back with his eyes closed, the sentence 
 dead, eyes closed", so the tool may carry it on every mannequin edit. The tool-side placement
 (`MANNEQUIN_EDIT_SOURCE`) was confirmed after the owner's restart: one Cecil standing token with
 nothing about the head in the instruction came back with the head lifted to the target, pose and
-kit kept. The recipe says nothing about the head from here on.
+kit kept. The recipe says nothing about the head from here on. The same day the tool grew a head check
+(`src/head.ts`): the plate goes to a judge model for one word, a bowed or up first render is redone
+once, and `head` is reported; it never refuses, since the judge can be wrong. Live after the next
+restart; its first verdicts on real renders are the thing to watch.

@@ -4,7 +4,7 @@ import * as path from 'node:path';
 import sharp from 'sharp';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { CutoutFn, CutoutOptions } from '../cutout.js';
-import { Gemini } from '../gemini.js';
+import { Gemini, JUDGE_MODEL } from '../gemini.js';
 import { buildToolRegistry } from '../registry.js';
 import { SpendMeter } from '../spend.js';
 import { PROP_FRAMING, TOKEN_FRAMING } from '../presets.js';
@@ -26,11 +26,26 @@ let propSrc: string;
 let mapSrc: string;
 let sent: Array<{ url: string; body: any }>;
 let cuts: CutoutOptions[];
+/** The judge's answers, in order; 'ERROR' makes the judge call fail; empty answers AHEAD. */
+let verdicts: string[] = [];
+let judged: Array<{ url: string; body: any }> = [];
 
 function fakeGemini(width = 1024, height = 1024, usage?: Record<string, number>): Gemini {
   sent = [];
+  judged = [];
+  verdicts = [];
   const fakeFetch = (async (url: any, init: any) => {
     const body = JSON.parse(init.body);
+    if (String(url).includes(`/models/${JUDGE_MODEL}:`)) {
+      judged.push({ url: String(url), body });
+      const word = verdicts.shift() ?? 'AHEAD';
+      if (word === 'ERROR')
+        return new Response('{"error":{"message":"judge down"}}', { status: 500 });
+      return new Response(
+        JSON.stringify({ candidates: [{ content: { parts: [{ text: word }] } }] }),
+        { status: 200 }
+      );
+    }
     sent.push({ url: String(url), body });
     // Answer on the plate colour the prompt asked for, as the real model does.
     const asked = /chroma-key \w+ \((#[0-9A-F]{6})\)/.exec(body.contents[0].parts.at(-1).text)?.[1];
@@ -597,6 +612,87 @@ describe('edit-image', () => {
     expect(MANNEQUIN_EDIT_KEEP).toMatch(/head lifted as described/);
     expect(MANNEQUIN_EDIT_KEEP).toMatch(/nothing left grey/);
     expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/face, hair/);
+  });
+
+  it('mannequin source: the head check asks the judge once and reports an ahead head', async () => {
+    const { dispatch, spend } = build();
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+    });
+    expect(sent).toHaveLength(1);
+    expect(judged).toHaveLength(1);
+    expect(judged[0].body.contents[0].parts[1].text).toMatch(/Judge only the head/);
+    expect(r.head).toEqual({ verdict: 'ahead' });
+    // The session total is rounded to a tenth of a cent; the meter itself shows the judge added.
+    expect(spend.totalUsd).toBeGreaterThanOrEqual(0.034);
+    const m = new SpendMeter();
+    m.recordJudge(0.0005);
+    expect(m.totalUsd).toBeCloseTo(0.001, 3);
+  });
+
+  it('mannequin source: a bowed head is rendered once more, the first plate kept, both verdicts reported', async () => {
+    const { dispatch } = build();
+    verdicts = ['BOWED', 'AHEAD'];
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+    });
+    expect(sent).toHaveLength(2);
+    expect(judged).toHaveLength(2);
+    expect(r.head).toMatchObject({ verdict: 'ahead', first: 'bowed', retried: true });
+    expect(path.basename(r.head.kept)).toMatch(/^token-guard-[0-9a-f]{8}-head-bowed\.png$/);
+    expect(fs.existsSync(r.head.kept)).toBe(true);
+    expect(r.estimatedUsd).toBeCloseTo(0.0336 * 2, 6);
+  });
+
+  it('mannequin source: two bad verdicts still deliver the token, flagged, never a third render', async () => {
+    const { dispatch } = build();
+    verdicts = ['UP', 'BOWED'];
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+    });
+    expect(sent).toHaveLength(2);
+    expect(r.head).toMatchObject({ verdict: 'bowed', first: 'up', retried: true });
+    expect(fs.existsSync(r.file)).toBe(true);
+  });
+
+  it('mannequin source: a judge that cannot be reached never blocks the render', async () => {
+    const { dispatch } = build();
+    verdicts = ['ERROR'];
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+    });
+    expect(sent).toHaveLength(1);
+    expect(r.head.verdict).toBe('unclear');
+    expect(r.head.error).toMatch(/judge down/);
+    expect(fs.existsSync(r.file)).toBe(true);
+  });
+
+  it('a plain token edit asks no judge', async () => {
+    const { dispatch } = build();
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'swap the sword for a maul',
+      kind: 'token',
+      slug: 'guard',
+    });
+    expect(judged).toHaveLength(0);
+    expect(r.head).toBeUndefined();
   });
 
   it('mannequin source: refused on any kind but token, before any network call', async () => {

@@ -12,6 +12,7 @@ export interface SpendEntry {
 
 export class SpendMeter {
   private readonly entries: SpendEntry[] = [];
+  private judgeUsd = 0;
 
   estimate(tier: Tier, size: ImageSize): number {
     return PRICE[tier][size];
@@ -24,8 +25,13 @@ export class SpendMeter {
     return usd;
   }
 
+  /** A judge call (the head check): no image, a flat estimate, counted in the total only. */
+  recordJudge(usd: number): void {
+    this.judgeUsd += usd;
+  }
+
   get totalUsd(): number {
-    return round(this.entries.reduce((a, e) => a + e.usd, 0));
+    return round(this.entries.reduce((a, e) => a + e.usd, 0) + this.judgeUsd);
   }
 
   get calls(): number {

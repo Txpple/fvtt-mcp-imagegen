@@ -15,6 +15,7 @@ import {
   type Aspect,
   Gemini,
   type InlineImage,
+  JUDGE_USD,
   PRICE,
   TEXT_OUT_PRICE,
   THINKING_LEVELS,
@@ -24,6 +25,7 @@ import {
 } from '../gemini.js';
 import { type DriftReport, measureDrift, overlandDrifted } from '../drift.js';
 import { EDGE_BAND, EDGE_LIMIT, edgeContact } from '../edge.js';
+import { type HeadReport, judgeHead } from '../head.js';
 import { type Box, type Dimensions, dimensions, fitRect, postProcess } from '../post.js';
 import {
   CREATURE_SIZES,
@@ -217,6 +219,8 @@ export interface RenderInput {
   map?: { source: Buffer; plan: PadPlan };
   /** Thinking level for the render; unset leaves the model's default (medium on flash). */
   thinking?: ThinkingLevel;
+  /** Tokens from a mannequin: ask the judge whether the head came out ahead, bowed or up. */
+  headCheck?: boolean;
 }
 
 /** Kinds rendered on a chroma plate, edge-checked, and cut to alpha. */
@@ -239,6 +243,8 @@ export interface RenderOutput {
   cutout?: Omit<CutoutResult, 'file' | 'width' | 'height'>;
   /** Tokens and props: the first render clipped the subject at the edge and was redone. */
   edgeRetried?: boolean;
+  /** Mannequin tokens: the judge's word on the head, and whether a bowed or up head was redone. */
+  head?: HeadReport;
   /** Battlemaps: the source's pixel size and the whole-number scale the map was delivered at. */
   source?: { width: number; height: number };
   scale?: number;
@@ -291,11 +297,11 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
   let { result, png, usd: estimatedUsd } = await once();
   let thinkingTokens = result.usage?.thinking;
   let edgeRetried: boolean | undefined;
+  const clippedPath = (n: number) =>
+    path.join(deps.outputDir, `${input.kind}-${slugOf(input.slug)}-${id}-clipped${n}.png`);
   if (cut && chromaKey) {
     // Nothing may clip off a token or a prop (owner rule 2026-09-24). A subject touching the
     // plate edge is rendered once more; if that is clipped too, refuse rather than deliver it.
-    const clippedPath = (n: number) =>
-      path.join(deps.outputDir, `${input.kind}-${slugOf(input.slug)}-${id}-clipped${n}.png`);
     let contact = await edgeContact(png, chromaKey);
     if (contact > EDGE_LIMIT) {
       fs.writeFileSync(clippedPath(1), png);
@@ -316,6 +322,36 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       }
     }
   }
+  // The head check (owner rule 2026-10-16): a mannequin token's face looks ahead, never bowed
+  // into the chest or up at the camera. The judge's word steers one re-render and is reported;
+  // it never refuses (head.ts). A re-render that clips is refused like any second clip.
+  let head: HeadReport | undefined;
+  if (cut && chromaKey && input.headCheck) {
+    head = await checkHead(deps, png);
+    if (head.verdict === 'bowed' || head.verdict === 'up') {
+      const kept = path.join(
+        deps.outputDir,
+        `${input.kind}-${slugOf(input.slug)}-${id}-head-${head.verdict}.png`
+      );
+      fs.writeFileSync(kept, png);
+      const again = await once();
+      estimatedUsd += again.usd;
+      if (again.result.usage) thinkingTokens = (thinkingTokens ?? 0) + again.result.usage.thinking;
+      const contact = await edgeContact(again.png, chromaKey);
+      if (contact > EDGE_LIMIT) {
+        fs.writeFileSync(clippedPath(2), again.png);
+        throw new Error(
+          `The head re-render clipped the subject at the image edge (${contact} subject pixels ` +
+            `in the outer ${EDGE_BAND} px); a clipped ${input.kind} is never delivered. Kept for ` +
+            `inspection: ${kept} (head ${head.verdict}), ${clippedPath(2)}. Spent about ` +
+            `$${estimatedUsd.toFixed(2)}.`
+        );
+      }
+      ({ result, png } = again);
+      const second = await checkHead(deps, png);
+      head = { ...second, first: head.verdict, retried: true, kept };
+    }
+  }
   const base = {
     kind: input.kind,
     tier: input.tier,
@@ -324,6 +360,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     sessionEstimatedUsd: deps.spend.totalUsd,
     ...(thinkingTokens !== undefined ? { thinkingTokens } : {}),
     ...(edgeRetried ? { edgeRetried } : {}),
+    ...(head ? { head } : {}),
   };
 
   if (cut && chromaKey) {
@@ -356,6 +393,17 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
   const file = path.join(deps.outputDir, filename(input.kind, input.slug, id));
   fs.writeFileSync(file, png);
   return { ...base, file, width: dims.width, height: dims.height };
+}
+
+/** Ask the judge about a plate's head; a judge that cannot be reached never blocks the render. */
+async function checkHead(deps: ToolDeps, plate: Buffer): Promise<HeadReport> {
+  try {
+    const verdict = await judgeHead(deps.gemini, plate);
+    deps.spend.recordJudge(JUDGE_USD);
+    return { verdict };
+  } catch (e) {
+    return { verdict: 'unclear', error: e instanceof Error ? e.message : String(e) };
+  }
 }
 
 /** What the thinking tokens of one render cost, at the tier's text output rate. */
