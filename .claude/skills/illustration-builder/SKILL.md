@@ -78,9 +78,12 @@ moved. You own the instruction and the content check. The proven shape (round 4,
 faithful on the three maps that had been the worst offenders before it):
 
 `repaint this top-down battlemap as <the shelf's battlemap finish>, <the shelf's colour words>,
-rich mid-tones and deep shadows, and crisp fine detail on every surface`
+rich mid-tones and soft shadows, and crisp fine detail on every surface`
 
 The finish and the colour words come from the campaign's `art/SHELF.md`; the shape is what held.
+The shadow words are "soft shadows", never "deep shadows" (owner, 2026-10-16): "deep" here made
+every map darker than the shelf asked, a dark-fantasy drift the owner retired. A map is never
+painted dark because its place is dark (a deep cave, a crypt); Foundry's darkness does that.
 Use the same words on every map in a set; that sentence, not a reference image, is what makes
 maps from two authors read as one family. A warm colour word pulls every map toward gold and
 brown (that is most of the family resemblance), and it once turned mossy green stone walls to
@@ -382,7 +385,7 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
 - **Icons**: the tool appends "single subject centered, filling the frame, no text, no border";
   you supply the STYLE, or the render comes back photoreal. The set prefix is the shelf's icon
   finish line, in the proven shape `fantasy RPG inventory icon, <the shelf's finish>, <its light>,
-  rich mid-tones and deep shadows, plain dark vignetted background. Subject:`, then the object
+  rich mid-tones and soft shadows, plain dark vignetted background. Subject:`, then the object
   with its material ("rusted iron key", "worn oak longbow"). Same prefix for every icon in a set
   so they read as a set; twenty in a row held on Flash.
 - **Negation backfires — describe presence, never absence** (proven twice, 2026-08-28). "no large
