@@ -61,6 +61,6 @@ reference images or multi-turn editing. Only worth a `draft` tier if icon volume
   Forgotten Adventures, Tom Cartos, and Mad Cartographer, about $6.25 of renders in all.
 
 - **Key colour from the prompt, not only from samples** (found and fixed 2026-09-19). The first
-  Bramblemaw token, a green dragon prompted against a grey reference token, went out on a green
+  green dragon token, prompted against a grey reference token, went out on a green
   plate and cut clean by luck. `pickChromaKey` now scores the prompt's colour words alongside the
   sampled images: one mention argues against a key, two are decisive, worst case per key wins.

@@ -264,17 +264,17 @@ describe('the Pro cost gate', () => {
 describe('referencePreamble', () => {
   it('numbers references 1-based, labels them, and separates character from style roles', () => {
     const s = referencePreamble([
-      { path: 'a', role: 'character', label: 'Morgash' },
+      { path: 'a', role: 'character', label: 'the captain' },
       { path: 'b', role: 'style' },
     ]);
-    expect(s).toMatch(/^Image 1 \(Morgash\) is a CHARACTER reference/);
+    expect(s).toMatch(/^Image 1 \(the captain\) is a CHARACTER reference/);
     expect(s).toMatch(/Image 2 is a STYLE reference only/);
     expect(referencePreamble([])).toBe('');
   });
 
   it('binds a character to identity only: pose and camera come from the prompt and the source', () => {
     // "keep this exact face" dragged a frontal portrait crop's angle onto tokens (2026-10-16).
-    const s = referencePreamble([{ path: 'a', role: 'character', label: 'Kartor' }]);
+    const s = referencePreamble([{ path: 'a', role: 'character', label: 'the dwarf' }]);
     expect(s).toMatch(/features, hair, skin, build and kit of this person/);
     expect(s).toMatch(/posed and framed as the prompt and the source image say/);
     expect(s).not.toMatch(/exact face/);
@@ -326,12 +326,12 @@ describe('generate-image', () => {
       kind: 'token',
       prompt: 'a goblin scout',
       slug: 'goblin',
-      references: [{ path: refPng, role: 'style', label: 'Morgash token' }],
+      references: [{ path: refPng, role: 'style', label: 'the captain token' }],
     });
     const parts = sent[0].body.contents[0].parts;
     expect(parts).toHaveLength(2);
     expect(parts[0].inline_data.mime_type).toBe('image/png');
-    expect(parts[1].text).toMatch(/^Image 1 \(Morgash token\) is a STYLE reference/);
+    expect(parts[1].text).toMatch(/^Image 1 \(the captain token\) is a STYLE reference/);
     expect(parts[1].text).toContain('fifteen degrees off vertical');
     expect(parts[1].text).toContain('chroma-key magenta (#FF00FF)');
     expect(r.chromaKey).toBe('magenta');
@@ -480,8 +480,8 @@ describe('generate-image', () => {
     const r: any = await dispatch('generate-image', {
       kind: 'token',
       prompt: 'a young green dragon, olive scales, wings half-spread',
-      slug: 'bramblemaw',
-      references: [{ path: refPng, role: 'style', label: 'Morgash token' }],
+      slug: 'dragon-lair',
+      references: [{ path: refPng, role: 'style', label: 'the captain token' }],
     });
     expect(r.chromaKey).toBe('magenta');
     expect(sent[0].body.contents[0].parts.at(-1).text).toContain('chroma-key magenta (#FF00FF)');
@@ -534,7 +534,7 @@ describe('edit-image', () => {
       sourceImage: refPng,
       instruction: 'swap the sword for a maul',
       kind: 'token',
-      slug: 'morgash',
+      slug: 'captain',
       references: [{ path: refPng, role: 'style' }],
     });
     const parts = sent[0].body.contents[0].parts;
@@ -544,7 +544,7 @@ describe('edit-image', () => {
     expect(text).toContain(`swap the sword for a maul. ${TOKEN_EDIT_KEEP}`);
     expect(text).toContain('chroma-key magenta');
     expect(r.tier).toBe('flash');
-    expect(path.basename(r.file)).toMatch(/^token-morgash-[0-9a-f]{8}\.png$/);
+    expect(path.basename(r.file)).toMatch(/^token-captain-[0-9a-f]{8}\.png$/);
     expect(cuts).toHaveLength(1);
   });
 
@@ -570,12 +570,12 @@ describe('edit-image', () => {
     const { dispatch } = build();
     await dispatch('edit-image', {
       sourceImage: refPng,
-      instruction: 'Kartor, a dwarf of forty-nine, clean-shaven, in worn steel plate.',
+      instruction: 'A dwarf of forty-nine, clean-shaven, in worn steel plate.',
       kind: 'token',
       source: 'mannequin',
-      slug: 'kartor',
+      slug: 'dwarf',
       references: [
-        { path: refPng, role: 'character', label: 'Kartor' },
+        { path: refPng, role: 'character', label: 'the dwarf' },
         { path: refPng, role: 'object', label: 'the battleaxe' },
       ],
     });
@@ -583,7 +583,7 @@ describe('edit-image', () => {
     expect(parts).toHaveLength(4);
     const text = parts[3].text;
     expect(text.startsWith(MANNEQUIN_EDIT_SOURCE)).toBe(true);
-    expect(text).toMatch(/Image 2 \(Kartor\) is a CHARACTER reference/);
+    expect(text).toMatch(/Image 2 \(the dwarf\) is a CHARACTER reference/);
     expect(text).toMatch(/Image 3 \(the battleaxe\) is an OBJECT reference/);
     expect(text).toContain(`in worn steel plate. ${MANNEQUIN_EDIT_KEEP}`);
     expect(text).toContain('chroma-key');
@@ -643,7 +643,7 @@ describe('edit-image', () => {
       sourceImage: refPng,
       instruction: 'make the cloak forest green',
       kind: 'token',
-      slug: 'morgash',
+      slug: 'captain',
     });
     expect(r.chromaKey).toBe('magenta');
   });
@@ -993,7 +993,7 @@ describe('overland maps', () => {
       sourceImage: mapSrc,
       instruction: 'repaint this map as an antique hand-painted atlas.',
       kind: 'overland',
-      slug: 'halruaa',
+      slug: 'kingdom',
     });
     const text = sent[0].body.contents[0].parts.at(-1).text;
     expect(text).toBe(`repaint this map as an antique hand-painted atlas. ${OVERLAND_EDIT_KEEP}`);
@@ -1003,7 +1003,7 @@ describe('overland maps', () => {
       imageSize: '4K',
     });
     expect(r).toMatchObject({ kind: 'overland', source: { width: 400, height: 300 }, scale: 2 });
-    expect(path.basename(r.file)).toMatch(/^overland-halruaa-[0-9a-f]{8}\.webp$/);
+    expect(path.basename(r.file)).toMatch(/^overland-kingdom-[0-9a-f]{8}\.webp$/);
     expect(fs.existsSync(r.check)).toBe(true);
     expect(spend.calls).toBe(1);
   });
@@ -1014,7 +1014,7 @@ describe('overland maps', () => {
       sourceImage: mapSrc,
       instruction: 'repaint',
       kind: 'overland',
-      slug: 'halruaa2',
+      slug: 'kingdom2',
     });
     expect(r.drift.drifted).toBeGreaterThan(0);
     expect(r.drift.failed).toBe(false);
@@ -1029,11 +1029,11 @@ describe('overland maps', () => {
         sourceImage: mapSrc,
         instruction: 'repaint',
         kind: 'overland',
-        slug: 'halruaa3',
+        slug: 'kingdom3',
       })
     ).rejects.toThrow(/geography moved too far/);
     expect(sent).toHaveLength(2);
-    const files = fs.readdirSync(tmp).filter(f => f.startsWith('overland-halruaa3-'));
+    const files = fs.readdirSync(tmp).filter(f => f.startsWith('overland-kingdom3-'));
     expect(files.some(f => f.endsWith('-drifted2.webp'))).toBe(true);
   });
 

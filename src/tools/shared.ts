@@ -102,7 +102,7 @@ export const referenceSchema = z.object({
   label: z
     .string()
     .optional()
-    .describe('Short name used to bind the reference in the prompt, e.g. "Morgash".'),
+    .describe('Short name used to bind the reference in the prompt, e.g. "the captain".'),
 });
 export type Reference = z.infer<typeof referenceSchema>;
 
@@ -149,7 +149,7 @@ export function loadImage(p: string): InlineImage {
 
 /**
  * Build the reference preamble. Images are attached in the order given; the preamble tells the
- * model which is which by 1-based index, so the caller's prompt can say "Morgash" and be bound.
+ * model which is which by 1-based index, so the caller's prompt can say "the captain" and be bound.
  * A battlemap's style reference lends its finish only: "match its camera angle" would tilt a
  * straight-down map, and its subject is another map whose layout must not leak in.
  */
@@ -161,7 +161,7 @@ export function referencePreamble(refs: Reference[], kind?: Kind): string {
     const who = r.label ? ` (${r.label})` : '';
     if (r.role === 'character') {
       // "keep this exact face" carried a frontal portrait crop's angle onto top-down tokens
-      // (Cassia and Kartor, 2026-10-11 to 16): identity is bound here, pose and camera are not.
+      // (two campaign tokens, 2026-10-11 to 16): identity is bound here, pose and camera are not.
       lines.push(
         `Image ${n}${who} is a CHARACTER reference: paint the features, hair, skin, build and ` +
           'kit of this person faithfully, posed and framed as the prompt and the source image say.'

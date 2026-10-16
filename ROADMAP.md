@@ -87,7 +87,7 @@ style-ref pass or a Flash prefix is enough.
   `src/cutout.ts` (spawns the script, parses coverage, measures residual key hue, chroma first
   with rembg fallback when verification fails), `cutout-image` tool. Tokens from `generate-image`
   and `edit-image` come back cut, with the plate PNG kept beside them. The fvtt-mcp-dnd5e skill now
-  holds only the Foundry install steps. Live gate: goblin, wolf, and a Morgash edit all cut clean.
+  holds only the Foundry install steps. Live gate: goblin, wolf, and a PC token edit all cut clean.
 
 ## M3 — Pro cost gate and spend counter — DONE inside M1 (2026-09-19)
 

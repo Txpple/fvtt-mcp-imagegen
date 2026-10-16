@@ -108,8 +108,8 @@ describe('filename', () => {
   });
 
   it('takes another extension for the kinds that ship in another format (battlemaps: webp)', () => {
-    expect(filename('battlemap', 'Bramblemaw Lair', 'a1b2c3d4', 'webp')).toBe(
-      'battlemap-bramblemaw-lair-a1b2c3d4.webp'
+    expect(filename('battlemap', 'Dragon Lair', 'a1b2c3d4', 'webp')).toBe(
+      'battlemap-dragon-lair-a1b2c3d4.webp'
     );
   });
 

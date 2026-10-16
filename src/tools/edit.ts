@@ -130,7 +130,7 @@ export const BATTLEMAP_EDIT_KEEP =
 /**
  * Overland maps (owner request 2026-10-03): a regional or world map repainted in the house style
  * and painted bare. Names, markers, and roads are lettered on afterwards by script, exactly, so
- * the model never draws text (it misspelled three of thirty labels on the first Halruaa render).
+ * the model never draws text (it misspelled three of thirty labels on the first regional-map render).
  * The bare map is the tool's promise, so the removal lives here, not in the instruction.
  */
 export const OVERLAND_EDIT_KEEP =

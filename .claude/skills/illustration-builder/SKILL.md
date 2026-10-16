@@ -22,7 +22,7 @@ delivery (`upload-asset`, `set-actor-art`, `add-journal-image`).
 
 Tools used: `imagegen-status`, `generate-image`, `edit-image`, `cutout-image` (imagegen);
 `manage-actors` `get`, `search-journals`, `manage-journals` (`list` / `get`), `manage-scenes` (`list`), `list-assets`, `download-asset`,
-`upload-asset`, `set-actor-art`, `add-journal-image` (molten5e).
+`upload-asset`, `set-actor-art`, `add-journal-image` (the dnd5e MCP).
 
 ## Step 0 — Pin the subject and the destination
 
@@ -47,22 +47,22 @@ the tool locks the geography and paints out every label, marker, road, compass r
 bar itself, so the instruction is only the finish. Names and symbols go on afterwards by script
 (PIL text on the bare map, positions read off the source), exact and re-placeable. The drift
 check is advisory below gross drift: a repainted coastline passes, a swapped geography is
-refused. First use: Halruaa from the 3.5e sourcebook map, 2026-10-03; with labels left in, the
+refused. First use: a kingdom from its 3.5e sourcebook map, 2026-10-03; with labels left in, the
 model misspelled three of thirty names, which is why the bare map is the rule. **The model will
-not drop all the lettering in one pass**, keep line or not: the Halruaa map took three. Pass
+not drop all the lettering in one pass**, keep line or not: that map took three. Pass
 one removed the markers, compass and scale bar but kept (and respelled) most names; pass two,
 an edit of pass one asking to erase "every word, letter by letter", left the eleven small
 settlement names; pass three, naming those eleven words outright, came back clean with zero
 drift. So: run the overland edit, Read it, then edit the result again naming every word still
 visible, until it is bare. Each pass is about 11 cents. **A busy map (hundreds of labels and icons,
 e.g. a fan continent map) never comes clean that way**: the model traces the clutter and
-re-garbles it (Faerûn, 2026-10-03, two passes). Clean the source locally first: downscale to
+re-garbles it (a continent map, 2026-10-03, two passes). Clean the source locally first: downscale to
 about 600 px wide, median filter, scale back, light blur, which kills the micro-text and keeps
 coastlines and region colours. Run the overland edit on that soft sketch (comes back bare but
 soft), then one more overland edit on the result with the sibling regional map attached as
 `role: "style"` to sharpen it to the same finish. Three renders, about 45 cents, zero drift. **Read the source map's legend into the
-instruction** (2026-10-03): the model takes cartographic symbols literally. On the 3.5e
-Halruaa map it painted every round tufted hill symbol as forest, turned dotted plains bare
+instruction** (2026-10-03): the model takes cartographic symbols literally. On that
+sourcebook map it painted every round tufted hill symbol as forest, turned dotted plains bare
 green, and put a swamp on a mountain massif; a cross-check against the source found seven
 wrong regions. Say what each symbol is ("round tufted bumps are rolling hills, never trees;
 hatched ridges are mountains; dotted lowlands are farmland; the only forest is ...") and name
@@ -74,25 +74,24 @@ with other changes in one instruction it was ignored entirely.
 different authors one consistent style; Foundry walls and lights are traced over them). The tool
 owns the geometry: it pads the source to an API aspect, maps the render back onto the source's
 pixel grid (a whole-number upscale when the source is small), and refuses a render whose layout
-moved. You own the instruction and the content check. Proven recipe (round 4, 2026-10-02:
-faithful on the garden, the Sanguine Dawn, and the Jade Temple, the three worst offenders
-before it):
+moved. You own the instruction and the content check. The proven shape (round 4, 2026-10-02:
+faithful on the three maps that had been the worst offenders before it):
 
-`repaint this top-down battlemap as a rich hand-painted fantasy oil painting with confident
-visible brushwork, warm natural colour, rich mid-tones and deep shadows, and crisp fine detail
-on every surface`
+`repaint this top-down battlemap as <the shelf's battlemap finish>, <the shelf's colour words>,
+rich mid-tones and deep shadows, and crisp fine detail on every surface`
 
-Use the same words on every map in a set; that sentence, not a reference image, is what makes a
-Tom Cartos map and a Mad Cartographer map read as one family. "warm" pulls every map toward
-gold and brown (that is most of the family resemblance), and it once turned mossy green stone
-walls to brown wood; drop it for a map whose cold palette is the point (a crypt, an ice cave).
+The finish and the colour words come from the campaign's `art/SHELF.md`; the shape is what held.
+Use the same words on every map in a set; that sentence, not a reference image, is what makes
+maps from two authors read as one family. A warm colour word pulls every map toward gold and
+brown (that is most of the family resemblance), and it once turned mossy green stone walls to
+brown wood; drop it for a map whose cold palette is the point (a crypt, an ice cave).
 What did not work, so do not repeat it:
 - **A map as a style reference.** It painted its own layout over the source, on both attempts
   (the guard refused both, $0.30 gone). Never attach a map beside a map.
 - **An illustration as a style reference.** Safer, but it invented terrain: cliffs and boulders
   at a tavern's edges, dirt over a plain dark background. Words only.
-- **"visible brushwork" with nothing about detail.** Big Van Gogh swirls on water and grass that
-  smear to mush at full resolution. Keep "crisp fine detail on every surface".
+- **A loose brushwork word with nothing about detail.** Big swirling strokes on water and grass
+  that smear to mush at full resolution. Keep "crisp fine detail on every surface".
 - **Pinning colours and daylight.** "Same colours, same daylight, only the technique changes"
   came back as a colour grade, not a repaint.
 
@@ -121,18 +120,18 @@ What the 2026-10-02 set of 14 (Forgotten Adventures, Tom Cartos, Mad Cartographe
 - **Google sometimes returns no image** (finishReason NO_IMAGE, nothing billed). Run it again
   once.
 
-What the 2026-10-05 Hearth set taught (12 Tom Cartos caves re-themed as one campaign's home,
-plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
+What a 2026-10-05 set taught (12 bought caves re-themed as one campaign's home, plus a kitbash;
+full write-up in `notes/map-builder/PLAN.md`):
 - **Content changes re-theme a map well, and they move it.** "The curved stone structure is a
-  forge hearth; the stone block is an anvil" turned a Cartos shrine into a forge the owner
+  forge hearth; the stone block is an anvil" turned a pack's shrine into a forge the owner
   loved, but 10 of 12 such renders drifted 3–5% and were refused (both drafts are kept as
   `-drifted1/2.webp`). When the owner says walls don't matter yet, the drafts are deliverable:
   pick by eye. When walls matter, keep the instruction to paint only.
 - **One call at a time.** Four `edit-image` calls in parallel all came back Gemini HTTP 500.
   A timeout happens now and then; retry it once.
 - **A repaint is only as rich as its input.** Our own drawn geometry (procedural sketches)
-  repainted as clip art, clearly inferior to repainted Cartos maps. A kitbash of real pack art
-  (a Clean variant as the base, props lifted from other maps) repainted at Cartos quality.
+  repainted as clip art, clearly inferior to repainted pack maps. A kitbash of real pack art
+  (a Clean variant as the base, props lifted from other maps) repainted at pack quality.
   Never draw our own geometry for a final map.
 - **The drift check misfires on composed or sketched input.** It refused renders that kept
   96–98% of the source's floor. For those, compare floor masks (void threshold after a light
@@ -143,15 +142,15 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   surrounding void stays pure black" when walls will be traced.
 - **Regular patterns come back as a printed grid.** Grid-aligned flagstone joints in the input
   repainted as a baked grid that fights Foundry's.
-- **A campaign shelf beats the recipe.** Where a campaign's `art/SHELF.md` bans "visible
-  brushwork" (it turns Van Gogh), swap the recipe's phrase for "smooth, refined, controlled
-  brushwork"; the rest of the recipe holds.
-- **Clean variants are a prop library.** A Cartos map minus its Clean twin lifts every prop
+- **The shelf owns the finish words.** A campaign's `art/SHELF.md` says what the brushwork is
+  (one banned "visible brushwork" for the swirls it drew and asked for "smooth, refined,
+  controlled"); the recipe's shape holds under any finish line.
+- **Clean variants are a prop library.** A pack map minus its Clean twin lifts every prop
   with alpha (fill the contours so pale props keep no holes). Combined sheets show which tiles
   the author designed to join.
 - **Start from the Clean variant when the map is being re-themed (owner rule 2026-10-07).**
   The standard map's dressing is the pack's story, and the keep line makes the model keep it:
-  a predator's gore-strewn lair in Twisting Tunnels came through into the Hearth's deep
+  a predator's gore-strewn lair in one pack map came through into a campaign's home
   tunnels untouched. Clean is the walled blank slate: it ships as its own scene with the
   structural walls (cave rim, rooms, doors) and none of the prop loops or lights. Name the
   dressing you want in the instruction, carry Clean's walls, and take lights from the standard
@@ -160,18 +159,18 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   is the point (a plain restyle for a better look).
 - **No interactable creatures on a battlemap (owner rule 2026-10-07).** Anything the party
   could fight, talk to, herd, buy or rescue is a token, made separately, so it can move: the
-  goats on the ledges, the people at the fire, a guard at the Door. Prompt the pen, the hay
+  goats on the ledges, the people at the fire, a guard at a gate. Prompt the pen, the hay
   rack and the stool; leave the goats out. Critters are the exception and should be painted:
   minor, non-interactable life that is set dressing, such as the blind fish in the pool, bats
   in the roof, rats at a spoil heap, moths at a lamp. The test is whether a player would ever
   click on it. The 2026-10-07 goat ledges painted the goats in and will be redone; the deep
   pools' fish stay.
-- **Doors read like the Hearth Door, not like a flag (owner, 2026-10-07).** The map is a
-  cutaway seen from above; a door slab painted from words should show the way the Hearth's
-  Door slab did (the slab's face foreshortened in the cutaway convention, standing in its
+- **Doors read like a standing slab, not like a flag (owner, 2026-10-07).** The map is a
+  cutaway seen from above; a door slab painted from words should show the way the first good
+  one did (the slab's face foreshortened in the cutaway convention, standing in its
   opening). Several second-pass doors came back as a flat upright flag at right angles to the
   map. Say "a door standing in its opening, seen the same way as the walls" and compare
-  against the Door render before accepting.
+  against a render that got it right before accepting.
 - **A stitched super map needs a blend pass at the seams (owner, 2026-10-07).** Tiles
   repainted separately join with a colour ramp only: one tile's water meets another's as two
   kinds of water, and cave rock changes grain at the line. After stitching, the seam band
@@ -190,7 +189,7 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   and say so.
 - **Dressing a whole scene is one light pass; tiles are for specific fixes (owner rule
   2026-10-12).** When a scene needs dressing throughout (a sleeping area in every room, hearths,
-  fungus), do not scatter `prop` tiles across it by hand: on the Family Chambers that put beds into
+  fungus), do not scatter `prop` tiles across it by hand: on one chambers map that put beds into
   walls and a mushroom in mid-floor. Run ONE whole-map `edit-image` `kind: "battlemap"` that names
   each kind of dressing and where it belongs ("one sleeping area flush against the cave wall, never
   on or across the wall line", "one small hearth in the open middle of each larger chamber", "a few
@@ -207,12 +206,12 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   tunnel rims and the black block; give the new wall's outer side the same soft pale rock shoulder
   fading into pure black as the other outer edges". Blend only the area beyond the new wall
   (feathered), so the wall line and floor that the walls trace stay put, and look again at the whole
-  map: a stub often hides further along (Party Camp's lower rim needed its own pass).
+  map: a stub often hides further along (one camp map's lower rim needed its own pass).
 - **Fine edits are tiles, never another draft of the map (owner rule 2026-10-11).** Once a
-  map is painted, a change to one thing on it (put the Lamp on the shrine, add a brazier, swap
+  map is painted, a change to one thing on it (put a lamp on the shrine, add a brazier, swap
   a chest) is a separate `prop`, placed as a Foundry tile over the background. Never re-run the
   whole map for it: every full pass redraws everything, drifts the layout (the drift check
-  refused a bench swap on the Great Hall twice) and quietly breaks details it was told to keep
+  refused a bench swap on a hall map twice) and quietly breaks details it was told to keep
   (the shrine's seven stars went). The recipe: `generate-image` `kind: "prop"` with `footprint`,
   a crop of the map around the spot attached as `role: "style"` so ink and palette match;
   `upload-asset` to `worlds/<world>/assets/tiles/props/<area>/<slug>_<W>x<H>.png`; find the
@@ -221,7 +220,7 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   renders at 300 px per cell; on a 140 px grid a small object is about 0.6 of a cell), centred,
   and **unlocked** (a locked tile can't be clicked or box-selected on the Tiles layer, so to the
   owner it looks missing; owner, 2026-10-11); move any light that belongs to the object onto it; `screenshot-scene` and look.
-  First used for the Lamp of 1391 on the Great Hall's shrine (echoes-of-halruaa).
+  First used for a lamp prop on a hall's shrine.
   **To change or remove something already painted** (close a painted door, paint out a chest),
   the tile is an opaque *patch*, not a prop, because the prop kind cuts to alpha and would throw
   the floor away. Crop the scene image a little wider than the change, run `edit-image`
@@ -229,7 +228,7 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   at the edges (local PIL), and place it at the crop's pixels plus `sceneX`/`sceneY`, unlocked.
   On a small crop the drift check refuses a removal, because the change itself reads as drift. No
   walls trace a patch, so read the kept `-drifted` render and judge it by eye. A patch can also
-  hold a *state*: the Hearth's Door is painted open, with a closed-Door patch on top for the
+  hold a *state*: a great door painted open, with a closed-door patch on top for the
   story. Hide the tile (and unhide the daylight light) on the day it opens.
 - **Overhead features are the one exception to "never another draft" (owner rule 2026-10-12).**
   Anything a token should pass *under* (shoring beams, lintels, arches, hanging racks, bridges,
@@ -237,7 +236,7 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   ONE whole-map `edit-image` `kind: "battlemap"` that names the *kind* of thing and never a
   position: "Remove every wooden shoring beam, timber post and plank on the whole map … Do not add
   any new beams or objects. Keep every lantern and its glow, [the other objects] exactly where they
-  are." A five-beam instruction by position on The Breach removed the wrong beams, kept three of
+  are." A five-beam instruction by position on a mine map removed the wrong beams, kept three of
   the five and painted in a new one, and still passed the drift check (it checks layout, not
   content), so judge the result by eye. Then cut each feature from the ORIGINAL map (local PIL): a
   hand-drawn polygon per feature from pixel-ruler crops, dilated about 8 px (`MaxFilter(17)`; 4 px
@@ -247,24 +246,24 @@ plus a kitbash; full write-up in `notes/map-builder/PLAN.md`):
   map as the background (below) and each cut at its bbox plus `sceneX`/`sceneY` as an overhead
   tile: elevation 20, `occlusionMode` 1 (Fade: the whole tile ghosts while a token is under it;
   the owner preferred it to 4, Radial, which clears only a circle), `occlusionAlpha` 0.25. Check
-  with `screenshot-scene` `asToken` and a token moved under a beam. First used on The Breach
-  (echoes-of-halruaa): sixteen timbers, about $0.23.
+  with `screenshot-scene` `asToken` and a token moved under a beam. First used on a mine map:
+  sixteen timbers, about $0.23.
 
-**Installing a restyled map** (molten5e): `upload-asset` the WebP the tool wrote to
+**Installing a restyled map** (the dnd5e MCP): `upload-asset` the WebP the tool wrote to
 `worlds/<world>/assets/maps/<name>.webp`, then `manage-scenes` `update` with `sceneIdentifier`
 and `backgroundPath` only. Never pass width, height, or gridSize: the walls are in the scene's
 own coordinates, and a scene (v10+) draws its background at the scene's dimensions, so a bigger
 or smaller file still lines up. Note the old background path first so the swap can be undone,
 and `screenshot-scene` afterwards. Before the swap, draw the scene's walls over the restyle
 (the walls are in the campaign repo's scene export, in canvas pixels: subtract `sceneX` /
-`sceneY` from `get-scene-dimensions`) and look: proven on Bramblemaw's Lair, live on Molten
+`sceneY` from `get-scene-dimensions`) and look: proven on a lair map, live on the hosted world
 2026-10-02, all 934 walls and doors on their painted edges. Only after the owner has approved
 the map. About 15
 cents a map, 30 with a drift retry.
 
 **Props** (the owner's prop library, mostly Tom Cartos at 300 px per
 grid cell). Refreshing one is `edit-image` `kind: "prop"` with the repaint wording (`repaint this
-prop at much higher quality in a painterly style, with fine painted detail on its materials`);
+prop at much higher quality in <the shelf's prop finish>, with fine painted detail on its materials`);
 the result comes back at the source's exact pixel size with the new art in the original's box,
 so it replaces the file one for one. A new prop is `generate-image` `kind: "prop"` with
 `footprint` from the file-name convention (`TC_Anvil 02_2x1.png` is `"2x1"`). Never run a prop
@@ -342,7 +341,7 @@ prompt can simply say the character's name and be understood:
 - **Object references** hold one thing to reproduce: a crop of a weapon head, a shield face, a
   scarf, an orb (Flash up to 10, Pro up to 6). Label each and say where it goes ("the axe in the
   fist at the lower left is Image 3"). Gear that was only described drifted; gear that is shown
-  is copied (2026-10-16): Kartor's axe head and shield and Cecil's lute and scarf came through
+  is copied (2026-10-16): a dwarf's axe head and shield and a bard's lute and scarf came through
   from crops with the head and pose untouched.
 - **Style references** hold the house look. The docs say Pro only, up to 3, but they work on
   Flash in practice (spike 2026-09-19; the whole 2026-09-19 batch was Flash and held the look).
@@ -352,7 +351,7 @@ prompt can simply say the character's name and be understood:
   only; the mannequin route in Step 4 takes a crop of the character's approved portrait as
   `character` and crops of signature gear as `object`, never a style image). They are top-down full-body
   figures on transparency (`assets/tokens/<name>.png` in the world data). Attach one as
-  `role: "style"` and the new token comes out at the same angle and in the same ink-lined look.
+  `role: "style"` and the new token comes out at the same angle and in the same look.
   The tool appends the framing and the chroma plate sentence itself, picks a plate colour the
   subject will not share (it samples the references AND reads the prompt for colour words, so a
   green dragon prompted against a grey token gets a magenta plate), cuts the result to alpha on
@@ -373,19 +372,19 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
 - **Describe props concretely**: "crossbow" drifts into muskets; "wooden crossbow with a drawn
   string" holds. Stat-block gear gets described, not named.
 - **Never say "book art", "cover", or "poster"** — that paints title typography and plate
-  borders. Style lives in words like "fantasy illustration", "oil painting style". The exception
+  borders. Style lives in the shelf's finish line, never in a product word. The exception
   is a deliberate text prop (a real wanted poster), which is a Pro illustration.
 - **Tokens** (humanoids go the mannequin route in Step 4, whose recipe replaces this): describe
   the creature and its pose only. Never write framing, angle, or
   background words; the tool owns those and vaguer plate wording made Flash paint a green DISC
-  on white in the spike. "Ink-lined with painted color and shading" in the prompt reinforces the
+  on white in the spike. The shelf's token finish words in the prompt reinforce the
   world-token style reference.
 - **Icons**: the tool appends "single subject centered, filling the frame, no text, no border";
-  you supply the STYLE, or the render comes back photoreal. The proven set prefix: `fantasy RPG
-  inventory icon, painterly oil illustration, soft top-left light, rich mid-tones and deep
-  shadows, plain dark vignetted background. Subject:` then the object with its material ("rusted
-  iron key", "worn oak longbow"). Same prefix for every icon in a set so they read as a set;
-  twenty in a row held on Flash.
+  you supply the STYLE, or the render comes back photoreal. The set prefix is the shelf's icon
+  finish line, in the proven shape `fantasy RPG inventory icon, <the shelf's finish>, <its light>,
+  rich mid-tones and deep shadows, plain dark vignetted background. Subject:`, then the object
+  with its material ("rusted iron key", "worn oak longbow"). Same prefix for every icon in a set
+  so they read as a set; twenty in a row held on Flash.
 - **Negation backfires — describe presence, never absence** (proven twice, 2026-08-28). "no large
   tusks" DRAWS large tusks; "no beard" GROWS a beard. Say what IS there instead: "his chin and jaw
   and upper lip are smooth bare hairless skin".
@@ -465,9 +464,9 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    sentence ("give this elf a sword and armor instead"), no "keep everything identical", no
    angle or background words. The tool adds a keep-face/hair/angle line and a plate keyed to
    the token's colours; a light prompt beat the strict wording in the elf A/B (2026-09-24).
-   **Refreshing an old low-res token** ("upscale this", "give it a painterly pass") is the same
-   call with this instruction shape, proven on the bronze dragon (2026-09-24):
-   `give an updated and upscaled painterly style. Sharpen and refine every detail: <three or
+   **Refreshing an old low-res token** ("upscale this", "give it a finish pass") is the same
+   call with this instruction shape, proven on a bronze dragon (2026-09-24):
+   `give an updated and upscaled <the shelf's token finish>. Sharpen and refine every detail: <three or
    four details named for THIS subject>, clean confident edges, no blur or pixelation`.
    Read the token first and name what it has: scales, claws and spines for a dragon; fabric
    folds, fingers and facial features for a person; fur and teeth for a beast. Ask for existing
@@ -484,7 +483,7 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    description of his token was rejected because his pose, proportions, and look changed.
    So an existing token is ALWAYS reworked with `edit-image`, never regenerated from words.
    For a weak source, push the repaint harder while pinning what must not move:
-   `repaint this token at much higher quality in a painterly style: keep the exact pose,
+   `repaint this token at much higher quality in <the shelf's token finish>: keep the exact pose,
    silhouette, design, colours and camera angle, but redraw the anatomy, faces and materials
    properly with fine painted detail`. Tested 2026-09-24: faithful on a gnome, an assassin, a
    stegosaurus, a guard commander, and all four PCs, with clear gains on the weak ones and a
@@ -629,7 +628,7 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    - **`thinking: "high"` bought nothing on tokens (2026-10-16, two pairs).** Both render tools
      take it and report `thinkingTokens`; Nano Banana 2.1 thinks at medium by default, about 600
      to 1600 tokens a token render, under a cent. At high the counts stayed in the same band,
-     Cecil came out the same and Tychon's stance drifted into a lean the mannequin lacks. Leave
+     one PC came out the same and another's stance drifted into a lean the mannequin lacks. Leave
      it unset for tokens.
    **Drawing a token from words** (`generate-image` kind `token`, flash: the pose written as a
    camera would see it, a face crop as `character`, one finished token as `style`) is now the
@@ -640,8 +639,8 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    a library token becomes a campaign NPC, pick a base that is already steeply overhead (head
    and shoulders large, legs tucked under), because the restyle keeps whatever angle it has.
    A `character` reference (a portrait) makes it worse: it drags the face toward the camera,
-   and on the canvas a frontal figure reads as lying on its back. For Cassia
-   (echoes-of-halruaa), six passes of angle wording and `pose` references on a frontal base
+   and on the canvas a frontal figure reads as lying on its back. For one key NPC,
+   six passes of angle wording and `pose` references on a frontal base
    failed. Restarting from an overhead library token, restyled from a written description with
    only a `style` reference (another NPC's finished token), fixed it in two calls. If the angle
    is wrong, start over from a better base; don't keep editing.
@@ -668,8 +667,8 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    figure in its default stance, and a frontal face reference pulls the camera frontal. What
    held all three poses exactly: no character reference, and three edits in a row, each opening
    with `keep the exact pose, body position, limb placement, camera angle and silhouette;` then
-   one group of changes: (1) head and weapon, (2) armour, shield and cloak, (3) the painterly
-   refresh wording above with the subject's details named. Put the base and each pass side by
+   one group of changes: (1) head and weapon, (2) armour, shield and cloak, (3) the refresh
+   wording above with the subject's details named. Put the base and each pass side by
    side before showing anything, and compare the *pose*, not just the kit.
    **But quality comes from words, not from a base (owner, 2026-10-14).** The pose-locked passes
    above hold a pose; they cannot lift a flat library ink to the finish of a token the model
@@ -690,7 +689,7 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    given each other as style references swapped bodies).
    **A different creature in an existing token's pose is an edit too**: `turn this rat into a
    red squirrel: <colours, markings>, keeping the exact pose, body position and camera angle,
-   repainted at high quality in a painterly style` on the rat's token gave the rat's exact
+   repainted at high quality in <the shelf's token finish>` on the rat's token gave the rat's exact
    crouch and tail curve (2026-09-24), the same as `role: "pose"` with a description. Use the
    edit; the pose role is a fallback.
    **Glow and aura effects are a cutout weak spot**: a soft glow painted over the chroma plate
@@ -737,9 +736,9 @@ area first:
   square); everything that sits in one cell is the default (512). Tokens arrive already cut to alpha, shadowless (owner rule 2026-09-24: no
   shadows on tokens; the prompt tells the model to drop a baked one). Read the magenta preview
   the cutout wrote before trusting the edge. For a token from anywhere else, `cutout-image`
-  does the same cut. Restyling a world token ("give this an updated painterly style") is an
+  does the same cut. Restyling a world token ("give this an updated finish") is an
   ordinary token edit: point `sourceImage` at the file wherever it lives.
   Installing a token in the world (upload, `set-actor-art`, resetting the inherited prototype
-  scale/ring/rotation) follows the molten5e `token-cutout` skill, which now holds only that half.
+  scale/ring/rotation) follows the dnd5e MCP's `token-cutout` skill, which now holds only that half.
 - If canon details were invented in Step 1, offer to write them back into the actor bio/journal so
   the art and the text agree forever after.

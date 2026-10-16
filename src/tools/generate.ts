@@ -34,7 +34,7 @@ const generateImageSchema = z.object({
     .optional()
     .describe(
       'Reference images, attached in this order. Bind each in the prompt by its label or ' +
-        '1-based index ("Image 2 is Morgash").'
+        '1-based index ("Image 2 is the captain").'
     ),
   tier: tierSchema,
   confirmPro: confirmProSchema,

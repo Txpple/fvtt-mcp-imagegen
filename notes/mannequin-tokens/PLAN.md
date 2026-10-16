@@ -204,9 +204,8 @@ Replace the entire shield, keeping its exact position and angle on <his|her> for
 naturally the way the original is held: none of the old round disc, round rim, studs or arm
 straps remain, and nothing round is left. The new shield is <shape, material, rim>.
 <Any magic: "the hand at the lower right casts a crackling ball of violet force">.
-Dark epic painterly rendering, the figure mostly in deep shadow with <light source> as the key
-light and a faint cold rim light on the far edges, deep blacks and <dark colours>, crisp fine
-detail on <materials>; nothing bright except <light source>, nothing left grey clay.
+<The campaign's token finish line from its art/SHELF.md, its key light named>; nothing left grey
+clay.
 ```
 
 - Name hands by **where they are in the image** ("the hand at the lower left"), never left and
