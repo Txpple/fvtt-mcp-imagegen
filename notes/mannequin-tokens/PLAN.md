@@ -172,8 +172,11 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 2. **Capture** the rest of the human body: two-hand, down (and cast, if step 1 says so).
 3. **Prove** the small and large bodies with two or three renders each before capturing all
    their setups; then capture dwarf, small and large.
-4. **Store** the captures privately (the owner's private art repo `fvtt-assets-actors`), never
-   here. Record the path in this file.
+4. **Store** the captures in the owner's private art repo `fvtt-assets-actors`, under
+   `mannequins/` (never here). Its `npm run mannequin -- check` reads HeroForge's exports in
+   `~/Downloads` against the capture rules (1024 square, alpha, clear pixels on every side,
+   frame fill) and `npm run mannequin -- take <file> <body> <pose> <setup>` files a passing
+   one under its name; `mannequins/README.md` there carries the shot list.
 5. **Skill:** add a "mannequin route" to `illustration-builder`'s token section (it already
    points here): when to use it, where the library lives, picking by how the hands hold, and the
    recipe above. Make it the default for humanoid PCs and NPCs.
@@ -181,10 +184,17 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
    skills decide). Revisit only if the recipe's fixed wording starts repeating in every call;
    then a `mannequin` source hint on `kind: "token"` could carry it.
 
-## Status (2026-10-15)
+## Status (2026-10-15, evening)
 
-- **Captured:** the human crouch, eight setups (male body), plus the spear-and-shield crouch on a
-  female body from the sex test. Still the owner's raw HeroForge downloads, not yet named or
-  stored (step 4).
-- **Test renders** are local only (the owner's Desktop, `male-vs-female-body-test`).
-- **Next:** step 1, then step 2.
+- **Nothing is in the library yet.** The two bodies from the sex test (the spear-and-shield
+  crouch, male and female) are the only captures so far; they are on the owner's Desktop
+  (`male-vs-female-body-test/source-*.png`) and re-exported into `~/Downloads` this evening.
+  The spear tip sits 4 to 18 px from the right edge on every one of them: it rendered, but the
+  shot list asks for 24 px clear, so the saved camera should pull back a touch before the first
+  real session.
+- **The library's home exists:** `fvtt-assets-actors/mannequins/` with the checker, the naming
+  script and the shot list (step 4). The human session starts with `crouch-empty`, because step 1
+  needs it.
+- **Test renders** are local only (the owner's Desktop, `male-vs-female-body-test`,
+  `Backup/class-samples`).
+- **Next:** the owner captures the human body from the shot list; then step 1, then step 2.
