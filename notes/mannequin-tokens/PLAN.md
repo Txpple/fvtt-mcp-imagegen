@@ -182,7 +182,10 @@ shields).
 **Licensing (ruled 2026-10-16):** the captures are unpainted grey poses with no copyright of their
 own, so they live in this public repo under `mannequins/`. They were first kept in the private
 `fvtt-assets-actors`, which the owner reserves for finished art. For anything commercial, read
-HeroForge's terms or swap the capture step to an open source (PoseMy.Art, MakeHuman).
+HeroForge's terms or swap the capture step to an open source (PoseMy.Art, MakeHuman). **Per-character
+HeroForge builds are out (owner ruling, 2026-10-16):** a PC modelled with HeroForge's own gear, horns
+and parts would carry their designs into the art, so the library stays grey, unclothed poses only;
+a character's gear comes from the approved portrait as `object` crops and from words.
 
 ## The render recipe
 
