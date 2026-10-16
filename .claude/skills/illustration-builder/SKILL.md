@@ -341,7 +341,8 @@ prompt can simply say the character's name and be understood:
   Flash in practice (spike 2026-09-19; the whole 2026-09-19 batch was Flash and held the look).
   Attach the standing style shelf (from `art/SHELF.md`) on every portrait and illustration
   call unless the owner asks for something deliberately different.
-- **Tokens take the world's own tokens as the style reference.** They are top-down full-body
+- **Tokens take the world's own tokens as the style reference** (words-only and restyle routes
+  only; the mannequin route in Step 4 takes no references at all). They are top-down full-body
   figures on transparency (`assets/tokens/<name>.png` in the world data). Attach one as
   `role: "style"` and the new token comes out at the same angle and in the same ink-lined look.
   The tool appends the framing and the chroma plate sentence itself, picks a plate colour the
@@ -366,7 +367,8 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
 - **Never say "book art", "cover", or "poster"** — that paints title typography and plate
   borders. Style lives in words like "fantasy illustration", "oil painting style". The exception
   is a deliberate text prop (a real wanted poster), which is a Pro illustration.
-- **Tokens**: describe the creature and its pose only. Never write framing, angle, or
+- **Tokens** (humanoids go the mannequin route in Step 4, whose recipe replaces this): describe
+  the creature and its pose only. Never write framing, angle, or
   background words; the tool owns those and vaguer plate wording made Flash paint a green DISC
   on white in the spike. "Ink-lined with painted color and shading" in the prompt reinforces the
   world-token style reference.
@@ -481,20 +483,88 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    light polish on good art (the party's tokens barely changed, so do not spend on good art).
    One slip: a cream cat came back Siamese-coloured; name the colours explicitly when they
    matter.
-   **Default for a PC or a key NPC: draw the top-down token from words (owner, 2026-10-14).**
-   `generate-image` kind `token`, flash tier, with three things: the pose written as a camera
-   would see it ("seen from steeply overhead, he crouches low and leans forward into a charge
-   toward the viewer, head and shoulders filling the upper frame, legs tucked under him, a
-   battleaxe gripped low in his right hand, a round shield on his left arm held out beside
-   him"), a crop of just the face from the approved portrait as `character`, and one existing
-   high-quality token (the character's own, or a finished sibling's) as `style` for the finish.
-   Flash matched pro on this recipe side by side, so pro is not the lever; the words are.
-   Library restyles are for background NPCs and for the case where the owner wants one exact
-   library pose kept; everything below about bases applies to that case only.
-   **Coming: a mannequin route for every humanoid** (grey HeroForge captures, one `edit-image`
-   each, words plus the mannequin and nothing else). The library is not captured yet; once it
-   is, it replaces the words-only default for humanoids. Read
-   `notes/mannequin-tokens/PLAN.md` before any token work.
+   **Default for every humanoid PC and NPC: the mannequin route (owner, 2026-10-15).** A
+   library of 312 grey HeroForge captures lives in the owner's private art repo,
+   `fvtt-assets-actors/mannequins/` (its README is the shot list; `npm run mannequin -- grid`
+   there lists it). One `edit-image` call, kind `token`, flash, the capture as `sourceImage`,
+   **no references at all**, turns a capture into a finished token at about 3 cents: the
+   mannequin fixes pose, camera, proportions and grip; the words supply race, sex, age, face,
+   kit, colours and finish. About 120 test renders (2026-10-15; the record is
+   `notes/mannequin-tokens/PLAN.md`) came out usable on the first pass almost every time. The
+   words-only `generate-image` route stays for creatures with no humanoid body (a beast, a
+   flying sword, an ooze); a library restyle stays for the case where the owner wants one exact
+   library token kept.
+   *Picking the capture.* File names are `mannequin-<body>-<sex>-<pose>[-<setup>].png`. Choose
+   in this order:
+   (1) **Pose.** `combat` (a low lunge from steeply overhead, the fighting default), `stand`
+   (upright, camera in front and above, chest and face showing: idle, casters, civilians, worn
+   gear), `twohand` (both fists on one shaft), `dead` (on the back, arms out), `prone` (knocked
+   down on the knees). A set of condition tokens for one character is one capture per pose with
+   the same description reused; the character stays recognisably the same.
+   (2) **What the hands hold.** The setup is picked by grip, never by class. Combat:
+   `spear-shield`, `dagger-shield`, `sword-shield`, `longsword-kite`, `sword-open`,
+   `longsword-open`, `empty` (one fist low, one hand high: every caster, monk, unarmed),
+   `crossbow-hip`, `crossbow-down`, `bow`, `twodaggers`, `sword-dagger`. Stand: `dagger-shield`,
+   `dagger-open`, `empty` (closed fists), `open` (open spread hands), `bow`, `bow-draw`,
+   `shortbow-draw`. Twohand: `right` (blade at the right shoulder), `left` (at the left side,
+   body twisting), `staff-level`, `staff-diagonal`, `staff-brace`. Dead and prone have no
+   setup. Take the *shortest* blade that fits: a weapon grows in words (a dagger became a
+   longsword three times its length) but never shrinks. A shield capture also covers no shield:
+   remove it by naming its parts.
+   (3) **Body and sex.** `human` (every human-sized race: elf, tiefling, dragonborn, half-orc
+   all came out clean on it), `dwarf`, `small` (halfling, gnome, goblin, kobold), `large`
+   (goliath, bugbear, ogre), `orc`, `elf`; each `male` and `female`. The body sets build and
+   mass, which words cannot change (a dwarf on the human body came out tall); face, ears, tusks,
+   skin and hair come from words on any body. Scale does *not* carry: every token is fitted to
+   its square, so a halfling fills its cell like anyone; size on the map is `creatureSize` and
+   the actor's token size.
+   *The recipe.* One instruction, in this shape, with the campaign's finish line from its
+   `art/SHELF.md` at the end:
+   `Turn this grey mannequin into <race, sex, age, build, skin, face, hair, eyes>, <anything the
+   mannequin lacks: ONE tail curving out behind to the lower left only, wings folded, a hood>.
+   <He|She> wears <clothing and armour, materials and colours>. Replace the entire <weapon> in
+   <his|her> fist at the <lower left>, keeping only the fist's grip and the line it points along:
+   none of the old <blade, crossguard, pommel> remain. The new weapon is <each part, grip to
+   tip>. Replace the entire shield, keeping its exact position and angle on the forearm, held
+   naturally: none of the old round disc, round rim, studs or arm straps remain, and nothing
+   round is left. The new shield is <shape, material, emblem>. <Any held light or magic, named
+   as the key light>. <The finish line>; nothing left grey clay.`
+   The rules behind it, each one paid for:
+   - **Name hands by where they sit in the image** ("the fist at the lower left"), never left
+     and right; the model reads those both ways, and even image sides are honoured only most of
+     the time (a mirror reads the same on a token, so let it go).
+   - **Repaint keeps what is not named; replace renames every part.** "Repaint the spear as an
+     ash shaft" kept the old grip and butt cap half the time; "replace the entire spear ... none
+     of the old butt cap, ring bands, wrapped grip or collar remain" left nothing. Repaint keeps
+     shape and ornament too: a curved dagger stays curved, a carved bow keeps its carving,
+     unless the old shape or ornament is named for removal.
+   - **A closed empty fist takes a written weapon; an open hand does not.** The standing
+     `empty` capture took a sword written into the fist first time; weapons written into open
+     hands gripped badly three times in four. An open hand is for a spell, a lantern, a torch, a
+     tankard, or nothing.
+   - **Shields change freely**: reshaped (heater, kite, tower, buckler), resized both ways,
+     removed, or added where a weapon was. Emblems read when the capture's shield faces the
+     camera (the standing captures, `longsword-kite`); edge-on shields hide their face.
+   - **Worn gear works from the standing camera**: a sheathed sword at the hip, a backpack with
+     its bedroll above the shoulders, a greatsword or a shield slung on the back. On the prone
+     capture, gear on the back rises over the bowed head; lay it on the ground instead.
+   - **Full-draw bows** render in character and never clip, but the string stays straight tip
+     to tip; a fix pass did not move it. Accept it.
+   - **The twohand `left` stance straightens on stocky and small bodies**; prefer `right` for
+     dwarves and small folk.
+   - **One render in about twelve loses the figure's scale** (a sickle came back at half size).
+     Compare figure size to the mannequin in the flaw pass; a shrunken figure is re-rendered,
+     since an edit cannot grow it back.
+   - **Fix a fault with one flaw pass on the render**, naming the one thing and ending "keep
+     everything else identical". Never re-roll a good pose. Variants (wounded, cloaked, darker)
+     are edits of the finished token, and the pose holds.
+   - **Never attach a second image.** A style token or a portrait beside the mannequin gets its
+     subject copied in. Words plus one mannequin and nothing else.
+   **Drawing a token from words** (`generate-image` kind `token`, flash: the pose written as a
+   camera would see it, a face crop as `character`, one finished token as `style`) is now the
+   route only for non-humanoid bodies. It matched pro side by side, so pro is not the lever.
+   Library restyles are for the case where the owner wants one exact library pose kept;
+   everything below about bases applies to that case only.
    **The camera angle is the base token's, and no edit changes it (owner, 2026-10-11).** When
    a library token becomes a campaign NPC, pick a base that is already steeply overhead (head
    and shoulders large, legs tucked under), because the restyle keeps whatever angle it has.

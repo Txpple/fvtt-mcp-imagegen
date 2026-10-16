@@ -11,13 +11,12 @@ fit walls and lights, and hand the LLM `.uvtt` / scene JSON plus teleporter pair
 through fvtt-mcp. Plan, lessons and proof-of-concept code in
 [notes/map-builder/PLAN.md](notes/map-builder/PLAN.md) (2026-10-05).
 
-## 0b · Tokens from a mannequin pose library
+## 0b · Tokens from a mannequin pose library (done 2026-10-15)
 
-Grey HeroForge captures (four bodies: human, dwarf, small, large; a few poses each, many quick
-weapon setups per pose) that `edit-image` turns into any humanoid token with a locked pose and
-camera. Tested 2026-10-14/15; the library's home and shot list are in `fvtt-assets-actors/mannequins/`
-(private), the captures are next, then a mannequin route in `illustration-builder`. Everything is in
-[notes/mannequin-tokens/PLAN.md](notes/mannequin-tokens/PLAN.md).
+312 grey HeroForge captures (six bodies in both sexes; combat, stand, twohand, dead and prone poses,
+26 setups) in the private `fvtt-assets-actors/mannequins/`, turned into any humanoid token by one
+`edit-image` call. The `illustration-builder` skill carries the route as the default for humanoids.
+The record is [notes/mannequin-tokens/PLAN.md](notes/mannequin-tokens/PLAN.md).
 
 ## 1 · Icon sets as a first-class workflow
 

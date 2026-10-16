@@ -218,9 +218,10 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
    `~/Downloads` against the capture rules (1024 square, alpha, clear pixels on every side,
    frame fill) and `npm run mannequin -- take <file> <body> <pose> <setup>` files a passing
    one under its name; `mannequins/README.md` there carries the shot list.
-5. **Skill:** add a "mannequin route" to `illustration-builder`'s token section (it already
-   points here): when to use it, where the library lives, picking by how the hands hold, and the
-   recipe above. Make it the default for humanoid PCs and NPCs.
+5. **Skill: done 2026-10-15.** `illustration-builder`'s token rules (Step 4, item 5) open with the
+   mannequin route: when to use it, picking a capture (pose, then grip, then body and sex), the
+   recipe, and the rules learned here. It is the default for every humanoid PC and NPC; the
+   words-only route stays for non-humanoid bodies.
 6. **No new tool.** This is skill judgment over the existing `edit-image` token kind (tools do,
    skills decide). Revisit only if the recipe's fixed wording starts repeating in every call;
    then a `mannequin` source hint on `kind: "token"` could carry it.
@@ -244,6 +245,6 @@ and race, gear limits, coverage, casters, the standing pose, worn gear, four pos
 character, full-draw bows, and the two-handed stances. The lessons are in the tables above. Three
 staff setups (level, diagonal, brace) are captured but not yet rendered.
 
-**Next: step 5, the skill.** Add the mannequin route to `illustration-builder`: when to use it,
-how to pick a capture (pose, then what the hands hold, then body and sex), the render recipe, and
-the rules learned here. It becomes the default for humanoid PCs and NPCs.
+**Step 5 is done:** the mannequin route is in `illustration-builder` and is the default for every
+humanoid. What remains is use: the next PC or NPC token goes this way, and anything it teaches
+goes into the skill and this file. Step 6 (no new tool) stands.
