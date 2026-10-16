@@ -77,6 +77,23 @@ humanoid whose body is in the library starts from a mannequin.**
 | Variants by editing a finished render (darker, cloak, runes) | Pose held | One mannequin gives a whole wardrobe. Fix faults with a flaw pass, never a re-roll. |
 | A black outline round the mannequin (asked, not rendered) | — | Don't: an edit keeps drawing in the source, so an outline would come back as ink. Separate limbs with arms held off the body, or stronger HeroForge lighting. |
 
+### The standing pose (2026-10-15)
+
+A second pose: standing, arms held a little out from the body, the camera from in front and above
+(the face shows more than in the crouch). Three human male captures, 16 renders, all usable first
+pass (Desktop, `Manny Tests/Stand`).
+
+| Test | Result | Lesson |
+| --- | --- | --- |
+| Two daggers pointing down made into a longsword and dagger, a sword and an added round shield, two hand axes, a mace and a lantern, a warhammer and a tower shield, a rapier and a parrying dagger | All six clean; the longsword three times the dagger, the tower shield shoulder to ankle, the rapier's swept hilt | Everything the crouch showed holds here. **A shield can also be added** where a weapon was, not only removed. |
+| Empty, loosely closed fists made into a wizard with a tall staff, a monk, a mercenary with a sword written into the empty fist, a civilian holding two tankards | All clean, including the sword | **A weapon can be written into a closed empty fist.** The crouch failure was an *open* hand. In a closed fist the grip held. |
+| Worn gear on the empty capture: a sheathed longsword at the hip with a backpack and bedroll, a greatsword slung across the back, a round shield slung on the back | All three read clearly: the bedroll above the shoulders, the greatsword's hilt over one shoulder, the shield's rim and emblem behind the head | **Worn gear works.** From this camera, gear on the back shows above the shoulders. |
+| The dagger-and-shield capture made into a kite shield with a lion, a torch with the shield removed, a dwarf on this human body with a spiked buckler, a tiefling with ONE tail, a scimitar and a heater shield | All clean; the lion emblem reads fully, since this shield faces the camera | Heraldry shows on this pose's shield. Race and size words work on the standing human body too. |
+| Sides named "the fist at the left/right of the image" | Honoured in 10 of 12; the round shield and the wizard's staff went to the other hand | Side names are mostly kept, not always. For a token it rarely matters (a mirror reads the same). |
+
+**Verdict: two captures per body** (empty fists, and a short blade with a shield) cover everything
+tried here. The empty capture alone came close, since closed fists take written weapons.
+
 ## The library
 
 ### Bodies
@@ -216,5 +233,7 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 - **Tested:** 18 body renders, 12 gear renders, 3 coverage renders, and a dwarf with sword and
   dagger and with axe and dagger. Everything is on the owner's Desktop, `Manny Tests`.
 - **Caster question answered:** the empty-handed crouch makes casters; `cast` is dropped.
-- **Next:** the other poses (two-handed, down, and the owner's new standing pose), then step 5,
-  the skill's mannequin route.
+- **Standing pose tested:** two captures per body cover it (empty fists, short blade and shield);
+  16 renders, all clean, including worn gear on the back and hip.
+- **Next:** capture the standing pose for the six bodies, then two-handed and down, then step 5, the
+  skill's mannequin route.
