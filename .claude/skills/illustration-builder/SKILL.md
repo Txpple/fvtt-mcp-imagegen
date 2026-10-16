@@ -589,8 +589,11 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
      kept as `-head-<verdict>.png`), and the result's `head` reports the verdict, the first
      verdict and whether it retried. Two bad verdicts still deliver, flagged, because the judge
      can be wrong: read `head` before the flaw pass, and treat `bowed` or `up` on a delivered
-     token as a re-render, not an edit. `unclear` with an `error` means the judge was not
-     reached and the token went through unchecked; `unclear` without one is a hooded, helmeted
+     token as a re-render, not an edit. When the same capture comes back `up` twice, change the
+     capture rather than the words (Cecil's combat dropped the camera three times on
+     `combat-empty` and landed first time on `combat-dagger-shield` with the shield removed,
+     2026-10-16). `unclear` with an `error` means the judge was not
+     reached and the token went through unchecked; `unclear` without one is a lying, hooded, helmeted
      or lying figure, which is fine.
    - **The dwarf `dead` capture loses the dwarf build**: twice it came back lean, older and grey,
      with and without the crop. One flaw pass naming build, age and hair fixed it both times;

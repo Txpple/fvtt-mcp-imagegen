@@ -332,6 +332,16 @@ token framing; the fifteen-degree pitch and the lifting sentence are retired, an
 judges for the new target (`up` now means the camera dropped). The library stays as captured: the
 words override its pitch, and pose, proportions and grip are all it gives.
 
+**The first run at the new camera (2026-10-16, the four PCs in four poses, sixteen tokens, about
+$1.04; `PCTokens90` on the Desktop and the campaign's `art/staging`).** With the head check live:
+every stand and prone and three of four combats were judged `ahead` first time and look it. Cecil's
+combat on the empty-hands capture came back with the camera dropped three times (the judge caught
+each, the retries did not fix it) and landed first time on the dagger-shield capture with the
+shield removed: when a capture keeps dropping the camera, change the capture, not the words. The
+three dead PCs lying on their backs were judged `up`, since a lying figure is face-on from above by
+nature; the judge prompt now calls a lying figure `unclear` first. The owner's HeroForge heads were
+not raised (ruled not worth it); the words carry the camera.
+
 The same day the tool grew a head check
 (`src/head.ts`): the plate goes to a judge model for one word, a bowed or up first render is redone
 once, and `head` is reported; it never refuses, since the judge can be wrong. Live after the next

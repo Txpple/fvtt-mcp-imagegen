@@ -14,13 +14,16 @@ export type HeadVerdict = (typeof HEAD_VERDICTS)[number];
 export const HEAD_PROMPT =
   'This is a virtual tabletop token: one figure on a flat coloured plate, meant to be seen from ' +
   'directly above, straight down onto the tops of its shoulders, with its head tilted up so the ' +
-  'face shows. Judge the camera and the head and answer with one word. AHEAD: the body is seen ' +
-  'from straight above (shoulders and crown the largest shapes, feet beneath the body) and the ' +
+  'face shows. Judge the camera and the head and answer with one word. First: if the figure is ' +
+  'lying on the ground, on its back or its side, with its whole body flat (arms out, legs ' +
+  'stretched, dropped weapons beside it), answer UNCLEAR, because a lying figure is seen ' +
+  'face-on from above by nature. Otherwise: AHEAD: the body is upright or crouching, seen from ' +
+  'straight above (shoulders and crown the largest shapes, feet beneath the body), and the ' +
   'brow, both eyes and the nose are visible in front of the crown. BOWED: the body is seen from ' +
   'straight above but the head is bowed, so mainly the crown and hair show and the eyes are ' +
-  'hidden or closed. UP: the camera is not straight above: the chest or front of the body faces ' +
-  'the viewer and the face is seen nearly head-on, as in a portrait. UNCLEAR: no face can be ' +
-  'made out (a helmet with no visor, a hood hiding the face, a figure lying down). One word.';
+  'hidden or closed. UP: the camera is not straight above: the chest or front of an upright ' +
+  'body faces the viewer and the face is seen nearly head-on, as in a portrait. UNCLEAR also ' +
+  'when no face can be made out (a helmet with no visor, a hood hiding the face). One word.';
 
 /** The judge's first word, as a verdict; anything else is unclear. */
 export function parseVerdict(text: string): HeadVerdict {

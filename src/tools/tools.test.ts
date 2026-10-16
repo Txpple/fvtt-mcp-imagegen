@@ -626,6 +626,8 @@ describe('edit-image', () => {
     expect(sent).toHaveLength(1);
     expect(judged).toHaveLength(1);
     expect(judged[0].body.contents[0].parts[1].text).toMatch(/Judge the camera and the head/);
+    // A lying figure (dead) reads face-on from above by nature; the judge is told so first.
+    expect(judged[0].body.contents[0].parts[1].text).toMatch(/lying on the ground.*answer UNCLEAR/);
     expect(r.head).toEqual({ verdict: 'ahead' });
     // The session total is rounded to a tenth of a cent; the meter itself shows the judge added.
     expect(spend.totalUsd).toBeGreaterThanOrEqual(0.034);
