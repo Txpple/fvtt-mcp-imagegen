@@ -283,3 +283,23 @@ looked straight down with his eyes shut, Lysandra up at the camera. The approved
 head attached as a `pose` reference pulled both retries frontal: that token is itself nearly
 frontal, so it is no angle reference. The reference to use is a grey head at the target pitch (the
 owner's re-capture), which has no face to copy and only carries the angle.
+
+**The head test (2026-10-16, after the restart; fourteen token renders, $0.59; on the owner's
+Desktop in `imagegentests/head-test`, with a contact sheet).** All on `source: "mannequin"`, flash,
+the head-to-waist crop as `character`. A: the tool's absolute head line ("held level, looking
+ahead") left all four PCs bowed like the capture (Cecil, Tychon, Kartor) or up at the camera
+(Lysandra). B: one relative sentence at the top of the instruction, "the mannequin's head is bowed
+toward the ground; lift the head up from that position until he looks ahead along the ground
+three paces in front, face tilted only a little up, so that the brow, both open eyes and the nose
+show clearly below the top of the head while the chin stays hidden", landed four of four. D: B plus
+gear crops as `object` references (Kartor's axe head and shield, Cecil's lute and scarf) came
+through with the head and pose untouched. E: B on the owner's four raised-head re-exports (the
+highest HeroForge allows without looking awkward) landed four of four again, the faces a touch more
+forward: the raised heads help and are not required. The sentence now leads the tool's mannequin
+prompt (`MANNEQUIN_EDIT_SOURCE`), to be confirmed on the first render after the next restart.
+Three of the re-exports are filed over their captures (`human-male-stand-open`,
+`human-male-stand-empty`, `human-male-combat-dagger-shield`); the female combat dagger-and-open-hand
+export has no slot in the grid and waits on the owner's name for it. Side lessons: name the
+footwear (the mannequin is barefoot and Tychon came back barefoot); thinking at the default medium
+runs 600 to 1600 tokens a token render, under a cent, and is now in the estimate. Not yet tested:
+`thinking: "high"`.

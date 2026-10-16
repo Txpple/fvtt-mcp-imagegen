@@ -342,7 +342,8 @@ prompt can simply say the character's name and be understood:
 - **Object references** hold one thing to reproduce: a crop of a weapon head, a shield face, a
   scarf, an orb (Flash up to 10, Pro up to 6). Label each and say where it goes ("the axe in the
   fist at the lower left is Image 3"). Gear that was only described drifted; gear that is shown
-  is copied (2026-10-16).
+  is copied (2026-10-16): Kartor's axe head and shield and Cecil's lute and scarf came through
+  from crops with the head and pose untouched.
 - **Style references** hold the house look. The docs say Pro only, up to 3, but they work on
   Flash in practice (spike 2026-09-19; the whole 2026-09-19 batch was Flash and held the look).
   Attach the standing style shelf (from `art/SHELF.md`) on every portrait and illustration
@@ -539,7 +540,8 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    only names them. For a new NPC, describe the face in full instead.
    `<Name> is Image 2. <He|She> is <race, sex, age, build, skin, hair, eyes; horn shape if
    any>, <anything the mannequin lacks: ONE tail curving out behind to the lower left only,
-   wings folded, a hood>. <He|She> wears <clothing and armour, materials and colours>. Replace
+   wings folded, a hood>. <He|She> wears <clothing and armour, materials and colours, always
+   the footwear>. Replace
    the entire <weapon> in <his|her> fist at the <lower left>, keeping only the fist's grip and
    the line it points along: none of the old <blade, crossguard, pommel> remain. The new weapon
    is <each part, grip to tip>. Replace the entire shield, keeping its exact position and angle
@@ -565,16 +567,20 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
      left grey. "Keep the mannequin's exact pose" and the softer guide sentence bought the same
      pose side by side in the first real run; the tool's line is the firmer of the two, and the
      instruction no longer says any of it.
-   - **The head angle (2026-10-16).** In the first real run heads went down into the chest or up
-     at the camera. Both causes are in the pixels: the captures' own heads bow toward the ground
-     (the stand and combat human male both look at their feet), and a frontal portrait crop
-     bound "keep this exact face" pulled the head up to the camera. So the head is never bound
-     to the mannequin's. The tool's mannequin keep line describes it (held level, looking ahead
-     along the ground a few paces in front, crown and brow largest, eyes and nose showing, chin
-     mostly hidden), the character preamble binds identity only, and a per-PC token-head anchor
-     (the approved face rendered at the token camera, approved once, on the campaign shelf) goes
-     in as `character` instead of the frontal portrait crop. The owner's re-capture with raised
-     heads is the lock beneath all three. Compare every head to the target in the flaw pass.
+   - **The head angle is solved by lifting it (2026-10-16, fourteen renders).** In the first
+     real run heads went down into the chest or up at the camera: the captures' own heads bow
+     toward the ground, and a frontal portrait crop bound "keep this exact face" pulled the head
+     up to the camera. An absolute description in the tool ("held level, looking ahead") left
+     all four PCs bowed. What landed four of four, twice, on the bowed captures and on the
+     owner's raised-head re-exports alike: a relative sentence that lifts the head from the
+     mannequin's bowed position to a stated target (brow, both open eyes and nose showing below
+     the top of the head, chin hidden, face tilted only a little up, gaze three paces ahead).
+     The tool's `source: "mannequin"` lead sentence now carries it, so the instruction says
+     nothing about the head; the character preamble binds identity only. A token-head anchor
+     rendered from the portrait is not needed for this, and a frontal token head attached as a
+     `pose` reference pulls the face frontal: never attach one. Compare every head to the target
+     in the flaw pass anyway, and name the footwear: the mannequin is barefoot, and a figure
+     described without boots came back barefoot.
    - **The dwarf `dead` capture loses the dwarf build**: twice it came back lean, older and grey,
      with and without the crop. One flaw pass naming build, age and hair fixed it both times;
      expect it.
