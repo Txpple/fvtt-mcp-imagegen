@@ -313,5 +313,6 @@ motes from the raised hand) and Tychon on `twohand-staff-level` both landed with
 target and the pose kept; Lysandra on `prone` came back kneeling with her head up, alert, which
 reads well; Kartor on `dead` lay on his back with his eyes closed, the sentence overruled by "lying
 dead, eyes closed", so the tool may carry it on every mannequin edit. The tool-side placement
-(`MANNEQUIN_EDIT_SOURCE`) is still unverified: the server process predates that build, so every
-test here carried the sentence in the instruction; the first render after the next restart tells.
+(`MANNEQUIN_EDIT_SOURCE`) was confirmed after the owner's restart: one Cecil standing token with
+nothing about the head in the instruction came back with the head lifted to the target, pose and
+kit kept. The recipe says nothing about the head from here on.
