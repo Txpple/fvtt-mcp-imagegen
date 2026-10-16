@@ -42,6 +42,10 @@ export interface CutoutResult {
   coveragePct: number;
   /** % of the delivered opaque pixels still carrying the key hue (fringe / interior residue). */
   residualKeyPct: number;
+  /** % of the delivered canvas that is faint matte away from the subject (a plate keyed short). */
+  hazePct: number;
+  /** chroma only: the plate colour the script keyed on (#RRGGBB), sampled from the border. */
+  plateColor?: string;
   width: number;
   height: number;
   /** Set when the first attempt failed verification and rembg was used instead. */
@@ -68,13 +72,15 @@ export function buildArgs(opts: CutoutOptions): string[] {
 export function parseScriptOutput(stdout: string): {
   method: 'chroma' | 'rembg';
   coveragePct: number;
+  plateColor?: string;
 } {
   const method = /^method:\s*(chroma|rembg)/m.exec(stdout)?.[1] as 'chroma' | 'rembg' | undefined;
   const cov = /subject coverage:\s*([\d.]+)%/.exec(stdout)?.[1];
   if (!method || cov === undefined) {
     throw new Error(`cutout script output not understood:\n${stdout.slice(0, 500)}`);
   }
-  return { method, coveragePct: Number(cov) };
+  const key = /^key:\s*([0-9A-Fa-f]{6})\b/m.exec(stdout)?.[1];
+  return { method, coveragePct: Number(cov), ...(key ? { plateColor: `#${key}` } : {}) };
 }
 
 function run(python: string, args: string[]): Promise<string> {
@@ -103,10 +109,62 @@ export async function residualKey(file: string, key: ChromaKey | undefined): Pro
   return Math.round((scores.find(s => s.key === key)?.risk ?? 0) * 1000) / 10;
 }
 
+/** Pixels this far from the subject's solid matte are background, whatever their alpha. */
+const HAZE_REACH = 4;
+
+/**
+ * How much of the delivered canvas is faint matte (alpha 1-127) more than HAZE_REACH px from any
+ * solid (alpha 128+) pixel. A clean cut's soft edge sits inside that reach and scores 0; a plate
+ * keyed short of its real colour leaves a haze over the whole frame (63% on the off-key goliath
+ * plate, 2026-10-15, where the residual check read 0 because it counts only opaque pixels).
+ */
+export async function hazePct(file: string): Promise<number> {
+  const { data, info } = await sharp(file)
+    .ensureAlpha()
+    .extractChannel(3)
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const { width: w, height: h } = info;
+  // Square dilation of the solid mask, as two separable passes.
+  const solid = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++) solid[i] = data[i] >= 128 ? 1 : 0;
+  const rows = new Uint8Array(w * h);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      let hit = 0;
+      for (let dx = Math.max(0, x - HAZE_REACH); dx <= Math.min(w - 1, x + HAZE_REACH); dx++) {
+        if (solid[y * w + dx]) {
+          hit = 1;
+          break;
+        }
+      }
+      rows[y * w + x] = hit;
+    }
+  }
+  let haze = 0;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const a = data[y * w + x];
+      if (a === 0 || a >= 128) continue;
+      let near = false;
+      for (let dy = Math.max(0, y - HAZE_REACH); dy <= Math.min(h - 1, y + HAZE_REACH); dy++) {
+        if (rows[dy * w + x]) {
+          near = true;
+          break;
+        }
+      }
+      if (!near) haze++;
+    }
+  }
+  return Math.round((haze / (w * h)) * 1000) / 10;
+}
+
 /** Coverage outside this band means the key was misread (all or nothing was cut). */
 const COVERAGE_MIN = 3;
 const COVERAGE_MAX = 97;
 const RESIDUAL_MAX = 2;
+/** Clean cuts score 0 to 0.1; the off-key goliath 63. */
+const HAZE_MAX = 1;
 
 export function makeCutout(python: string): CutoutFn {
   return async function cutout(opts: CutoutOptions): Promise<CutoutResult> {
@@ -125,6 +183,8 @@ export function makeCutout(python: string): CutoutFn {
         method: parsed.method,
         coveragePct: parsed.coveragePct,
         residualKeyPct: await residualKey(opts.output, namedKey),
+        hazePct: await hazePct(opts.output),
+        ...(parsed.plateColor ? { plateColor: parsed.plateColor } : {}),
         width: meta.width ?? 0,
         height: meta.height ?? 0,
       };
@@ -138,9 +198,11 @@ export function makeCutout(python: string): CutoutFn {
     const bad =
       first.coveragePct < COVERAGE_MIN ||
       first.coveragePct > COVERAGE_MAX ||
-      first.residualKeyPct > RESIDUAL_MAX;
+      first.residualKeyPct > RESIDUAL_MAX ||
+      first.hazePct > HAZE_MAX;
     if (bad && requested === 'auto') {
-      // Chroma misread the plate or the subject shares the key hue. Let the AI matte try.
+      // Chroma misread the plate, the subject shares the key hue, or the plate keyed short and
+      // left a haze. Let the AI matte try.
       try {
         const second = await attempt('rembg');
         return { ...second, fellBackToRembg: true };

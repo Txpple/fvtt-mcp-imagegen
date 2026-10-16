@@ -71,11 +71,36 @@ def detect_key(a):
     return np.median(corners, axis=0)
 
 
+# How far the plate may sit from the requested key and still be read as that key. A render asked
+# for #FF00FF came back at (235, 33, 231), 45 off (the female goliath, 2026-10-15); keyed on the
+# nominal colour every plate pixel sat just past the distance floor and the cut kept a full-frame
+# haze at alpha 1-39. Past this distance the border is not the key at all, so the caller's colour
+# stands and the verification reports the bad cut.
+PLATE_DRIFT_MAX = 120.0
+
+
+def plate_color(a, key):
+    """The colour the plate actually came back in: the median of a 6px border strip.
+
+    The token render is edge-checked before the cut, so the border is plate. Returns `key` when
+    the border is too far from it to be the same plate.
+    """
+    p = 6
+    border = np.concatenate([
+        a[:p].reshape(-1, 3), a[-p:].reshape(-1, 3),
+        a[:, :p].reshape(-1, 3), a[:, -p:].reshape(-1, 3),
+    ])
+    measured = np.median(border, axis=0)
+    if np.sqrt(((measured - np.asarray(key, dtype=np.float32)) ** 2).sum()) > PLATE_DRIFT_MAX:
+        return np.asarray(key, dtype=np.float32)
+    return measured
+
+
 def chroma(src, key=None, keep_shadow=False):
     a = np.asarray(src.convert("RGB")).astype(np.float32)
     r, g, b = a[..., 0], a[..., 1], a[..., 2]
-    if key is None:
-        key = detect_key(a)
+    # A named key is what was asked for; the model paints near it, not on it. Key on the plate.
+    key = detect_key(a) if key is None else plate_color(a, key)
     kr, kg, kb = float(key[0]), float(key[1]), float(key[2])
 
     green = kg - max(kr, kb) > 25
@@ -96,7 +121,7 @@ def chroma(src, key=None, keep_shadow=False):
         alpha = np.clip((d - lo) / (hi - lo), 0.0, 1.0)
 
     a = despill(a, (kr, kg, kb))
-    return a, alpha
+    return a, alpha, key
 
 
 def via_rembg(src):
@@ -214,7 +239,7 @@ def main():
     if method == "rembg":
         rgb, alpha = via_rembg(src)
     else:
-        rgb, alpha = chroma(src, key=key, keep_shadow=args.keep_shadow)
+        rgb, alpha, key = chroma(src, key=key, keep_shadow=args.keep_shadow)
 
     if args.erode > 0:
         try:
@@ -224,7 +249,10 @@ def main():
             print("  (scipy not installed — --erode skipped)", file=sys.stderr)
 
     rgb = rgb.copy()
-    rgb[alpha <= 0.004] = 0.0            # neutralize fully-keyed pixels (no bleed on scale)
+    # Plate noise a hair past the key floor is not subject: below ~6/255 the matte is zeroed,
+    # and so is the colour (no bleed on scale).
+    alpha = np.where(alpha < 0.025, 0.0, alpha)
+    rgb[alpha <= 0.0] = 0.0
     rgba = np.dstack([rgb, alpha * 255.0]).astype(np.uint8)
     out = Image.fromarray(rgba, "RGBA")
     if args.drop_shadow:
@@ -236,6 +264,9 @@ def main():
     out.save(out_path)
 
     print(f"method: {method}")
+    if method == "chroma":
+        print(f"key: {int(round(key[0])):02X}{int(round(key[1])):02X}{int(round(key[2])):02X}"
+              "  (the plate colour keyed on)")
     print(f"saved:  {out_path}  ({out.size[0]}x{out.size[1]} RGBA)"
           + ("  -> VTT scale 1.0" if args.size > 0 else "  (source canvas kept)"))
     # Both figures read the SOURCE frame — the square fit reframes afterwards, so they

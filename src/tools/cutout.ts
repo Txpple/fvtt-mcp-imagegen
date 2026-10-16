@@ -66,8 +66,8 @@ export class CutoutImageTool {
         description:
           'Knock the background off a token image to real alpha and deliver it centred on a ' +
           '512 square so Foundry scale 1.0 is right. Writes a magenta-composited *_preview.png ' +
-          'beside it: READ THAT before trusting the edge. Returns coverage and residual-key ' +
-          'numbers; a cut outside sane coverage falls back to the rembg AI matte automatically.',
+          'beside it: READ THAT before trusting the edge. Returns coverage, residual-key and haze ' +
+          'numbers; a cut that fails any of them falls back to the rembg AI matte automatically.',
         inputSchema: toInputSchema(cutoutSchema),
       },
     ];

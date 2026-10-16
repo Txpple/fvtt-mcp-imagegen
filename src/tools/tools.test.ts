@@ -78,6 +78,7 @@ const fakeCutout: CutoutFn = async opts => {
     method: 'chroma',
     coveragePct: 42,
     residualKeyPct: 0.1,
+    hazePct: 0,
     width: 512,
     height: 512,
   };
