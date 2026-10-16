@@ -200,17 +200,19 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
    skills decide). Revisit only if the recipe's fixed wording starts repeating in every call;
    then a `mannequin` source hint on `kind: "token"` could carry it.
 
-## Status (2026-10-15, evening)
+## Status (2026-10-15, night)
 
-- **Filed:** `crouch-spear-shield`, `crouch-dagger-shield` and `crouch-sword-shield` for all six
-  bodies, male and female (36 captures), in `fvtt-assets-actors/mannequins/`. The shot list there
-  is a grid of setup by body. The owner captures one setup at a time across every body.
-- **Tested:** 18 renders on the spear set (the body lessons) and 12 gear renders on the human
-  dagger set (the gear lessons). The tokens and sheets are on the owner's Desktop, `Manny Tests`
-  and `Manny Tests/Gear`.
-- **The shot list is thinner:** a shield capture covers the shieldless off hand (one render
-  each confirmed it), so `crouch-sword`, `crouch-shortblade` and `crouch-twoblades` are dropped.
-- **Cutout defect:** one render came back on a duller magenta plate and the chroma cut left a
-  faint alpha box. A separate session is fixing it in the token cut.
-- **Next:** `crouch-empty`, then step 1 (the caster question); the crossbow, bow, two-hand and
-  down setups.
+- **The crouch is complete:** 12 setups for all six bodies, male and female, 144 captures in
+  `fvtt-assets-actors/mannequins/` (shot list and checks in its README). The setups are spear and
+  shield, dagger and shield, sword and shield, longsword and kite, sword and open hand, longsword
+  and open hand, both hands empty, crossbow at the hip, crossbow pointing down, longbow low, two
+  daggers, and sword and dagger. Crossbow and shield was dropped: add the shield in words.
+- **Verified:** every capture's body and sex, against a set exported in the owner's fixed order
+  (human, large, small, dwarf, orc, elf; male then female). From that set on, `npm run mannequin --
+  takeset` files a whole set in that order.
+- **One scale exception:** the crossbow-down orc pair was re-exported at 0.89 scale. At full
+  scale the pose was too tall for the frame, so its tokens come out about 11% smaller.
+- **Tested:** 18 body renders, 12 gear renders, 3 coverage renders, and a dwarf with sword and
+  dagger and with axe and dagger. Everything is on the owner's Desktop, `Manny Tests`.
+- **Next:** step 1, the caster question, which `crouch-empty` now allows. Then the other poses:
+  two-handed and down, plus cast only if step 1 needs it. Then step 5, the skill's mannequin route.
