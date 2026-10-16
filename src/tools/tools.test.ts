@@ -590,9 +590,11 @@ describe('edit-image', () => {
     expect(text).not.toContain(TOKEN_EDIT_KEEP);
     expect(text).not.toContain(EDIT_PREAMBLE);
     expect(text).not.toContain(TOKEN_FRAMING);
-    // The captures' own heads bow to the ground, so the head is described, never bound.
-    expect(MANNEQUIN_EDIT_KEEP).toMatch(/head is held level, looking ahead along the ground/);
-    expect(MANNEQUIN_EDIT_KEEP).toMatch(/eyes and nose show below them/);
+    // The captures' own heads bow to the ground, so the head is lifted from there to a stated
+    // target, in the lead sentence, before the description (4 of 4 landed, 2026-10-16).
+    expect(MANNEQUIN_EDIT_SOURCE).toMatch(/head is bowed toward the ground; lift/);
+    expect(MANNEQUIN_EDIT_SOURCE).toMatch(/both open eyes and the nose show clearly/);
+    expect(MANNEQUIN_EDIT_KEEP).toMatch(/head lifted as described/);
     expect(MANNEQUIN_EDIT_KEEP).toMatch(/nothing left grey/);
     expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/face, hair/);
   });

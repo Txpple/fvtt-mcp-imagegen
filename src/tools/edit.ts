@@ -79,21 +79,25 @@ export const TOKEN_EDIT_KEEP =
  * Mannequin edits (owner rule 2026-10-16). The source is a grey HeroForge capture, so "keep the
  * face, hair" is noise, and nothing in the token keep line pinned the head: in the first real
  * run heads went down into the chest or up at the camera. The capture binds pose, camera,
- * proportions and grip; the head is described here, not bound, because the captures' own heads
- * bow toward the ground (a bound head would look at its feet). Said as presence throughout: a
- * negation draws the thing. The instruction supplies everything else, and no grey may remain.
+ * proportions and grip. The head is the exception, because every capture's head bows toward the
+ * ground: an absolute description ("held level, looking ahead") left all four PCs bowed in the
+ * 2026-10-16 test, and a relative one, lifting the head from the bowed position to a stated
+ * target, landed all four. So the head is lifted here, before the description, in the words
+ * that landed. If the library is ever re-captured with raised heads, re-test this line. Said as
+ * presence throughout: a negation draws the thing. The instruction supplies everything else,
+ * and no grey may remain.
  */
 export const MANNEQUIN_EDIT_SOURCE =
   'Image 1 is a grey mannequin: the guide for the pose, the overhead camera, the body ' +
-  'proportions and the grip. ';
+  "proportions and the grip. The mannequin's head is bowed toward the ground; lift the " +
+  "figure's head up from that position until it looks ahead along the ground three paces in " +
+  'front, the face tilted only a little up, so that the brow, both open eyes and the nose show ' +
+  'clearly below the top of the head while the chin stays hidden. ';
 export const MANNEQUIN_EDIT_KEEP =
   'Paint the figure in exactly this stance from exactly this camera, every limb and weapon where ' +
-  'the mannequin has them. The head is held level, looking ahead along the ground a few paces in ' +
-  'front of the figure: from this camera the crown and brow are the largest parts of the head, ' +
-  'the eyes and nose show below them, and the chin is mostly hidden. The grey clay is replaced ' +
-  'entirely by the described figure, with nothing left grey. Remove any cast shadow. Keep the ' +
-  'whole figure, weapons included, inside the frame with a margin on every side; nothing crosses ' +
-  'the edge.';
+  'the mannequin has them, the head lifted as described. The grey clay is replaced entirely by ' +
+  'the described figure, with nothing left grey. Remove any cast shadow. Keep the whole figure, ' +
+  'weapons included, inside the frame with a margin on every side; nothing crosses the edge.';
 
 /**
  * Prop edits: the token keep line's "face, hair" grew people on an armchair, a tree, and a crate
