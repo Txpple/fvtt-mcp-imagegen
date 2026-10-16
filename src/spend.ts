@@ -17,8 +17,9 @@ export class SpendMeter {
     return PRICE[tier][size];
   }
 
-  record(tool: string, tier: Tier, size: ImageSize): number {
-    const usd = this.estimate(tier, size);
+  /** Record one render: the image price plus anything billed beside it (thinking tokens). */
+  record(tool: string, tier: Tier, size: ImageSize, extraUsd = 0): number {
+    const usd = this.estimate(tier, size) + extraUsd;
     this.entries.push({ tool, tier, size, usd });
     return usd;
   }

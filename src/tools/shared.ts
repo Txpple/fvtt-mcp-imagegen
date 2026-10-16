@@ -11,7 +11,17 @@ import { encodeMap, mapBack, mapFormat, type PadPlan } from '../battlemap.js';
 import { type ChromaKey, chromaSuffix, pickChromaKey } from '../chroma.js';
 import type { CutoutFn, CutoutResult } from '../cutout.js';
 import type { PythonCheckFn } from '../doctor.js';
-import { type Aspect, Gemini, type InlineImage, PRICE, TIERS, type Tier } from '../gemini.js';
+import {
+  type Aspect,
+  Gemini,
+  type InlineImage,
+  PRICE,
+  TEXT_OUT_PRICE,
+  THINKING_LEVELS,
+  type ThinkingLevel,
+  TIERS,
+  type Tier,
+} from '../gemini.js';
 import { type DriftReport, measureDrift, overlandDrifted } from '../drift.js';
 import { EDGE_BAND, EDGE_LIMIT, edgeContact } from '../edge.js';
 import { type Box, type Dimensions, dimensions, fitRect, postProcess } from '../post.js';
@@ -78,12 +88,16 @@ export const creatureSizeSchema = z
 export const referenceSchema = z.object({
   path: z.string().min(1).describe('Absolute path of a PNG/JPEG on disk.'),
   role: z
-    .enum(['character', 'style', 'pose'])
+    .enum(['character', 'object', 'style', 'pose'])
     .describe(
-      'character: hold this face/figure (up to 4 on flash, 5 on pro). style: match palette, ' +
-        'brushwork, light, camera angle; never copy the subject (works on both tiers in practice). ' +
-        'pose: match only its pose, head direction, camera angle, and silhouette, never its ' +
-        'drawing; for replacing a weak token, attach the old one as the ONLY image with this role.'
+      'character: hold the features, hair, skin, build and kit of this person (up to 4 on flash, ' +
+        '5 on pro); the pose, head angle and camera come from the prompt and the source image, so ' +
+        'a crop already at the angle you want beats a frontal portrait. object: reproduce this ' +
+        'exact object (a crop of a weapon head, a shield face, a garment) in shape, materials, ' +
+        'colours and markings (up to 10 on flash, 6 on pro). style: match palette, brushwork, ' +
+        'light, camera angle; never copy the subject (works on both tiers in practice). pose: ' +
+        'match only its pose, head direction, camera angle, and silhouette, never its drawing; ' +
+        'for replacing a weak token, attach the old one as the ONLY image with this role.'
     ),
   label: z
     .string()
@@ -91,6 +105,16 @@ export const referenceSchema = z.object({
     .describe('Short name used to bind the reference in the prompt, e.g. "Morgash".'),
 });
 export type Reference = z.infer<typeof referenceSchema>;
+
+export const thinkingSchema = z
+  .enum(THINKING_LEVELS)
+  .optional()
+  .describe(
+    'How much the model thinks before it draws (Nano Banana 2.1: minimal, medium, high; the ' +
+      'default is medium). Thinking is billed at the text rate, from a fraction of a cent to a ' +
+      'few cents a render; the result reports thinkingTokens. Try "high" on a prompt that ' +
+      'carries many constraints at once (a mannequin token with a face and gear to match).'
+  );
 
 /** Resolve the tier and enforce the Pro gate. Throws the owner-facing refusal. */
 export function resolveTier(
@@ -136,8 +160,19 @@ export function referencePreamble(refs: Reference[], kind?: Kind): string {
     const n = i + 1;
     const who = r.label ? ` (${r.label})` : '';
     if (r.role === 'character') {
+      // "keep this exact face" carried a frontal portrait crop's angle onto top-down tokens
+      // (Cassia and Kartor, 2026-10-11 to 16): identity is bound here, pose and camera are not.
       lines.push(
-        `Image ${n}${who} is a CHARACTER reference: keep this exact face, build, and outfit faithful.`
+        `Image ${n}${who} is a CHARACTER reference: paint the features, hair, skin, build and ` +
+          'kit of this person faithfully, posed and framed as the prompt and the source image say.'
+      );
+    } else if (r.role === 'object') {
+      // Gemini treats object references as their own category (up to 10 on flash, 6 on pro):
+      // a crop of a weapon head or a shield face, reproduced rather than described (2026-10-16).
+      lines.push(
+        `Image ${n}${who} is an OBJECT reference: reproduce this exact object, its shape, ` +
+          'materials, colours and markings, belonging to the figure, held or worn where the ' +
+          'instruction says.'
       );
     } else if (r.role === 'pose') {
       // Wording proven on the bear, hound, and troll (2026-09-24): angle and silhouette held,
@@ -180,6 +215,8 @@ export interface RenderInput {
   box?: Box;
   /** Battlemaps only: the unpadded source and how it was padded for the API. */
   map?: { source: Buffer; plan: PadPlan };
+  /** Thinking level for the render; unset leaves the model's default (medium on flash). */
+  thinking?: ThinkingLevel;
 }
 
 /** Kinds rendered on a chroma plate, edge-checked, and cut to alpha. */
@@ -194,6 +231,8 @@ export interface RenderOutput {
   height: number;
   estimatedUsd: number;
   sessionEstimatedUsd: number;
+  /** Thinking tokens the model spent, billed at the text rate and folded into estimatedUsd. */
+  thinkingTokens?: number;
   /** Tokens and props: the chroma key chosen for this subject and the cut's numbers. */
   chromaKey?: ChromaKey;
   plate?: string;
@@ -237,12 +276,20 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       images: input.images,
       aspect: input.aspect ?? preset.aspect,
       size: preset.size,
+      ...(input.thinking ? { thinking: input.thinking } : {}),
     });
     const png = await postProcess(result.image.data, preset.post);
-    return { result, png, usd: deps.spend.record(input.tool, input.tier, preset.size) };
+    const usd = deps.spend.record(
+      input.tool,
+      input.tier,
+      preset.size,
+      thinkingUsd(input.tier, result.usage?.thinking)
+    );
+    return { result, png, usd };
   };
 
   let { result, png, usd: estimatedUsd } = await once();
+  let thinkingTokens = result.usage?.thinking;
   let edgeRetried: boolean | undefined;
   if (cut && chromaKey) {
     // Nothing may clip off a token or a prop (owner rule 2026-09-24). A subject touching the
@@ -255,6 +302,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       const again = await once();
       ({ result, png } = again);
       estimatedUsd += again.usd;
+      if (again.result.usage) thinkingTokens = (thinkingTokens ?? 0) + again.result.usage.thinking;
       edgeRetried = true;
       contact = await edgeContact(png, chromaKey);
       if (contact > EDGE_LIMIT) {
@@ -274,6 +322,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     model: result.model,
     estimatedUsd,
     sessionEstimatedUsd: deps.spend.totalUsd,
+    ...(thinkingTokens !== undefined ? { thinkingTokens } : {}),
     ...(edgeRetried ? { edgeRetried } : {}),
   };
 
@@ -309,6 +358,12 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
   return { ...base, file, width: dims.width, height: dims.height };
 }
 
+/** What the thinking tokens of one render cost, at the tier's text output rate. */
+export function thinkingUsd(tier: Tier, tokens: number | undefined): number {
+  if (!tokens) return 0;
+  return (tokens * TEXT_OUT_PRICE[tier]) / 1_000_000;
+}
+
 /** Display copy of a drift report: shares as per-mille of the long side, rounded. */
 function driftSummary(d: DriftReport): DriftReport {
   const pm = (v: number) => Math.round(v * 10000) / 10;
@@ -338,8 +393,14 @@ async function renderMap(deps: ToolDeps, input: RenderInput, id: string): Promis
       images: input.images,
       aspect: input.aspect ?? preset.aspect,
       size: preset.size,
+      ...(input.thinking ? { thinking: input.thinking } : {}),
     });
-    const usd = deps.spend.record(input.tool, input.tier, preset.size);
+    const usd = deps.spend.record(
+      input.tool,
+      input.tier,
+      preset.size,
+      thinkingUsd(input.tier, result.usage?.thinking)
+    );
     const back = await mapBack(result.image.data, map.plan);
     const measured = await measureDrift(map.source, back.png);
     // An overland map has nothing traced over it: only a grossly moved geography fails.
@@ -392,6 +453,7 @@ async function renderMap(deps: ToolDeps, input: RenderInput, id: string): Promis
     height: r.height,
     estimatedUsd,
     sessionEstimatedUsd: deps.spend.totalUsd,
+    ...(r.result.usage ? { thinkingTokens: r.result.usage.thinking } : {}),
     source: { ...map.plan.source },
     scale: r.scale,
     drift: driftSummary(r.drift),

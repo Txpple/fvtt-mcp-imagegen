@@ -84,7 +84,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | The same sixteen with a tight face crop of the approved portrait (centred on the pupils, about four interpupillary distances wide) as `character`, bound "Image 2 is <Name>, use it for the face only, never its painting style, lighting, framing or camera angle" | All sixteen faces fixed, pose and camera held, no render copied the portrait's angle | **A crop as `character` is the exception to the no-second-image rule.** The copying lesson came from whole tokens and portraits, not crops. |
 | A head-to-waist crop instead, bound "use it for the face, outfit and equipment only, never its painting style, lighting, background, framing or camera angle" | Faces as good as the face crop, the kit pulled toward the portrait (plate, shield boss, leather, scarf, robe), pose and camera held; horns followed the crop, not the words | **Head-to-waist is the crop to use.** Restate horn shape when it matters. |
 | "Keep the mannequin's exact pose, proportions and steep overhead camera" against "The grey mannequin is a guide for the pose, the overhead camera and the body proportions, not a rig to copy: paint <Name> in roughly this stance from roughly this angle, and let <him\|her> stand naturally, with <his\|her> own weight, head and hands" | Side by side the pose did not change | **The guide sentence replaces the exact-pose line.** It buys the same and treats the mannequin the way the owner wants. |
-| Heads on standing and combat renders | Most looked down at the ground or tilted up at the camera. A strict "look straight ahead at eye level" block made the figure look further up, toward the camera; a frontal portrait crop pulls the head that way too | **Open (2026-10-16).** The target is the mannequin's own head angle from the overhead camera (crown and brow largest, eyes in the lower third looking along the ground a few paces ahead, chin mostly hidden). The likely fix binds the crop "never its frontal head angle" and describes the head relative to the mannequin's; a wording is rendered, not yet judged. |
+| Heads on standing and combat renders | Most looked down at the ground or tilted up at the camera. A strict "look straight ahead at eye level" block made the figure look further up, toward the camera; a frontal portrait crop pulls the head that way too | **Two causes, both in the pixels (2026-10-16).** The captures' own heads bow toward the ground (the stand and combat human male look at their feet), and the frontal crop bound "keep this exact face" pulled heads up to the camera. So the head is never bound to the mannequin's: `edit-image`'s `source: "mannequin"` keep line describes it (held level, looking ahead along the ground, crown and brow largest, eyes and nose showing, chin mostly hidden), the character preamble binds identity only, and a per-PC token-head anchor (the face already at the token camera) replaces the frontal crop. The re-capture with raised heads is the owner's lock beneath all three. |
 | The dwarf `dead` capture, with and without the crop | Came back lean, older and grey, twice | One flaw pass naming build, age and hair fixed it both times; expect it. |
 | Gear "lying dropped on the ground beside the fist at the left/right" on prone and dead; `twohand-staff-diagonal` with a glowing orb at the staff head; `stand-open` with an orb and a book; `stand-empty` with a lute slung on the back | All landed first time, except a haft on the dwarf `prone` capture that clipped the frame twice until written "tucked close under the fist, haft no longer than his forearm" | Dropped gear works; keep it tucked under the fist on the small-framed prone captures. |
 | A tail asked for on a body that loops it round the figure | Showed in two places, reading as two tails | Say "ONE tail, curving out behind to the upper left only". |
@@ -235,9 +235,10 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
    mannequin route: when to use it, picking a capture (pose, then grip, then body and sex), the
    recipe, and the rules learned here. It is the default for every humanoid PC and NPC; the
    words-only route stays for non-humanoid bodies.
-6. **No new tool.** This is skill judgment over the existing `edit-image` token kind (tools do,
-   skills decide). Revisit only if the recipe's fixed wording starts repeating in every call;
-   then a `mannequin` source hint on `kind: "token"` could carry it.
+6. **No new tool; a source hint (2026-10-16).** The recipe's fixed wording repeated in every call
+   of the first real run, so `edit-image` kind `token` took `source: "mannequin"`: the tool writes
+   the guide line, the head and the no-grey rule, and the skill's recipe shrinks to the character
+   and the references (`character` for the face, `object` for gear crops).
 
 ## Status (2026-10-15, night)
 
@@ -265,5 +266,12 @@ shows one capture repeated. The skill carries that rule.
 **Step 5 is done, and the first real run is in (2026-10-16):** the four PCs' tokens went the
 mannequin route in another session, and its lessons (a portrait crop as `character` for a known
 face, the mannequin as a guide not a rig, the dwarf `dead` build fix) are in the skill and the
-Prompting table above. The head angle is still open; the owner has more to send. Step 6 (no new
-tool) stands.
+Prompting table above.
+
+**2026-10-16, day.** The library moved into this repo (`mannequins/`). The review of the first
+real run (the sheets in `_tests/testpcs` on the owner's Desktop) found the head's two causes, the
+captures' bowed heads and the frontal crop, and the server changed: `source: "mannequin"`, the
+`object` role, identity-only character binding, a described head in the token framing, and
+`thinking`. Next: a token-head anchor per PC (the approved face rendered at the token camera,
+approved once, filed on the campaign shelf), gear crops as `object` references, and a
+twelve-render head test (the four PCs standing, three ways) after a Claude Code restart.

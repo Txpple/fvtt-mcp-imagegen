@@ -11,6 +11,8 @@ import { PROP_FRAMING, TOKEN_FRAMING } from '../presets.js';
 import {
   BATTLEMAP_EDIT_KEEP,
   EDIT_PREAMBLE,
+  MANNEQUIN_EDIT_KEEP,
+  MANNEQUIN_EDIT_SOURCE,
   OVERLAND_EDIT_KEEP,
   PROP_EDIT_KEEP,
   TOKEN_EDIT_KEEP,
@@ -25,7 +27,7 @@ let mapSrc: string;
 let sent: Array<{ url: string; body: any }>;
 let cuts: CutoutOptions[];
 
-function fakeGemini(width = 1024, height = 1024): Gemini {
+function fakeGemini(width = 1024, height = 1024, usage?: Record<string, number>): Gemini {
   sent = [];
   const fakeFetch = (async (url: any, init: any) => {
     const body = JSON.parse(init.body);
@@ -45,6 +47,7 @@ function fakeGemini(width = 1024, height = 1024): Gemini {
             content: { parts: [{ inlineData: { mimeType: 'image/jpeg', data } }] },
           },
         ],
+        ...(usage ? { usageMetadata: usage } : {}),
       }),
       { status: 200 }
     );
@@ -269,6 +272,22 @@ describe('referencePreamble', () => {
     expect(referencePreamble([])).toBe('');
   });
 
+  it('binds a character to identity only: pose and camera come from the prompt and the source', () => {
+    // "keep this exact face" dragged a frontal portrait crop's angle onto tokens (2026-10-16).
+    const s = referencePreamble([{ path: 'a', role: 'character', label: 'Kartor' }]);
+    expect(s).toMatch(/features, hair, skin, build and kit of this person/);
+    expect(s).toMatch(/posed and framed as the prompt and the source image say/);
+    expect(s).not.toMatch(/exact face/);
+  });
+
+  it('binds an object reference to the thing itself, reproduced, not described', () => {
+    const s = referencePreamble([{ path: 'a', role: 'object', label: 'the battleaxe' }]);
+    expect(s).toMatch(
+      /^Image 1 \(the battleaxe\) is an OBJECT reference: reproduce this exact object/
+    );
+    expect(s).toMatch(/shape, materials, colours and markings/);
+  });
+
   it('binds a pose reference to pose and silhouette and forbids copying its drawing', () => {
     const s = referencePreamble([{ path: 'a', role: 'pose', label: 'old bear' }]);
     expect(s).toMatch(/^Image 1 \(old bear\) is a POSE reference only: match its exact pose/);
@@ -409,9 +428,38 @@ describe('generate-image', () => {
     expect(r.edgeRetried).toBeUndefined();
   });
 
-  it('tokens: the framing and the edit keep line both forbid clipping at the edge', () => {
+  it('tokens: the framing and the edit keep lines all forbid clipping at the edge', () => {
     expect(TOKEN_FRAMING).toMatch(/weapon.*inside the frame.*nothing touches or crosses the edge/);
     expect(TOKEN_EDIT_KEEP).toMatch(/weapons included, inside the frame/);
+    expect(MANNEQUIN_EDIT_KEEP).toMatch(/weapons included, inside the frame/);
+  });
+
+  it('passes a thinking level through to the API and reports the thinking tokens and their cost', async () => {
+    const { dispatch, spend } = build(
+      fakeGemini(1024, 1024, {
+        promptTokenCount: 500,
+        candidatesTokenCount: 1120,
+        thoughtsTokenCount: 4000,
+      })
+    );
+    const r: any = await dispatch('generate-image', {
+      kind: 'icon',
+      prompt: 'a key',
+      slug: 'k',
+      thinking: 'high',
+    });
+    expect(sent[0].body.generationConfig.thinkingConfig).toEqual({ thinkingLevel: 'high' });
+    expect(r.thinkingTokens).toBe(4000);
+    // 4000 thinking tokens at $7.50 per million is 3 cents on top of the 1K image price.
+    expect(r.estimatedUsd).toBeCloseTo(0.0336 + 0.03, 6);
+    expect(spend.totalUsd).toBeCloseTo(0.064, 3);
+  });
+
+  it('sends no thinking config and reports no thinking tokens by default', async () => {
+    const { dispatch } = build();
+    const r: any = await dispatch('generate-image', { kind: 'icon', prompt: 'a key', slug: 'k' });
+    expect(sent[0].body.generationConfig.thinkingConfig).toBeUndefined();
+    expect(r.thinkingTokens).toBeUndefined();
   });
 
   it('tokens: switches the plate to magenta when the reference subject is green', async () => {
@@ -516,6 +564,51 @@ describe('edit-image', () => {
     );
     expect(text).not.toContain(EDIT_PREAMBLE);
     expect(text).not.toContain(TOKEN_FRAMING);
+  });
+
+  it('mannequin source: binds pose, camera, grip and head to the capture, nothing left grey', async () => {
+    const { dispatch } = build();
+    await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'Kartor, a dwarf of forty-nine, clean-shaven, in worn steel plate.',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'kartor',
+      references: [
+        { path: refPng, role: 'character', label: 'Kartor' },
+        { path: refPng, role: 'object', label: 'the battleaxe' },
+      ],
+    });
+    const parts = sent[0].body.contents[0].parts;
+    expect(parts).toHaveLength(4);
+    const text = parts[3].text;
+    expect(text.startsWith(MANNEQUIN_EDIT_SOURCE)).toBe(true);
+    expect(text).toMatch(/Image 2 \(Kartor\) is a CHARACTER reference/);
+    expect(text).toMatch(/Image 3 \(the battleaxe\) is an OBJECT reference/);
+    expect(text).toContain(`in worn steel plate. ${MANNEQUIN_EDIT_KEEP}`);
+    expect(text).toContain('chroma-key');
+    expect(text).not.toContain(TOKEN_EDIT_KEEP);
+    expect(text).not.toContain(EDIT_PREAMBLE);
+    expect(text).not.toContain(TOKEN_FRAMING);
+    // The captures' own heads bow to the ground, so the head is described, never bound.
+    expect(MANNEQUIN_EDIT_KEEP).toMatch(/head is held level, looking ahead along the ground/);
+    expect(MANNEQUIN_EDIT_KEEP).toMatch(/eyes and nose show below them/);
+    expect(MANNEQUIN_EDIT_KEEP).toMatch(/nothing left grey/);
+    expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/face, hair/);
+  });
+
+  it('mannequin source: refused on any kind but token, before any network call', async () => {
+    const { dispatch } = build();
+    await expect(
+      dispatch('edit-image', {
+        sourceImage: propSrc,
+        instruction: 'a crate',
+        kind: 'prop',
+        source: 'mannequin',
+        slug: 'crate',
+      })
+    ).rejects.toThrow(/kind "token" only/);
+    expect(sent).toHaveLength(0);
   });
 
   it('keeps the strict preamble for non-token edits', async () => {

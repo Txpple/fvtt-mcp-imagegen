@@ -36,6 +36,17 @@ describe('buildRequestBody', () => {
       imageConfig: { aspectRatio: '1:1', imageSize: '1K' },
     });
   });
+
+  it('sends a thinking level only when asked, nested as the REST schema wants it', () => {
+    const body = buildRequestBody({
+      tier: 'flash',
+      prompt: 'a key',
+      aspect: '1:1',
+      size: '1K',
+      thinking: 'high',
+    }) as any;
+    expect(body.generationConfig.thinkingConfig).toEqual({ thinkingLevel: 'high' });
+  });
 });
 
 describe('parseResponse', () => {
@@ -54,6 +65,27 @@ describe('parseResponse', () => {
     expect(r.image.mimeType).toBe('image/jpeg');
     expect(r.image.data.toString()).toBe('not-really-a-jpeg');
     expect(r.finishReason).toBe('STOP');
+    expect(r.usage).toBeUndefined();
+  });
+
+  it('reads the token counts, thinking included, when the response reports them', () => {
+    const r = parseResponse(
+      {
+        candidates: [
+          {
+            finishReason: 'STOP',
+            content: { parts: [{ inlineData: { mimeType: 'image/jpeg', data: tinyJpegB64 } }] },
+          },
+        ],
+        usageMetadata: {
+          promptTokenCount: 900,
+          candidatesTokenCount: 1120,
+          thoughtsTokenCount: 2345,
+        },
+      },
+      'm'
+    );
+    expect(r.usage).toEqual({ prompt: 900, output: 1120, thinking: 2345 });
   });
 
   it('names a prompt block', () => {

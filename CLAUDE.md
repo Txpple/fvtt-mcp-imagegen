@@ -10,11 +10,15 @@ a small set of **Foundry-specific** tools so Claude can author prompts, generate
 them, and hand the winners to the Foundry pipeline (`upload-asset` → `set-actor-art` /
 `add-journal-image` in `fvtt-mcp-dnd5e`).
 
-**State (2026-10-15).** At **1.3.1**, released: the server key is `imagegen`, and `imagegen-status`
+**State (2026-10-16).** At **1.3.1**, released: the server key is `imagegen`, and `imagegen-status`
 and `npm run doctor` check the setup; seven kinds (icon, token, prop, portrait, illustration,
-battlemap, overland), every one on flash by default. `main` carries the `illustration-builder`
-skill's newer owner rules for maps, tiles and tokens past 1.3.1, with no tool change. Release detail
-is the GitHub release notes; the dated journal is `docs/log/YYYY-MM.md`.
+battlemap, overland), every one on flash by default. `main` carries, past 1.3.1: the mannequin
+library (`mannequins/`, 312 grey captures, `scripts/mannequin.mjs`), the `illustration-builder`
+skill's newer owner rules for maps, tiles and tokens, and the token changes of 2026-10-16:
+`edit-image` takes `source: "mannequin"`, references take role `object`, both render tools take
+`thinking` and report `thinkingTokens`, and the token framing and the character preamble describe
+the head instead of tilting it to the camera. Release detail is the GitHub release notes; the
+dated journal is `docs/log/YYYY-MM.md`.
 
 The server runs on the Gemini API. The first version of this server wrapped
 a local ComfyUI install with FLUX models and a trained house-style LoRA. That direction is dead:

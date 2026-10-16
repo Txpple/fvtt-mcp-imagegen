@@ -11,6 +11,10 @@ export type ImageSize = (typeof SIZES)[number];
 export const ASPECTS = ['1:1', '3:4', '4:3', '16:9', '9:16', '3:2', '2:3'] as const;
 export type Aspect = (typeof ASPECTS)[number];
 
+/** Thinking levels Nano Banana 2.1 accepts (default medium); 3.1 Flash Image knows minimal and high. */
+export const THINKING_LEVELS = ['minimal', 'medium', 'high'] as const;
+export type ThinkingLevel = (typeof THINKING_LEVELS)[number];
+
 /** Model ids exactly as the API lists them (verified 2026-09-19; flash moved to Nano Banana 2.1 on 2026-10-08). */
 export const MODELS: Record<Tier, string> = {
   flash: 'gemini-nano-banana-2.1',
@@ -22,6 +26,16 @@ export const PRICE: Record<Tier, Record<ImageSize, number>> = {
   flash: { '1K': 0.0336, '2K': 0.0504, '4K': 0.113 },
   pro: { '1K': 0.134, '2K': 0.134, '4K': 0.24 },
 };
+
+/** USD per 1M output text tokens, the rate thinking is billed at (Google's price table, 2026-10-16). */
+export const TEXT_OUT_PRICE: Record<Tier, number> = { flash: 7.5, pro: 12 };
+
+/** Token counts the API reports for one call; thinking is billed as output text. */
+export interface TokenUsage {
+  prompt: number;
+  output: number;
+  thinking: number;
+}
 
 export interface InlineImage {
   data: Buffer;
@@ -35,12 +49,16 @@ export interface GenerateRequest {
   images?: InlineImage[];
   aspect: Aspect;
   size: ImageSize;
+  /** Unset leaves the model's default. */
+  thinking?: ThinkingLevel;
 }
 
 export interface GenerateResult {
   image: InlineImage;
   model: string;
   finishReason: string;
+  /** Present when the response carried usageMetadata. */
+  usage?: TokenUsage;
 }
 
 export interface GeminiOptions {
@@ -58,13 +76,13 @@ export function buildRequestBody(req: GenerateRequest): Record<string, unknown> 
     parts.push({ inline_data: { mime_type: img.mimeType, data: img.data.toString('base64') } });
   }
   parts.push({ text: req.prompt });
-  return {
-    contents: [{ parts }],
-    generationConfig: {
-      responseModalities: ['IMAGE'],
-      imageConfig: { aspectRatio: req.aspect, imageSize: req.size },
-    },
+  const generationConfig: Record<string, unknown> = {
+    responseModalities: ['IMAGE'],
+    imageConfig: { aspectRatio: req.aspect, imageSize: req.size },
   };
+  // REST nests the level under thinkingConfig (the generate-content reference, 2026-10-16).
+  if (req.thinking) generationConfig.thinkingConfig = { thinkingLevel: req.thinking };
+  return { contents: [{ parts }], generationConfig };
 }
 
 /** Pull the one image out of a response, or explain precisely why there is none. */
@@ -83,6 +101,7 @@ export function parseResponse(json: any, model: string): GenerateResult {
       `Gemini returned no image (finishReason=${cand?.finishReason ?? 'none'})${text ? `: ${text}` : ''}`
     );
   }
+  const u = json?.usageMetadata;
   return {
     image: {
       data: Buffer.from(part.inlineData.data, 'base64'),
@@ -90,6 +109,15 @@ export function parseResponse(json: any, model: string): GenerateResult {
     },
     model,
     finishReason: String(cand?.finishReason ?? ''),
+    ...(u
+      ? {
+          usage: {
+            prompt: Number(u.promptTokenCount ?? 0),
+            output: Number(u.candidatesTokenCount ?? 0),
+            thinking: Number(u.thoughtsTokenCount ?? 0),
+          },
+        }
+      : {}),
   };
 }
 

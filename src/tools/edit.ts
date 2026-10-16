@@ -17,9 +17,13 @@ import {
   referenceSchema,
   render,
   resolveTier,
+  thinkingSchema,
   tierSchema,
   type ToolDeps,
 } from './shared.js';
+
+export const EDIT_SOURCES = ['mannequin'] as const;
+export type EditSource = (typeof EDIT_SOURCES)[number];
 
 const editImageSchema = z.object({
   sourceImage: z.string().min(1).describe('Absolute path of the image to edit (PNG/JPEG/WebP).'),
@@ -34,6 +38,16 @@ const editImageSchema = z.object({
         'own wording.'
     ),
   kind: kindSchema,
+  source: z
+    .enum(EDIT_SOURCES)
+    .optional()
+    .describe(
+      'Tokens only. "mannequin": the source is a grey pose capture (a HeroForge mannequin), not ' +
+        'a token. The keep line then binds pose, camera, proportions, grip and head angle to the ' +
+        'capture and asks for nothing grey to remain; the instruction describes the figure and ' +
+        'its kit, with a crop of the approved portrait as a character reference and gear crops ' +
+        'as object references.'
+    ),
   slug: z.string().min(1).describe('Kebab-cased into the filename: <kind>-<slug>-<id>.png.'),
   references: z
     .array(referenceSchema)
@@ -43,6 +57,7 @@ const editImageSchema = z.object({
   tier: tierSchema,
   confirmPro: confirmProSchema,
   creatureSize: creatureSizeSchema,
+  thinking: thinkingSchema,
 });
 
 export const EDIT_PREAMBLE =
@@ -59,6 +74,26 @@ export const EDIT_PREAMBLE =
 export const TOKEN_EDIT_KEEP =
   'Keep the face, hair, and the top-down token angle. Remove any cast shadow. Keep the whole ' +
   'figure, weapons included, inside the frame with a margin on every side; nothing crosses the edge.';
+
+/**
+ * Mannequin edits (owner rule 2026-10-16). The source is a grey HeroForge capture, so "keep the
+ * face, hair" is noise, and nothing in the token keep line pinned the head: in the first real
+ * run heads went down into the chest or up at the camera. The capture binds pose, camera,
+ * proportions and grip; the head is described here, not bound, because the captures' own heads
+ * bow toward the ground (a bound head would look at its feet). Said as presence throughout: a
+ * negation draws the thing. The instruction supplies everything else, and no grey may remain.
+ */
+export const MANNEQUIN_EDIT_SOURCE =
+  'Image 1 is a grey mannequin: the guide for the pose, the overhead camera, the body ' +
+  'proportions and the grip. ';
+export const MANNEQUIN_EDIT_KEEP =
+  'Paint the figure in exactly this stance from exactly this camera, every limb and weapon where ' +
+  'the mannequin has them. The head is held level, looking ahead along the ground a few paces in ' +
+  'front of the figure: from this camera the crown and brow are the largest parts of the head, ' +
+  'the eyes and nose show below them, and the chin is mostly hidden. The grey clay is replaced ' +
+  'entirely by the described figure, with nothing left grey. Remove any cast shadow. Keep the ' +
+  'whole figure, weapons included, inside the frame with a margin on every side; nothing crosses ' +
+  'the edge.';
 
 /**
  * Prop edits: the token keep line's "face, hair" grew people on an armchair, a tree, and a crate
@@ -108,12 +143,21 @@ export const OVERLAND_EDIT_KEEP =
 export const PROP_EDIT_PAD = 0.12;
 
 /** Assemble the edit prompt for a kind. The token plate sentence is appended later by render(). */
-export function editPrompt(kind: Kind, instruction: string, refs: Reference[]): string {
+export function editPrompt(
+  kind: Kind,
+  instruction: string,
+  refs: Reference[],
+  source?: EditSource
+): string {
   // Shift reference numbering past the source image.
   const preamble = referencePreamble(refs, kind).replace(
     /Image (\d+)/g,
     (_, n) => `Image ${Number(n) + 1}`
   );
+  if (source === 'mannequin') {
+    const body = instruction.trim().replace(/[.\s]+$/, '');
+    return `${MANNEQUIN_EDIT_SOURCE}${preamble}${body}. ${MANNEQUIN_EDIT_KEEP}`;
+  }
   const map = kind === 'battlemap' || kind === 'overland';
   if (kind === 'token' || kind === 'prop' || map) {
     const source = refs.length ? `Image 1 is the ${map ? 'map' : kind} to edit. ` : '';
@@ -145,6 +189,8 @@ export class EditImageTool {
           'plus a keep-face/hair/angle line and "remove any cast shadow"), put back on a chroma ' +
           "plate keyed to the token's own colours, and cut to alpha on the 512 square in the " +
           'same call. "give this an updated painterly style" restyles a world token in place. ' +
+          'source: "mannequin" paints a grey pose capture into a token with the pose, camera, ' +
+          'grip and head angle bound to the capture. ' +
           'Props (kind "prop") get object-only wording (no figures added) and come back cut at ' +
           "the source file's exact pixel size, ready for the same tile slot. Battlemaps " +
           '(kind "battlemap") restyle a bought map with the layout locked: the result lands on ' +
@@ -162,11 +208,17 @@ export class EditImageTool {
 
   async handleEditImage(args: unknown) {
     const p = editImageSchema.parse(args);
+    if (p.source && p.kind !== 'token') {
+      throw new Error(
+        `source: "${p.source}" is for kind "token" only: a mannequin is painted into a token. ` +
+          `Omit source for a ${p.kind} edit.`
+      );
+    }
     // Edits default to flash regardless of kind; the spike showed no gain from pro here.
     const tier = resolveTier(p.kind, p.tier ?? 'flash', p.confirmPro);
     const refs = (p.references ?? []).map(r => ({ ...r }));
     const images = [loadImage(p.sourceImage), ...refs.map(r => loadImage(r.path))];
-    const prompt = editPrompt(p.kind, p.instruction, refs);
+    const prompt = editPrompt(p.kind, p.instruction, refs, p.source);
     // A prop comes back at its source's exact size, with the new art in the box the original
     // occupied, so it drops into the same tile slot at the same scale. The model is shown the
     // source with a transparent margin: a crate drawn edge to edge on its tile was otherwise
@@ -210,6 +262,7 @@ export class EditImageTool {
       images,
       slug: p.slug,
       ...(p.creatureSize ? { creatureSize: p.creatureSize } : {}),
+      ...(p.thinking ? { thinking: p.thinking } : {}),
       ...propFit,
     });
   }

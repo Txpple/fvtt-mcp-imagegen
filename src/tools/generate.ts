@@ -13,6 +13,7 @@ import {
   referenceSchema,
   render,
   resolveTier,
+  thinkingSchema,
   tierSchema,
   type ToolDeps,
 } from './shared.js';
@@ -38,6 +39,7 @@ const generateImageSchema = z.object({
   tier: tierSchema,
   confirmPro: confirmProSchema,
   creatureSize: creatureSizeSchema,
+  thinking: thinkingSchema,
   footprint: z
     .string()
     .regex(/^\d{1,2}x\d{1,2}$/i)
@@ -96,6 +98,7 @@ export class GenerateImageTool {
       images,
       slug: p.slug,
       ...(p.creatureSize ? { creatureSize: p.creatureSize } : {}),
+      ...(p.thinking ? { thinking: p.thinking } : {}),
       ...(fp
         ? {
             aspect: nearestAspect(fp.w / fp.h),

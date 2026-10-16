@@ -36,15 +36,20 @@ export interface Preset {
   suffix: string;
 }
 
-// Two body plans, one sentence each (2026-09-24): an upright figure keeps the face-up pitch the
-// world's humanoid tokens use; a four-legged or crawling creature is seen along its back. The
-// single humanoid wording turned a bear, a hound, and a troll to look up at the camera.
+// Two body plans, one sentence each (2026-09-24): an upright figure keeps the pitch the world's
+// humanoid tokens use; a four-legged or crawling creature is seen along its back. The single
+// humanoid wording turned a bear, a hound, and a troll to look up at the camera. The upright
+// head is described as carried, not "tilted up toward the viewer" (owner rule 2026-10-16): that
+// phrase drew faces staring up at the camera; the target shows the brow and eyes, chin hidden.
 export const TOKEN_FRAMING =
   'Virtual tabletop token, top-down. An upright figure: the camera is high above and slightly ' +
   'in front, about fifteen degrees off vertical, never straight down and never a three-quarter ' +
   'view; the top of the head and the shoulders are the largest shapes, the torso is ' +
-  'foreshortened, the feet are mostly hidden beneath the body, and the face tilts up toward the ' +
-  'viewer. A four-legged, crawling, or slithering creature: seen from directly above, looking ' +
+  'foreshortened, the feet are mostly hidden beneath the body, and the head is carried level or ' +
+  'tilted only slightly up: the crown and brow are the largest parts of the head, the eyes and ' +
+  'nose show below them, the chin is mostly hidden, and the gaze goes ahead along the ground a ' +
+  'few paces in front of the figure. A four-legged, crawling, or slithering creature: seen from ' +
+  'directly above, looking ' +
   'straight down on its back; the spine faces the camera, the head is at the leading edge ' +
   'pointing forward and slightly down (not turned up toward the camera), the legs in a natural ' +
   'walking stance beside the body, and the tail trails behind. If a token is attached as a ' +
