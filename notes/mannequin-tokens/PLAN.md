@@ -1,97 +1,135 @@
 # Plan: tokens from a mannequin pose library ("mannequin tokens")
 
-Written 2026-10-15 after two days of tests (2026-10-14/15) on the Echoes of Halruaa campaign:
-about twenty character tokens, then ten class samples. Everything needed to pick this up cold is
-in this file.
+The handoff for this work: everything needed to pick it up cold is in this file. Tests ran
+2026-10-14 and 2026-10-15 on the Echoes of Halruaa campaign (about forty renders, all flash).
+This repo is where the work continues; the campaign repo only receives finished art.
 
 ## Goal
 
 A small, reusable library of grey 3D mannequins (top-down captures from HeroForge) that turns
-into any humanoid token with one `edit-image` call: the mannequin fixes pose, camera, proportions
-and grip; the words supply race, kit, colours and finish. About 3–4¢ a token on flash, no
-re-rolls, and every token in a world shares one camera and one scale.
+into any humanoid token with one `edit-image` call. The mannequin fixes pose, camera,
+proportions and grip; the words supply race, sex, kit, colours and finish. About 3–4¢ a token,
+no re-rolls, and every token in a world shares one camera and one scale.
 
-## Why mannequins (the problem they solve)
+## Why mannequins
 
-- **Words-only tokens drift.** `generate-image` makes detailed tokens from words, but the pose and
-  camera wander from render to render, and the API has no seed. No training is possible: neither
-  Nano Banana 2.1 nor Gemini 3 Pro Image can be fine-tuned.
-- **Library restyles inherit the library.** A stock token keeps its pose (good) but also its
-  flat drawing and odd angle; edits cannot lift it to the house finish, and cannot fix the angle.
-- **A mannequin is a pose with nothing else in it.** No style to copy, no face to keep, no kit
-  to fight. The edit only adds.
+- **Words-only tokens drift.** `generate-image` makes detailed tokens from words, but pose and
+  camera wander from render to render, the API has no seed, and neither Nano Banana 2.1 nor
+  Gemini 3 Pro Image can be fine-tuned.
+- **Library restyles inherit the library.** A stock token keeps its pose but also its flat
+  drawing and odd angle; edits cannot lift it to the house finish or fix the angle.
+- **A mannequin is a pose with nothing else in it.** No style to copy, no face to keep. The edit
+  only adds.
 
-Where this sits next to the skill's existing routes (`illustration-builder` SKILL.md, token
-section): words-only `generate` stays the route for creatures with no humanoid body (a flying
-sword, a beast); a library restyle stays the route when the owner wants one exact library token
-kept. **Any humanoid with a body type in the library starts from a mannequin.**
+Next to the skill's other token routes (`illustration-builder`, token section): words-only
+`generate` stays the route for creatures with no humanoid body (a beast, a flying sword); a
+library restyle stays the route when the owner wants one exact library token kept. **Any
+humanoid whose body is in the library starts from a mannequin.**
 
-## What the tests showed
-
-| Test | Result | Lesson |
-| --- | --- | --- |
-| Human mannequin made into a dwarf, and into a woman | The dwarf came out a stretched human; the woman got a man's hands | **Body type is the one thing words cannot change.** A dwarf body and a female body fixed both at the source. |
-| Human body made into an elf, a tiefling, a half-orc | All clean, first pass | One human body covers every human-sized race. |
-| Dwarf body made into a beardless dwarf woman | Clean | One dwarf body covers both sexes. |
-| A weapon written into an open reaching hand | 3 bad grips in 4 renders (sword held by the pommel, staff through the wrist) | **Weapons go in the mannequin's closed fist**, captured in HeroForge. |
-| A HeroForge weapon in the fist, repainted (ornate sword → plain steel → runed blade → battleaxe → warhammer) | Perfect grip every time | **The weapon repaints across types freely, but its length and angle carry over.** Capture a medium-length weapon. |
-| Ten classes from existing mannequins (wizard, sorcerer, cleric, paladin, rogue, ranger, warlock, druid, barbarian, monk) | 8 good first pass; wizard, sorcerer, warlock and druid were the strongest | **Open hands and fists make every caster**: the spell is written in. Casters need no pose of their own. |
-| Mannequin whose axe handle ran off the frame | Refused twice by the edge-clip check | **The weapon must sit wholly inside the capture.** |
-| Ranger from a bow drawn across the body | Oversized bow, string and limbs that don't add up | Bows need to be edge-on and clear of the body. |
-| Paladin with a sunburst painted on the shield | Shield came back plain | Small emblems are the first detail lost; expect a flaw pass for them. |
-| A style token or portrait attached beside the mannequin | The attached subject got copied in | **Never attach a second image.** Words plus one mannequin, nothing else. |
-| Variants by editing a finished render (darker, cloak, runes) | Pose held | One mannequin gives a whole wardrobe; fix faults with a flaw pass, never a re-roll. |
-| Kicking, jumping, running, kneeling presets (looked at from above) | Legs barely read top-down | **Only the silhouette reads from above:** arms and weapons, not legs. |
-
-## The library: 19 poses, 28 files
-
-Five bodies × four poses, less the big frame's one-hand pose: 19 poses. With the free gear swaps
-(bow, shield off) it is 28 exported files.
+## Lessons
 
 ### Bodies
 
-| Body | Covers |
+| Test | Result | Lesson |
+| --- | --- | --- |
+| An early, heavily muscled human capture made into a dwarf, and into a woman | The dwarf came out a stretched human; the woman got a man's hands | A body far from the target can't be talked out of. |
+| The current human male capture made into a woman, armoured, then bare-armed, same prompt as on the current female capture (2026-10-15) | Armoured: near identical. Bare-armed: both clearly a woman; on the male body the arms and shoulders a little heavier, athletic rather than slight | **One human body covers both sexes.** Write "slender" or "slight" for a delicate build. A female body earns its keep only for many slight, bare-skinned figures, and even then it is a small gain. |
+| The human body made into an elf, a tiefling, a half-orc, a dragonborn (male and female) | All clean, first pass; the dragonborn got a full draconic head and a tail the mannequin lacks | One human body covers every human-sized race. |
+| The dwarf body made into a beardless dwarf woman | Clean | One dwarf body covers both sexes. |
+| Kicking, jumping, running, kneeling presets, looked at from above | Legs barely read top-down | Only the silhouette reads from above: arms and weapons, not legs. |
+
+### Gear
+
+| Test | Result | Lesson |
+| --- | --- | --- |
+| A weapon written into an open reaching hand | 3 bad grips in 4 renders (sword held by the pommel, staff through the wrist) | **Weapons go in the mannequin's closed fist**, captured in HeroForge. |
+| A HeroForge weapon in the fist repainted across types (sword → runed blade → battleaxe → warhammer) | Perfect grip every time | The weapon changes type freely, but **its length and angle are the mannequin's**. A repaint can't shorten a longsword into a dagger: capture a short blade too. |
+| A spear restyled by describing only a new head (noble dragonborn, 2026-10-15) | New head, but the base spear's ringed butt cap, cord-wrapped grip and collar all survived | **Anything not named is kept.** |
+| The same spear with every part named and replaced: "replace the entire spear from end to end, keeping only its length and angle in her fist: none of the old butt cap, ring bands, cord-wrapped grip or collar remain", then each new part described | Nothing of the base spear left but length and angle | **Replace gear part by part, by name.** |
+| A round shield asked to become a heater or kite shield by description only | Stayed round; only the decoration changed | Describing the new shape is not enough. |
+| The same shield with "none of the old round disc, round rim, studs or arm straps remain, and nothing round is left" | A true heater shield | **The shield's outline can change**: name the old parts and forbid the old shape. One round shield in the captures is enough. |
+| That heater shield "turned so its face tilts up toward the viewer" | Shape and emblem clearly visible, but the owner found the tilt unnatural | **Keep the mannequin's shield angle** ("keeping its exact position and angle on his forearm, held naturally"). Edge-on, the new outline still reads; the face emblem mostly doesn't. Tilt only when heraldry matters more than realism. |
+| A sunburst painted on a shield held edge-on | Came back plain; a "dragon's head boss" landed on the rim instead | Emblems on an edge-on shield face don't show; put them on the rim or accept the loss. |
+| A mannequin whose axe handle ran off the frame | Refused twice by the edge-clip check | The capture must hold the weapon wholly inside the frame. A spear 9–16 px from the edge on 1024 rendered fine. |
+| A bow drawn across the body | Oversized bow, string and limbs that don't add up | Bows held low, edge-on, clear of the body; never at full draw. |
+
+### Prompting
+
+| Test | Result | Lesson |
+| --- | --- | --- |
+| Ten classes from existing captures | 8 good first pass; wizard, sorcerer, warlock and druid the strongest | **Open hands and fists make every caster**: the spell is written in. |
+| A style token or portrait attached beside the mannequin | The attached subject got copied in | **Never attach a second image.** Words plus one mannequin. |
+| A tail asked for on a body that loops it round the figure | Showed in two places, reading as two tails | Say "ONE tail, curving out behind to the upper left only". |
+| Variants by editing a finished render (darker, cloak, runes) | Pose held | One mannequin gives a whole wardrobe. Fix faults with a flaw pass, never a re-roll. |
+| A black outline round the mannequin (asked, not rendered) | — | Don't: an edit keeps drawing in the source, so an outline would come back as ink. Separate limbs with arms held off the body, or stronger HeroForge lighting. |
+
+## The library
+
+### Bodies
+
+| Body | Covers | Status |
+| --- | --- | --- |
+| **Human** (the male body) | every human-sized race, both sexes | being captured |
+| **Dwarf** | dwarves, both sexes | not yet |
+| **Small** (a slim halfling body) | halfling, gnome, goblin, kobold | not yet; prove with 2–3 renders first. A stocky body may stretch a goblin the way the early human stretched a dwarf |
+| **Large** (a heavy body) | goliath, orc, bugbear, ogre, hill giant | not yet; prove first. Token size is separate (`creatureSize: "large"` gives the 1024 token) |
+
+A female human body was captured once (the spear-and-shield crouch) for the test above; it is
+optional.
+
+### Poses and setups
+
+A **pose** (how the body stands) is expensive to make in HeroForge; a **setup** (what the hands
+hold, in the same pose) is a quick re-export. Pick a mannequin by how the hands hold, never by
+class.
+
+**Crouch** (the human body, done 2026-10-15): a low forward lunge, one fist leading low, the
+other arm back and high. Eight setups:
+
+| Setup | Covers |
 | --- | --- |
-| Human male | human, elf, half-elf, tiefling, half-orc, aasimar, dragonborn, genasi |
-| Human female | the same, female |
-| Dwarf | dwarves of both sexes |
-| Halfling | halfling, gnome, goblin, kobold: anything Small |
-| Big frame | goliath, orc, ogre, bugbear, hill giant |
+| empty hands | casters (see open question), monks, unarmed |
+| sword | fighters without a shield, duelists; becomes any one-handed weapon of that length (mace, axe, hammer) |
+| sword and shield | fighter, paladin, cleric, guards |
+| short curved blade | rogue, assassin, thug; dagger, kukri, scimitar, shortsword |
+| two short blades | two-weapon rogue or ranger |
+| spear and shield | spear guard, soldier, hoplite; any polearm of that length one-handed |
+| crossbow and shield | crossbow guard, militia |
+| longbow held low | archer, ranger |
 
-### Poses
+**Still to capture on the human body:**
 
-| # | Pose | Hands | Free variants (same pose, swap the gear) | Covers |
-| --- | --- | --- | --- | --- |
-| 1 | **Cast / shoot** | one arm thrust straight out, the other hand drawn back to the chest | empty hands; a bow held edge-on, clear of the body | every caster; archers |
-| 2 | **One-hand weapon** | forward fist closed on a longsword-length weapon, other arm back | with a strapped shield; without, off hand open | fighter, paladin, cleric, rogue, guards, soldiers |
-| 3 | **Two-hand weapon** | both fists together at the chest on one long shaft, held diagonally across the body | — | greatsword, greataxe, polearm, spear, staff; barbarian, staff casters |
-| 4 | **Down** | on its back, arms out | — | the dead or unconscious token for any creature |
+1. **Two-hand weapon**: both fists together at the chest on one long shaft held diagonally
+   across the body (greatsword, greataxe, polearm, staff).
+2. **Down**: on its back, arms out (the dead or unconscious token for anything).
+3. **Cast**, only if the open question below says so: one arm thrust straight out, the other
+   hand drawn back to the chest.
 
-In HeroForge's pose presets these are close to: an arm-thrust-forward casting stance (pose 1), a
-forward lunge with one fist leading (2), a guard with both fists together at the chest (3), and
-lying flat on the back (4). The owner's labelled preset sheets are local only (below).
+**Open question: does the empty-handed crouch make a good caster?** An empty-handed lunge on an
+older capture gave one of the best class tests (a druid). If the crouch does as well for a
+wizard and a sorcerer, the cast pose drops out for every body. Test with two renders before
+capturing it.
 
-**Out of the library:** kneeling, jumping, running, kicking and idle standing. They don't read
-from above, and pose 1 empty-handed does everything an idle pose would.
+Then repeat for the other bodies: dwarf (crouch setups, two-hand, down), small (crouch setups
+less the crossbow, down), large (crouch empty, two-hand, down; large creatures rarely carry
+shields).
 
-### Order
-
-1. Human male and human female, all four poses (8 captures): most PCs and NPCs.
-2. Dwarf and halfling, all four (8).
-3. Big frame, poses 1, 3, 4 (3): big creatures rarely carry a shield.
-
-Step 1 alone covers about four-fifths of what a campaign asks for.
+**Out of the library:** kneeling, jumping, running, kicking and idle standing poses.
 
 ## Capture rules (HeroForge)
 
 1. Unpainted grey body, no clothing, no base, no rim (Stage tab: base and rim off).
 2. **One saved top-down camera for every capture** (Share › Booth): about fifteen degrees off
    vertical for standing figures, straight down for the down pose.
-3. Export with alpha: the PNG comes out already cut, no backdrop needed.
-4. Weapon in a **closed fist**, medium length, **wholly inside the frame**.
+3. Export with alpha (the PNG comes out already cut) at 1024 square.
+4. Weapon in a **closed fist** and **wholly inside the frame**. Plain weapons are better than
+   ornate ones: there is less to replace.
 5. Arms held off the torso so the silhouette reads from above.
-6. Name `mannequin-<body>-<pose>[-<variant>].png`, for example `mannequin-female-onehand-shield.png`,
-   `mannequin-halfling-cast-bow.png`, `mannequin-big-down.png`.
+6. After switching body or weapon, check the weapon is still inside the frame and the grip and
+   shield strap still line up.
+7. No outline.
+8. Name `mannequin-<body>-<pose>-<setup>.png`: `mannequin-human-crouch-sword-shield.png`,
+   `mannequin-dwarf-twohand.png`, `mannequin-small-down.png`.
 
 **Licensing:** HeroForge captures are a private intermediate. They never go in this repo (it is
 public) or any other public repo. For anything commercial, read HeroForge's terms or swap the
@@ -102,10 +140,17 @@ capture step to an open source (PoseMy.Art, MakeHuman).
 `edit-image`, `kind: "token"`, flash, the mannequin as `sourceImage`, **no references**:
 
 ```
-Turn this grey mannequin into <race, sex, age, build, face, hair>, in <clothing and armour>.
-The <weapon> in the fist becomes <new weapon>; the <shield> becomes <new shield>.
+Turn this grey mannequin into <race, sex, age, build, face, hair, eyes>, <anything the mannequin
+lacks: ONE tail curving out behind to the upper left only, wings folded, a cloak>.
+<He|She> wears <clothing and armour, materials and colours>.
+Replace the entire <weapon> from end to end, keeping only its length and angle in <his|her> fist:
+none of the old <butt cap, ring bands, wrapped grip, collar, crossguard, pommel> remain.
+The new weapon is <each part, bottom to top: pommel or butt, shaft or grip, collar or guard, head
+or blade>.
+Replace the entire shield, keeping its exact position and angle on <his|her> forearm, held
+naturally the way the original is held: none of the old round disc, round rim, studs or arm
+straps remain, and nothing round is left. The new shield is <shape, material, rim>.
 <Any magic: "the hand at the lower right casts a crackling ball of violet force">.
-<Anything the mannequin lacks: tail, cloak, wings, a second weapon, a light source>.
 Dark epic painterly rendering, the figure mostly in deep shadow with <light source> as the key
 light and a faint cold rim light on the far edges, deep blacks and <dark colours>, crisp fine
 detail on <materials>; nothing bright except <light source>, nothing left grey clay.
@@ -113,31 +158,33 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 
 - Name hands by **where they are in the image** ("the hand at the lower left"), never left and
   right: the model reads those both ways.
-- Name everything the mannequin lacks; it adds nothing unasked.
-- The finish line is the house style (campaign `art/SHELF.md`); swap it for another campaign's.
+- Name everything the mannequin lacks; it adds nothing unasked. Name every gear part you want
+  gone; it keeps everything not named.
+- The finish line is the house style (the campaign's `art/SHELF.md`); swap it for another
+  campaign's.
 - Fix a fault with one flaw pass on the render, naming the one thing and ending "keep everything
-  else identical". Never re-roll: the pose anchor survives a pass, not a new render.
+  else identical". Never re-roll: the pose survives a pass, not a new render.
 - Variants (darker, cloaked, wounded) are edits of the finished token.
 
 ## Build-out steps
 
-1. **Capture** the 19 poses (28 files) in the order above (owner, in HeroForge).
-2. **Store** the captures privately: the owner's art repo (`fvtt-assets-actors`, private) or the
-   campaign repo, never here. Record the path in step 4.
-3. **Prove** each new body with three tokens (a caster, a one-hander, a two-hander) before
-   capturing the rest of it; keep anything learned in the table above.
-4. **Skill:** add a "mannequin route" to `illustration-builder`'s token section: when to use it
-   (any humanoid whose body is in the library), where the library lives, how to pick the pose
-   (by how the hands hold, not by class), the recipe above. Make it the default for humanoid PCs
-   and NPCs, ahead of words-only and library restyles.
-5. **No new tool.** This is skill judgment over the existing `edit-image` token kind (house rule:
-   tools do, skills decide). Revisit only if the prompt shape above starts living in every call:
-   then a `mannequin` source hint on `kind: "token"` could carry the fixed wording.
+1. **Answer the open question** (two caster renders from the empty-handed crouch).
+2. **Capture** the rest of the human body: two-hand, down (and cast, if step 1 says so).
+3. **Prove** the small and large bodies with two or three renders each before capturing all
+   their setups; then capture dwarf, small and large.
+4. **Store** the captures privately (the owner's private art repo `fvtt-assets-actors`), never
+   here. Record the path in this file.
+5. **Skill:** add a "mannequin route" to `illustration-builder`'s token section (it already
+   points here): when to use it, where the library lives, picking by how the hands hold, and the
+   recipe above. Make it the default for humanoid PCs and NPCs.
+6. **No new tool.** This is skill judgment over the existing `edit-image` token kind (tools do,
+   skills decide). Revisit only if the recipe's fixed wording starts repeating in every call;
+   then a `mannequin` source hint on `kind: "token"` could carry it.
 
 ## Status (2026-10-15)
 
-- Tested on an ad-hoc set of about 24 captures, mostly human-male poses, which are **legacy**:
-  useful for tests, not the library. The library above starts from zero.
-- Owner's working folder: `Desktop\mannequin-tokens` (`NOTES.md` there is the local index:
-  legacy captures, the class samples, the labelled HeroForge preset sheets `heroforge-presets/`).
-- Next: step 1, eight human captures.
+- **Captured:** the human crouch, eight setups (male body), plus the spear-and-shield crouch on a
+  female body from the sex test. Still the owner's raw HeroForge downloads, not yet named or
+  stored (step 4).
+- **Test renders** are local only (the owner's Desktop, `male-vs-female-body-test`).
+- **Next:** step 1, then step 2.
