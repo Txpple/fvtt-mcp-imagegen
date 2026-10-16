@@ -51,13 +51,13 @@ describe('presets', () => {
   it('frames tokens top-down and leaves the plate sentence to chroma.ts', () => {
     expect(PRESETS.token.suffix).toBe(TOKEN_FRAMING);
     expect(PRESETS.token.suffix).toMatch(/top-down/);
-    // Both body plans: an upright head is carried level or slightly up with the brow and eyes
-    // showing (owner rule 2026-10-16; "tilts up toward the viewer" drew faces staring at the
-    // camera); beasts are seen along the back, head not turned up.
+    // Both body plans: an upright figure is a 90-degree orthographic body with the head tilted
+    // up so brow, eyes and nose show (the owner's standard, 2026-10-16); beasts are seen along
+    // the back, head not turned up.
     expect(PRESETS.token.suffix).toMatch(
-      /upright figure.*head is carried level or tilted only slightly up.*gaze goes ahead along the ground/
+      /upright figure.*90-degree orthographic top-down view.*both eyes and the nose show in front of the crown/
     );
-    expect(PRESETS.token.suffix).not.toMatch(/tilts up toward the viewer/);
+    expect(PRESETS.token.suffix).not.toMatch(/fifteen degrees|tilts up toward the viewer/);
     expect(PRESETS.token.suffix).toMatch(/four-legged.*spine faces the camera.*not turned up/);
     expect(PRESETS.token.suffix).not.toMatch(/chroma/);
   });

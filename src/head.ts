@@ -1,9 +1,10 @@
-// The head check for mannequin tokens (owner rule 2026-10-16): a token's face shows the brow,
-// both eyes and the nose, looking ahead along the ground; never bowed into the chest, never up
-// at the camera. No pixel measure tells a bowed painted head from a lifted one across races,
-// hoods and helmets, so the plate is shown to a cheap vision model and asked for one word. The
-// verdict steers one re-render and is reported; it never refuses, because the judge can be
-// wrong and the flaw pass still reads every token.
+// The head check for mannequin tokens (owner rule 2026-10-16): the body is seen from straight
+// above and the head is tilted up so the brow, both eyes and the nose show in front of the
+// crown; never bowed into the chest, never a lowered camera that shows the chest and the face
+// head-on. No pixel measure tells those apart across races, hoods and helmets, so the plate is
+// shown to a cheap vision model and asked for one word. The verdict steers one re-render and is
+// reported; it never refuses, because the judge can be wrong and the flaw pass still reads
+// every token.
 
 import type { Gemini } from './gemini.js';
 
@@ -11,14 +12,15 @@ export const HEAD_VERDICTS = ['ahead', 'bowed', 'up', 'unclear'] as const;
 export type HeadVerdict = (typeof HEAD_VERDICTS)[number];
 
 export const HEAD_PROMPT =
-  'This is a virtual tabletop token: one figure seen from a camera high above and a little in ' +
-  'front of it, on a flat coloured plate. Judge only the head of the figure and answer with one ' +
-  'word. AHEAD: the brow, both eyes and the nose are visible and the figure looks ahead along ' +
-  'the ground, the chin mostly hidden. BOWED: the head is bowed so that mainly the crown and ' +
-  'brow show, the eyes hidden, closed, or looking straight down at its own feet. UP: the face ' +
-  'is tilted up so that the figure looks straight up at the camera, chin and neck showing. ' +
-  'UNCLEAR: no face can be made out (a helmet with no visor, a hood hiding the face, a figure ' +
-  'lying down). One word.';
+  'This is a virtual tabletop token: one figure on a flat coloured plate, meant to be seen from ' +
+  'directly above, straight down onto the tops of its shoulders, with its head tilted up so the ' +
+  'face shows. Judge the camera and the head and answer with one word. AHEAD: the body is seen ' +
+  'from straight above (shoulders and crown the largest shapes, feet beneath the body) and the ' +
+  'brow, both eyes and the nose are visible in front of the crown. BOWED: the body is seen from ' +
+  'straight above but the head is bowed, so mainly the crown and hair show and the eyes are ' +
+  'hidden or closed. UP: the camera is not straight above: the chest or front of the body faces ' +
+  'the viewer and the face is seen nearly head-on, as in a portrait. UNCLEAR: no face can be ' +
+  'made out (a helmet with no visor, a hood hiding the face, a figure lying down). One word.';
 
 /** The judge's first word, as a verdict; anything else is unclear. */
 export function parseVerdict(text: string): HeadVerdict {

@@ -1,7 +1,9 @@
 # Mannequins
 
 Grey HeroForge captures that `fvtt-mcp-imagegen`'s `edit-image` (kind `token`, flash, no
-references) turns into any humanoid token: the mannequin fixes pose, camera, proportions and
+references) turns into any humanoid token: the mannequin fixes pose, proportions and grip (the
+camera comes from the tool's words: a 90-degree orthographic body, head tilted up, the owner's
+standard since 2026-10-16; the captures' own fifteen-degree pitch is overridden) and
 grip; the words supply the rest. The plan, the lessons and the render recipe are in that repo's
 `notes/mannequin-tokens/PLAN.md`; this folder is only the library and its shot list.
 

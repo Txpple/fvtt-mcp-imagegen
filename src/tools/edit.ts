@@ -77,27 +77,26 @@ export const TOKEN_EDIT_KEEP =
 
 /**
  * Mannequin edits (owner rule 2026-10-16). The source is a grey HeroForge capture, so "keep the
- * face, hair" is noise, and nothing in the token keep line pinned the head: in the first real
- * run heads went down into the chest or up at the camera. The capture binds pose, camera,
- * proportions and grip. The head is the exception, because every capture's head bows toward the
- * ground: an absolute description ("held level, looking ahead") left all four PCs bowed in the
- * 2026-10-16 test, and a relative one, lifting the head from the bowed position to a stated
- * target, landed all four. So the head is lifted here, before the description, in the words
- * that landed. If the library is ever re-captured with raised heads, re-test this line. Said as
- * presence throughout: a negation draws the thing. The instruction supplies everything else,
- * and no grey may remain.
+ * face, hair" is noise. The capture binds pose, proportions and grip; the camera does NOT come
+ * from the capture (the library is shot at about fifteen degrees off vertical) but from these
+ * words: the owner's standard is a 90-degree orthographic top-down body with the head tilted
+ * up so the brow, eyes and nose show in front of the crown. That wording landed on all eight
+ * of the ortho test's head-up renders (Kartor and Cecil, stand and combat, 2026-10-16) and the
+ * owner called it perfect. Said as presence throughout: a negation draws the thing. The
+ * instruction supplies everything else, and no grey may remain.
  */
 export const MANNEQUIN_EDIT_SOURCE =
-  'Image 1 is a grey mannequin: the guide for the pose, the overhead camera, the body ' +
-  "proportions and the grip. The mannequin's head is bowed toward the ground; lift the " +
-  "figure's head up from that position until it looks ahead along the ground three paces in " +
-  'front, the face tilted only a little up, so that the brow, both open eyes and the nose show ' +
-  'clearly below the top of the head while the chin stays hidden. ';
+  'Image 1 is a grey mannequin: the guide for the pose, the body proportions and the grip. ' +
+  'Re-render it in the same stance but seen from directly above: a 90-degree orthographic ' +
+  'top-down view, the camera looking straight down onto the tops of the shoulders, the feet ' +
+  'directly beneath the body. The head is tilted up a little so that, even from straight above, ' +
+  'the brow, both eyes and the nose show in front of the crown of the head. ';
 export const MANNEQUIN_EDIT_KEEP =
-  'Paint the figure in exactly this stance from exactly this camera, every limb and weapon where ' +
-  'the mannequin has them, the head lifted as described. The grey clay is replaced entirely by ' +
-  'the described figure, with nothing left grey. Remove any cast shadow. Keep the whole figure, ' +
-  'weapons included, inside the frame with a margin on every side; nothing crosses the edge.';
+  'Paint the figure in exactly this stance, every limb and weapon where the mannequin has them, ' +
+  'the camera straight down and the head tilted up as described. The grey clay is replaced ' +
+  'entirely by the described figure, with nothing left grey. Remove any cast shadow. Keep the ' +
+  'whole figure, weapons included, inside the frame with a margin on every side; nothing crosses ' +
+  'the edge.';
 
 /**
  * Prop edits: the token keep line's "face, hair" grew people on an armchair, a tree, and a crate

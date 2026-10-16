@@ -36,20 +36,18 @@ export interface Preset {
   suffix: string;
 }
 
-// Two body plans, one sentence each (2026-09-24): an upright figure keeps the pitch the world's
-// humanoid tokens use; a four-legged or crawling creature is seen along its back. The single
-// humanoid wording turned a bear, a hound, and a troll to look up at the camera. The upright
-// head is described as carried, not "tilted up toward the viewer" (owner rule 2026-10-16): that
-// phrase drew faces staring up at the camera; the target shows the brow and eyes, chin hidden.
+// Two body plans, one sentence each (2026-09-24): an upright figure is seen from straight above
+// with its head tilted up (the owner's standard, 2026-10-16: a 90-degree orthographic body, the
+// brow, eyes and nose showing in front of the crown; it landed eight of eight in the ortho test
+// and replaced the fifteen-degree pitch); a four-legged or crawling creature is seen along its
+// back. The single humanoid wording turned a bear, a hound, and a troll to look up at the camera.
 export const TOKEN_FRAMING =
-  'Virtual tabletop token, top-down. An upright figure: the camera is high above and slightly ' +
-  'in front, about fifteen degrees off vertical, never straight down and never a three-quarter ' +
-  'view; the top of the head and the shoulders are the largest shapes, the torso is ' +
-  'foreshortened, the feet are mostly hidden beneath the body, and the head is carried level or ' +
-  'tilted only slightly up: the crown and brow are the largest parts of the head, the eyes and ' +
-  'nose show below them, the chin is mostly hidden, and the gaze goes ahead along the ground a ' +
-  'few paces in front of the figure. A four-legged, crawling, or slithering creature: seen from ' +
-  'directly above, looking ' +
+  'Virtual tabletop token, top-down. An upright figure: seen from directly above, a 90-degree ' +
+  'orthographic top-down view, the camera looking straight down onto the tops of the shoulders, ' +
+  'the feet directly beneath the body, the shoulders and the crown of the head the largest ' +
+  'shapes; the head is tilted up a little so that, even from straight above, the brow, both ' +
+  'eyes and the nose show in front of the crown. A four-legged, crawling, or slithering ' +
+  'creature: seen from directly above, looking ' +
   'straight down on its back; the spine faces the camera, the head is at the leading edge ' +
   'pointing forward and slightly down (not turned up toward the camera), the legs in a natural ' +
   'walking stance beside the body, and the tail trails behind. If a token is attached as a ' +

@@ -318,7 +318,21 @@ reads well; Kartor on `dead` lay on his back with his eyes closed, the sentence 
 dead, eyes closed", so the tool may carry it on every mannequin edit. The tool-side placement
 (`MANNEQUIN_EDIT_SOURCE`) was confirmed after the owner's restart: one Cecil standing token with
 nothing about the head in the instruction came back with the head lifted to the target, pose and
-kit kept. The recipe says nothing about the head from here on. The same day the tool grew a head check
+kit kept. The recipe says nothing about the head from here on.
+
+**The camera changed the same evening (owner ruling, 2026-10-16).** Tokens are true top-down at
+the table, so the owner tested a 90-degree orthographic camera and an 85 (sixteen renders on
+Kartor and Cecil, `OrthoTests` on the Desktop). Plain 90 and 85 gave an overhead body with no face
+(a sliver of brow at 85). "Seen from directly above, a 90-degree orthographic top-down view, the
+camera looking straight down onto the tops of the shoulders, the feet directly beneath the body;
+the head is tilted up a little so that, even from straight above, the brow, both eyes and the nose
+show in front of the crown of the head" gave an overhead body with the face showing, eight of
+eight, and the owner called it perfect. It is now the tool's mannequin line and the words-only
+token framing; the fifteen-degree pitch and the lifting sentence are retired, and the head check
+judges for the new target (`up` now means the camera dropped). The library stays as captured: the
+words override its pitch, and pose, proportions and grip are all it gives.
+
+The same day the tool grew a head check
 (`src/head.ts`): the plate goes to a judge model for one word, a bowed or up first render is redone
 once, and `head` is reported; it never refuses, since the judge can be wrong. Live after the next
 restart; its first verdicts on real renders are the thing to watch.

@@ -347,7 +347,7 @@ describe('generate-image', () => {
     expect(parts).toHaveLength(2);
     expect(parts[0].inline_data.mime_type).toBe('image/png');
     expect(parts[1].text).toMatch(/^Image 1 \(the captain token\) is a STYLE reference/);
-    expect(parts[1].text).toContain('fifteen degrees off vertical');
+    expect(parts[1].text).toContain('90-degree orthographic top-down view');
     expect(parts[1].text).toContain('chroma-key magenta (#FF00FF)');
     expect(r.chromaKey).toBe('magenta');
     expect(cuts).toHaveLength(1);
@@ -605,11 +605,11 @@ describe('edit-image', () => {
     expect(text).not.toContain(TOKEN_EDIT_KEEP);
     expect(text).not.toContain(EDIT_PREAMBLE);
     expect(text).not.toContain(TOKEN_FRAMING);
-    // The captures' own heads bow to the ground, so the head is lifted from there to a stated
-    // target, in the lead sentence, before the description (4 of 4 landed, 2026-10-16).
-    expect(MANNEQUIN_EDIT_SOURCE).toMatch(/head is bowed toward the ground; lift/);
-    expect(MANNEQUIN_EDIT_SOURCE).toMatch(/both open eyes and the nose show clearly/);
-    expect(MANNEQUIN_EDIT_KEEP).toMatch(/head lifted as described/);
+    // The owner's standard: a 90-degree orthographic body with the head tilted up (8 of 8 in
+    // the ortho test, 2026-10-16); the camera comes from these words, not the capture.
+    expect(MANNEQUIN_EDIT_SOURCE).toMatch(/90-degree orthographic top-down view/);
+    expect(MANNEQUIN_EDIT_SOURCE).toMatch(/both eyes and the nose show in front of the crown/);
+    expect(MANNEQUIN_EDIT_KEEP).toMatch(/camera straight down and the head tilted up/);
     expect(MANNEQUIN_EDIT_KEEP).toMatch(/nothing left grey/);
     expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/face, hair/);
   });
@@ -625,7 +625,7 @@ describe('edit-image', () => {
     });
     expect(sent).toHaveLength(1);
     expect(judged).toHaveLength(1);
-    expect(judged[0].body.contents[0].parts[1].text).toMatch(/Judge only the head/);
+    expect(judged[0].body.contents[0].parts[1].text).toMatch(/Judge the camera and the head/);
     expect(r.head).toEqual({ verdict: 'ahead' });
     // The session total is rounded to a tenth of a cent; the meter itself shows the judge added.
     expect(spend.totalUsd).toBeGreaterThanOrEqual(0.034);

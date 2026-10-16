@@ -494,9 +494,10 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    library of 312 grey HeroForge captures lives in this repo under `mannequins/` (its README is
    the shot list; `npm run mannequin -- grid` lists it from the files). One `edit-image` call,
    kind `token`, `source: "mannequin"`, flash, the capture as `sourceImage`, turns a capture
-   into a finished token at about 3 cents: the tool binds pose, camera, proportions and grip to
-   the capture and describes the head (held level, looking ahead along the ground, brow and
-   eyes showing); the words supply race, sex, age, face, kit, colours and finish. **A known
+   into a finished token at about 3 cents: the tool binds pose, proportions and grip to the
+   capture and sets the camera itself, the owner's standard (2026-10-16): a 90-degree
+   orthographic top-down body with the head tilted up so the brow, eyes and nose show in front
+   of the crown; the words supply race, sex, age, face, kit, colours and finish. **A known
    character also gets references: a head-to-waist crop of the approved portrait as
    `character`, and crops of its signature gear as `object`** (below). A new NPC with no
    portrait is words alone. About 120 test renders
@@ -566,25 +567,25 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
      left grey. "Keep the mannequin's exact pose" and the softer guide sentence bought the same
      pose side by side in the first real run; the tool's line is the firmer of the two, and the
      instruction no longer says any of it.
-   - **The head angle is solved by lifting it (2026-10-16, fourteen renders).** In the first
-     real run heads went down into the chest or up at the camera: the captures' own heads bow
-     toward the ground, and a frontal portrait crop bound "keep this exact face" pulled the head
-     up to the camera. An absolute description in the tool ("held level, looking ahead") left
-     all four PCs bowed. What landed four of four, twice, on the bowed captures and on the
-     owner's raised-head re-exports alike: a relative sentence that lifts the head from the
-     mannequin's bowed position to a stated target (brow, both open eyes and nose showing below
-     the top of the head, chin hidden, face tilted only a little up, gaze three paces ahead).
-     The tool's `source: "mannequin"` lead sentence now carries it, so the instruction says
-     nothing about the head; the character preamble binds identity only. A token-head anchor
-     rendered from the portrait is not needed for this, and a frontal token head attached as a
-     `pose` reference pulls the face frontal: never attach one. Compare every head to the target
-     in the flaw pass anyway, and name the footwear: the mannequin is barefoot, and a figure
-     described without boots came back barefoot. The same sentence held on the combat and
-     two-handed captures, read as alert on `prone`, and did no harm on `dead`, where "lying
-     dead, eyes closed" won, so the tool applies it to every mannequin edit.
+   - **The camera is the owner's standard, set by the tool (2026-10-16).** Tokens are seen
+     from straight above at the table, so the standard is a 90-degree orthographic body (the
+     shoulders and crown the largest shapes, feet beneath the body) with the head tilted up so
+     the brow, both eyes and the nose show in front of the crown. In the ortho test (Kartor and
+     Cecil, stand and combat, sixteen renders) that wording landed eight of eight and the owner
+     called it perfect; a plain 90 or 85 gives the same body with no face, and the old
+     fifteen-degree pitch is retired. The tool's `source: "mannequin"` lead sentence and the
+     words-only token framing both carry it, so the instruction says nothing about camera or
+     head; the character preamble binds identity only. The library's captures are shot at about
+     fifteen degrees, and the words override that: the capture gives pose, proportions and
+     grip only. A frontal token head as a `pose` reference pulls the camera frontal: never
+     attach one. Compare every render to the target in the flaw pass anyway, and name the
+     footwear: the mannequin is barefoot, and a figure described without boots came back
+     barefoot. On `prone` and `dead` the pose words win ("knocked down onto the knees", "lying
+     dead, eyes closed") and the camera line does no harm.
    - **The tool checks the head and says so (2026-10-16).** After a mannequin render the tool
-     shows the plate to a cheap vision model and asks one word: `ahead`, `bowed`, `up` or
-     `unclear`. A bowed or up first render is rendered once more (both billed, the first plate
+     shows the plate to a cheap vision model and asks one word: `ahead` (overhead body, face
+     showing), `bowed` (overhead body, head down), `up` (the camera dropped: chest and face
+     head-on) or `unclear`. A bowed or up first render is rendered once more (both billed, the first plate
      kept as `-head-<verdict>.png`), and the result's `head` reports the verdict, the first
      verdict and whether it retried. Two bad verdicts still deliver, flagged, because the judge
      can be wrong: read `head` before the flaw pass, and treat `bowed` or `up` on a delivered

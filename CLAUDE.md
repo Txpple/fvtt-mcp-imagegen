@@ -17,7 +17,8 @@ library (`mannequins/`, 312 grey captures, `scripts/mannequin.mjs`), the `illust
 skill's newer owner rules for maps, tiles and tokens, and the token changes of 2026-10-16:
 `edit-image` takes `source: "mannequin"` (with a judge-model head check, `src/head.ts`), references
 take role `object`, both render tools take `thinking` and report `thinkingTokens`, and the token
-framing and the character preamble describe the head instead of tilting it to the camera. Release
+framing and the mannequin line set the owner's camera, a 90-degree orthographic body with the head
+tilted up (the fifteen-degree pitch is retired). Release
 detail is the GitHub release notes; the dated journal is `docs/log/YYYY-MM.md`.
 
 The server runs on the Gemini API. The first version of this server wrapped
@@ -65,8 +66,9 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
 - Small server: `generate-image`, `edit-image`, `cutout-image`, `imagegen-status`. Resist tool
   sprawl. New work arrives as a `kind`, not a tool (props, battlemaps and overland maps all
   came that way).
-- **The head check** (`src/head.ts`, an owner rule): a mannequin token's face looks ahead,
-  never bowed into the chest or up at the camera. No pixel measure tells those apart across
+- **The head check** (`src/head.ts`, an owner rule): a mannequin token is a 90-degree overhead
+  body with the head tilted up so the face shows, never bowed into the chest and never a lowered
+  camera that shows the chest head-on. No pixel measure tells those apart across
   races, hoods and helmets, so the plate is shown to `JUDGE_MODEL` (a flash-lite vision model,
   temperature 0, a flat `JUDGE_USD` in the session total) for one word. A bowed or up first
   render is redone once, both billed; the result reports `head`; two bad verdicts still deliver,
@@ -103,7 +105,7 @@ default tier, and its post-processing:
 | kind | tier default | API call | post-process | destination |
 |---|---|---|---|---|
 | `icon` | flash | 1:1 at 1K | resize to 512 square | item / spell / feature icons |
-| `token` | flash | 1:1 at 1K, top-down full-body at the pitch of the world's tokens (an existing token attached as the style reference), on a chroma plate whose colour is chosen per subject | edge-clip check (subject touching the plate edge ⇒ one re-render, then refuse), cutout to alpha, no shadow, 512 square (1024 with `creatureSize: "large"`, meaning Large or bigger) | actor token |
+| `token` | flash | 1:1 at 1K, full-body from straight above (a 90-degree orthographic body, the head tilted up so the face shows; the owner's standard), on a chroma plate whose colour is chosen per subject | edge-clip check (subject touching the plate edge ⇒ one re-render, then refuse), cutout to alpha, no shadow, 512 square (1024 with `creatureSize: "large"`, meaning Large or bigger) | actor token |
 | `prop` | flash | nearest API aspect to the footprint (generate) or the source (edit), object-only wording, chroma plate | edge-clip check, cutout, fitted to the exact tile size: 300 px per cell for a new prop, the source's own pixel size and subject box for an edit | map dressing tile (furniture, barrels, trees) |
 | `portrait` | flash | 3:4 at 2K | none beyond naming | actor sheet portrait |
 | `illustration` | flash | 16:9 at 4K, style refs attached | crop to 16:10, downsample to 2560×1600 | journal image / player handout |
