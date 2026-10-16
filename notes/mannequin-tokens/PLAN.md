@@ -79,7 +79,14 @@ humanoid whose body is in the library starts from a mannequin.**
 | **Token scale** (measured 2026-10-15 on the adventurer test): figure size in the token against the mannequin | Every token fills its square: the figure is trimmed to its outline and fitted at about 0.9 of the frame, so a kneeling capture filling 0.33 of its frame came back 2.7× taller, as large as a standing one | **The mannequin's scale never reaches the token.** `scripts/token_cutout.py` fits each cut to the square on purpose (VTT scale 1.0); size on the map is the token's grid size (`creatureSize`, Foundry's token width). A halfling or a downed figure fills its cell like anyone else. Earlier notes that "the halfling stays small" were wrong. |
 | **Three adventurers in four poses** (2026-10-15): a fighter (longsword, blue heater shield), a rogue (two curved daggers), a wizard (oak staff), each from the combat, standing, dead and a new kneeling capture, one character description reused across the four | 12 of 12 clean first pass; each character is plainly the same person in every pose; dead reads as dead (eyes closed, blood, gear lying beside the hands); the kneeling capture reads as knocked down | **One description carries a character across poses.** A set of pose tokens for one PC is four edits. |
 | The kneeling capture with a shield "slung on his back" | From this front-and-above camera the shield's top rose over his head like a hat | On a figure bowed toward the camera, gear on the back rises over the head. Lay it on the ground instead. |
-| A style token or portrait attached beside the mannequin | The attached subject got copied in | **Never attach a second image.** Words plus one mannequin. |
+| A style token or portrait attached beside the mannequin | The attached subject got copied in | **Never attach a whole second image.** Words plus one mannequin, with the one exception below. |
+| **The first real run** (the four Echoes of Halruaa PCs, 2026-10-15/16, about 50 renders, $1.71; the renders are on the owner's Desktop, `testpcs` and `testpcs-head-angle`): sixteen words-only tokens, four PCs by stand, combat, prone and dead | 15 of 16 usable first pass, and the owner rejected them: the likeness drifted, "it's not good" | **Words alone do not hold a known face.** |
+| The same sixteen with a tight face crop of the approved portrait (centred on the pupils, about four interpupillary distances wide) as `character`, bound "Image 2 is <Name>, use it for the face only, never its painting style, lighting, framing or camera angle" | All sixteen faces fixed, pose and camera held, no render copied the portrait's angle | **A crop as `character` is the exception to the no-second-image rule.** The copying lesson came from whole tokens and portraits, not crops. |
+| A head-to-waist crop instead, bound "use it for the face, outfit and equipment only, never its painting style, lighting, background, framing or camera angle" | Faces as good as the face crop, the kit pulled toward the portrait (plate, shield boss, leather, scarf, robe), pose and camera held; horns followed the crop, not the words | **Head-to-waist is the crop to use.** Restate horn shape when it matters. |
+| "Keep the mannequin's exact pose, proportions and steep overhead camera" against "The grey mannequin is a guide for the pose, the overhead camera and the body proportions, not a rig to copy: paint <Name> in roughly this stance from roughly this angle, and let <him\|her> stand naturally, with <his\|her> own weight, head and hands" | Side by side the pose did not change | **The guide sentence replaces the exact-pose line.** It buys the same and treats the mannequin the way the owner wants. |
+| Heads on standing and combat renders | Most looked down at the ground or tilted up at the camera. A strict "look straight ahead at eye level" block made the figure look further up, toward the camera; a frontal portrait crop pulls the head that way too | **Open (2026-10-16).** The target is the mannequin's own head angle from the overhead camera (crown and brow largest, eyes in the lower third looking along the ground a few paces ahead, chin mostly hidden). The likely fix binds the crop "never its frontal head angle" and describes the head relative to the mannequin's; a wording is rendered, not yet judged. |
+| The dwarf `dead` capture, with and without the crop | Came back lean, older and grey, twice | One flaw pass naming build, age and hair fixed it both times; expect it. |
+| Gear "lying dropped on the ground beside the fist at the left/right" on prone and dead; `twohand-staff-diagonal` with a glowing orb at the staff head; `stand-open` with an orb and a book; `stand-empty` with a lute slung on the back | All landed first time, except a haft on the dwarf `prone` capture that clipped the frame twice until written "tucked close under the fist, haft no longer than his forearm" | Dropped gear works; keep it tucked under the fist on the small-framed prone captures. |
 | A tail asked for on a body that loops it round the figure | Showed in two places, reading as two tails | Say "ONE tail, curving out behind to the upper left only". |
 | Variants by editing a finished render (darker, cloak, runes) | Pose held | One mannequin gives a whole wardrobe. Fix faults with a flaw pass, never a re-roll. |
 | A black outline round the mannequin (asked, not rendered) | — | Don't: an edit keeps drawing in the source, so an outline would come back as ink. Separate limbs with arms held off the body, or stronger HeroForge lighting. |
@@ -178,7 +185,11 @@ capture step to an open source (PoseMy.Art, MakeHuman).
 
 ## The render recipe
 
-`edit-image`, `kind: "token"`, flash, the mannequin as `sourceImage`, **no references**:
+`edit-image`, `kind: "token"`, flash, the mannequin as `sourceImage`, and for a known character
+one reference, a head-to-waist crop of the approved portrait as `character` (no reference for a
+new NPC). This is the 2026-10-15 shape; the skill's mannequin route carries the current recipe,
+which adds the guide sentence and the crop binding from the first real run (the Prompting
+lessons above):
 
 ```
 Turn this grey mannequin into <race, sex, age, build, face, hair, eyes>, <anything the mannequin
@@ -249,6 +260,8 @@ staff setups (level, diagonal, brace) are captured but not yet rendered.
 warband, a crowd) should spread across the poses and grips that fit the intent, so a map never
 shows one capture repeated. The skill carries that rule.
 
-**Step 5 is done:** the mannequin route is in `illustration-builder` and is the default for every
-humanoid. What remains is use: the next PC or NPC token goes this way, and anything it teaches
-goes into the skill and this file. Step 6 (no new tool) stands.
+**Step 5 is done, and the first real run is in (2026-10-16):** the four PCs' tokens went the
+mannequin route in another session, and its lessons (a portrait crop as `character` for a known
+face, the mannequin as a guide not a rig, the dwarf `dead` build fix) are in the skill and the
+Prompting table above. The head angle is still open; the owner has more to send. Step 6 (no new
+tool) stands.

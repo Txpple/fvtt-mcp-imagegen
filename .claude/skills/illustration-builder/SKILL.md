@@ -342,7 +342,8 @@ prompt can simply say the character's name and be understood:
   Attach the standing style shelf (from `art/SHELF.md`) on every portrait and illustration
   call unless the owner asks for something deliberately different.
 - **Tokens take the world's own tokens as the style reference** (words-only and restyle routes
-  only; the mannequin route in Step 4 takes no references at all). They are top-down full-body
+  only; the mannequin route in Step 4 takes one reference at most, a crop of the character's
+  approved portrait as `character`, never a style image). They are top-down full-body
   figures on transparency (`assets/tokens/<name>.png` in the world data). Attach one as
   `role: "style"` and the new token comes out at the same angle and in the same ink-lined look.
   The tool appends the framing and the chroma plate sentence itself, picks a plate colour the
@@ -487,10 +488,13 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    library of 312 grey HeroForge captures lives in the owner's private art repo,
    `fvtt-assets-actors/mannequins/` (its README is the shot list; `npm run mannequin -- grid`
    there lists it). One `edit-image` call, kind `token`, flash, the capture as `sourceImage`,
-   **no references at all**, turns a capture into a finished token at about 3 cents: the
-   mannequin fixes pose, camera, proportions and grip; the words supply race, sex, age, face,
-   kit, colours and finish. About 120 test renders (2026-10-15; the record is
-   `notes/mannequin-tokens/PLAN.md`) came out usable on the first pass almost every time. The
+   turns a capture into a finished token at about 3 cents: the mannequin guides pose, camera,
+   proportions and grip; the words supply race, sex, age, face, kit, colours and finish. **A
+   known character also gets one reference: a head-to-waist crop of the approved portrait as
+   `character`** (below). A new NPC with no portrait is words alone. About 120 test renders
+   (2026-10-15) and the first real run on the four PCs (about 50 renders, 2026-10-16; the record
+   is `notes/mannequin-tokens/PLAN.md`) came out usable on the first pass almost every time;
+   the PC run is what added the reference and the guide sentence. The
    words-only `generate-image` route stays for creatures with no humanoid body (a beast, a
    flying sword, an ooze); a library restyle stays for the case where the owner wants one exact
    library token kept.
@@ -519,17 +523,53 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    its square, so a halfling fills its cell like anyone; size on the map is `creatureSize` and
    the actor's token size.
    *The recipe.* One instruction, in this shape, with the campaign's finish line from its
-   `art/SHELF.md` at the end:
-   `Turn this grey mannequin into <race, sex, age, build, skin, face, hair, eyes>, <anything the
-   mannequin lacks: ONE tail curving out behind to the lower left only, wings folded, a hood>.
-   <He|She> wears <clothing and armour, materials and colours>. Replace the entire <weapon> in
-   <his|her> fist at the <lower left>, keeping only the fist's grip and the line it points along:
-   none of the old <blade, crossguard, pommel> remain. The new weapon is <each part, grip to
-   tip>. Replace the entire shield, keeping its exact position and angle on the forearm, held
-   naturally: none of the old round disc, round rim, studs or arm straps remain, and nothing
-   round is left. The new shield is <shape, material, emblem>. <Any held light or magic, named
-   as the key light>. <The finish line>; nothing left grey clay.`
+   `art/SHELF.md` at the end. For a known character, attach the portrait crop as
+   `references: [{ role: "character", label: "<Name>" }]` and keep the binding sentence; for a
+   new NPC, drop the binding sentence and describe the face in full instead.
+   `The grey mannequin is a guide for the pose, the overhead camera and the body proportions,
+   not a rig to copy: paint <Name> in roughly this stance from roughly this angle, and let
+   <him|her> stand naturally, with <his|her> own weight, head and hands. Image 2 is <Name>: use
+   it for the face, outfit and equipment only, never its painting style, lighting, background,
+   framing or camera angle. <He|She> is <race, sex, age, build, skin, hair, eyes; horn shape if
+   any>, <anything the mannequin lacks: ONE tail curving out behind to the lower left only,
+   wings folded, a hood>. <He|She> wears <clothing and armour, materials and colours>. Replace
+   the entire <weapon> in <his|her> fist at the <lower left>, keeping only the fist's grip and
+   the line it points along: none of the old <blade, crossguard, pommel> remain. The new weapon
+   is <each part, grip to tip>. Replace the entire shield, keeping its exact position and angle
+   on the forearm, held naturally: none of the old round disc, round rim, studs or arm straps
+   remain, and nothing round is left. The new shield is <shape, material, emblem>. <Any held
+   light or magic, named as the key light>. <The finish line>; nothing left grey clay.`
    The rules behind it, each one paid for:
+   - **A known character takes a crop of the approved portrait as `character` (owner,
+     2026-10-16).** Sixteen words-only PC tokens came out 15 of 16 usable, and the owner rejected
+     them: the likeness drifted. A tight face crop (centred on the pupils, about four
+     interpupillary distances wide) bound "use it for the face only" fixed all sixteen faces with
+     the mannequin's pose and camera held; a head-to-waist crop bound as in the recipe did the
+     same and pulled the kit toward the portrait too (plate, shield boss, leather, scarf, robe),
+     so it is the one to use. No render copied the portrait's angle. Horns follow the crop rather
+     than the words, so restate the horn shape when it matters.
+   - **Never attach a whole image beside the mannequin.** A full style token or a full portrait
+     gets its subject copied in (a wizard and a harpy came back as the attached drow). The crop
+     rule above is the only exception: a crop, bound to the face and kit, nothing else.
+   - **The mannequin is a guide, not a rig (owner, 2026-10-16).** "Keep the mannequin's exact
+     pose, proportions and steep overhead camera" bought nothing side by side; the guide sentence
+     in the recipe held the pose just as well and reads the way the owner wants the mannequin
+     treated.
+   - **The head angle is an open problem (2026-10-16, unsettled).** On stand and combat renders
+     heads look down at the ground or, more often, tilt up at the camera, and a frontal portrait
+     crop pulls the head toward the camera. The target is the angle the mannequin's own head
+     already has from the overhead camera: crown and brow largest, eyes in the lower third
+     looking along the ground a few paces ahead, chin mostly hidden. A "look straight ahead at
+     eye level" block made it worse. The likely fix is to bind the crop "never its frontal head
+     angle" and describe the head relative to the mannequin's; a wording is rendered but not
+     yet judged. Until the owner settles it, compare every head to the mannequin's in the flaw
+     pass and say what you did.
+   - **The dwarf `dead` capture loses the dwarf build**: twice it came back lean, older and grey,
+     with and without the crop. One flaw pass naming build, age and hair fixed it both times;
+     expect it.
+   - **Dropped gear on prone and dead**: "lying dropped on the ground beside the fist at the
+     <left|right>" landed every time. On the dwarf `prone` capture a haft clipped the frame twice
+     until written "tucked close under the fist, haft no longer than his forearm".
    - **Name hands by where they sit in the image** ("the fist at the lower left"), never left
      and right; the model reads those both ways, and even image sides are honoured only most of
      the time (a mirror reads the same on a token, so let it go).
@@ -558,8 +598,6 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    - **Fix a fault with one flaw pass on the render**, naming the one thing and ending "keep
      everything else identical". Never re-roll a good pose. Variants (wounded, cloaked, darker)
      are edits of the finished token, and the pose holds.
-   - **Never attach a second image.** A style token or a portrait beside the mannequin gets its
-     subject copied in. Words plus one mannequin and nothing else.
    - **A batch spreads across poses (owner, 2026-10-16).** The extra poses and setups exist so
      that several tokens made at once (a guard post, a goblin warband, a tavern's regulars, a
      cult) do not share one capture. Read the intent, then pick a spread that matches it: a
