@@ -62,6 +62,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | The dagger set's round shield replaced with a blue heater shield with a white tower | A true heater; the emblem reads clearly | This capture holds its shield more face-up than the spear capture, so **emblems show on it**. Pick the capture by how much heraldry matters. |
 | The same shield made into a small fist-held buckler, and a tower shield "twice as long" | Both clean: smaller and larger outlines both work | A shield can change size both ways, unlike a weapon. |
 | The shield removed entirely ("no disc, rim, studs or arm straps remain anywhere"), the hand given a lantern, or a second dagger | Both clean, forearm bare, the new item held naturally | **A shield capture also covers the shieldless off hand.** The `sword` (no shield) setup may be redundant; `sword-shield` with the shield removed may do. |
+| Coverage check (2026-10-15): the sword-and-shield capture made into a duelist with the shield removed and the hand open; the dagger-and-shield capture into a hooded rogue the same way; the sword-and-shield capture into a ranger with a scimitar and a long knife in the freed fist | All three clean first pass: a natural bare forearm where the shield was, the open hand reads as balance, the scimitar a full replacement | **The `sword`, `shortblade` and `twoblades` setups are dropped.** Every crouch setup is now a shield capture; the shield comes off in words. |
 | A mannequin whose axe handle ran off the frame | Refused twice by the edge-clip check | The capture must hold the weapon wholly inside the frame. A spear 9–16 px from the edge on 1024 rendered fine. |
 | A bow drawn across the body | Oversized bow, string and limbs that don't add up | Bows held low, edge-on, clear of the body; never at full draw. |
 
@@ -207,10 +208,8 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 - **Tested:** 18 renders on the spear set (the body lessons) and 12 gear renders on the human
   dagger set (the gear lessons). The tokens and sheets are on the owner's Desktop, `Manny Tests`
   and `Manny Tests/Gear`.
-- **The gear tests thin the shot list:** a shield capture covers the shieldless off hand, and a
-  short blade grows into any one-handed weapon. `crouch-sword` and `crouch-shortblade` are
-  probably redundant; `twoblades` may be too (the shield-removed second dagger worked). Worth one
-  render each before capturing them.
+- **The shot list is thinner:** a shield capture covers the shieldless off hand (one render
+  each confirmed it), so `crouch-sword`, `crouch-shortblade` and `crouch-twoblades` are dropped.
 - **Cutout defect:** one render came back on a duller magenta plate and the chroma cut left a
   faint alpha box. A separate session is fixing it in the token cut.
 - **Next:** `crouch-empty`, then step 1 (the caster question); the crossbow, bow, two-hand and
