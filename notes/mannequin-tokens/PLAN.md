@@ -244,5 +244,5 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
   capture, 12 renders, all clean (Desktop, `Manny Tests/Adventurers`). The kneeling capture works.
 - **Prone and bow-draw filed:** prone (kneeling on the fists) and a standing bow at full draw for
   all six bodies; the library is 228 captures. Full draw renders well but its string stays undrawn.
-- **Next:** then two-handed and down, then step 5, the
-  skill's mannequin route.
+- **Next:** the two-handed pose (the last on the shot list; dead and prone are done), then step 5,
+  the skill's mannequin route.
