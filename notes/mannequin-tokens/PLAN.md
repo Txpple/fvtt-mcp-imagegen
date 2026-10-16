@@ -248,7 +248,7 @@ shows it from the files). Every body and sex was verified; no flags are open.
 
 | Pose | Setups |
 | --- | --- |
-| combat (was crouch) | spear-shield, dagger-shield, sword-shield, longsword-kite, sword-open, longsword-open, empty, crossbow-hip, crossbow-down, bow, twodaggers, sword-dagger |
+| combat (was crouch) | spear-shield, dagger-shield, sword-shield, longsword-kite, sword-open, longsword-open, empty, crossbow-hip, crossbow-down, bow, twodaggers, sword-dagger; dagger-open (human female only so far, 2026-10-16, head raised) |
 | stand | dagger-shield, dagger-open, empty, open, bow, bow-draw, shortbow-draw |
 | twohand | right, left, staff-level, staff-diagonal, staff-brace |
 | dead | (none) |
@@ -298,8 +298,10 @@ highest HeroForge allows without looking awkward) landed four of four again, the
 forward: the raised heads help and are not required. The sentence now leads the tool's mannequin
 prompt (`MANNEQUIN_EDIT_SOURCE`), to be confirmed on the first render after the next restart.
 Three of the re-exports are filed over their captures (`human-male-stand-open`,
-`human-male-stand-empty`, `human-male-combat-dagger-shield`); the female combat dagger-and-open-hand
-export has no slot in the grid and waits on the owner's name for it. Side lessons: name the
+`human-male-stand-empty`, `human-male-combat-dagger-shield`); the fourth, the female combat lunge
+with the dagger and the off hand open, is filed as a new setup, `human-female-combat-dagger-open`
+(the owner's call, 2026-10-16), and the grid shows the other bodies and the male as missing until
+the owner captures them. Side lessons: name the
 footwear (the mannequin is barefoot and Tychon came back barefoot); thinking at the default medium
 runs 600 to 1600 tokens a token render, under a cent, and is now in the estimate. Not yet tested:
 `thinking: "high"`.

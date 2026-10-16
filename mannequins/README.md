@@ -17,7 +17,7 @@ outline. Bodies: `large`, `human` (medium), `dwarf`, `small` (halfling, gnome, g
 `orc`, `elf`; each in `male` and `female`. Poses: `combat` (was `crouch` until 2026-10-15), `stand`, `dead`, `prone`, `twohand`, `cast` (only if
 the open question in the plan says so). Setups are what the hands hold in the same pose:
 `empty`, `sword`, `sword-open`, `longsword-open`, `sword-shield`, `longsword-kite`, `dagger-shield`, `twodaggers`, `sword-dagger`, `shortblade`, `twoblades`, `spear-shield`,
-`crossbow-shield`, `crossbow-hip`, `crossbow-down`, `bow`.
+`crossbow-shield`, `crossbow-hip`, `crossbow-down`, `bow`, `dagger-open` (combat, 2026-10-16: the dagger-shield lunge with the shield off and the off hand open; human female so far).
 
 ## Taking a capture
 
@@ -67,6 +67,7 @@ What remains is the other poses below it.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `combat-spear-shield` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 2026-10-15 |
 | `combat-dagger-shield` (a curved short blade) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 2026-10-15 |
+| `combat-dagger-open` (the dagger-shield lunge with the shield off and the off hand raised open; the head raised as far as HeroForge allows) | — | female only | — | — | — | — | 2026-10-16; the male and the other bodies are the owner's to capture |
 | `combat-empty` (both hands open; answers the caster question) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 2026-10-15 |
 | `combat-sword-open` (sword variant 1, the off hand raised open; the sword-only setup, captured after all) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 2026-10-15 |
 | `combat-longsword-open` (sword variant 2, the off hand raised open; the owner's reference order) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 2026-10-15 |
