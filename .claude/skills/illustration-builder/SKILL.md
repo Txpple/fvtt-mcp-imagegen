@@ -560,6 +560,15 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
      are edits of the finished token, and the pose holds.
    - **Never attach a second image.** A style token or a portrait beside the mannequin gets its
      subject copied in. Words plus one mannequin and nothing else.
+   - **A batch spreads across poses (owner, 2026-10-16).** The extra poses and setups exist so
+     that several tokens made at once (a guard post, a goblin warband, a tavern's regulars, a
+     cult) do not share one capture. Read the intent, then pick a spread that matches it: a
+     watch post gets `stand-dagger-shield`, `stand-bow`, `combat-spear-shield` and
+     `twohand-staff-level`; a warband gets `combat-sword-open`, `combat-twodaggers`,
+     `combat-bow`, `combat-spear-shield` and a `twohand-right` champion; villagers get `stand-empty`,
+     `stand-open` and `stand-dagger-open` with tools written into the hands. Vary body and sex
+     within the race too. Reuse a capture only when the group is meant to look drilled and
+     identical (a line of the same soldiers), and say so.
    **Drawing a token from words** (`generate-image` kind `token`, flash: the pose written as a
    camera would see it, a face crop as `character`, one finished token as `style`) is now the
    route only for non-humanoid bodies. It matched pro side by side, so pro is not the lever.

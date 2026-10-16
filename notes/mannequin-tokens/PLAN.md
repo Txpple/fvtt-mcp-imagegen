@@ -245,6 +245,10 @@ and race, gear limits, coverage, casters, the standing pose, worn gear, four pos
 character, full-draw bows, and the two-handed stances. The lessons are in the tables above. Three
 staff setups (level, diagonal, brace) are captured but not yet rendered.
 
+**Why so many setups (the owner, 2026-10-16):** a batch of tokens made at once (a guard post, a
+warband, a crowd) should spread across the poses and grips that fit the intent, so a map never
+shows one capture repeated. The skill carries that rule.
+
 **Step 5 is done:** the mannequin route is in `illustration-builder` and is the default for every
 humanoid. What remains is use: the next PC or NPC token goes this way, and anything it teaches
 goes into the skill and this file. Step 6 (no new tool) stands.
