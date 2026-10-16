@@ -36,6 +36,9 @@ humanoid whose body is in the library starts from a mannequin.**
 | The current human male capture made into a woman, armoured, then bare-armed, same prompt as on the current female capture (2026-10-15) | Armoured: near identical. Bare-armed: both clearly a woman; on the male body the arms and shoulders a little heavier, athletic rather than slight | **One human body covers both sexes.** Write "slender" or "slight" for a delicate build. A female body earns its keep only for many slight, bare-skinned figures, and even then it is a small gain. |
 | The human body made into an elf, a tiefling, a half-orc, a dragonborn (male and female) | All clean, first pass; the dragonborn got a full draconic head and a tail the mannequin lacks | One human body covers every human-sized race. |
 | The dwarf body made into a beardless dwarf woman | Clean | One dwarf body covers both sexes. |
+| Six bodies (large, human, dwarf, small, orc, elf), each sex, made into its own race with one shared kit and finish (spear and shield crouch, 2026-10-15) | 12 of 12 clean first pass; pose, grip, spear angle and relative size all held (the halfling stays small in its token) | **Every body works.** The small and large bodies are proven. |
+| The same race on its own body and on the human body: dwarf, goliath, orc woman, elf woman | Elf: no difference. Goliath: near identical. Dwarf: the human body gave a taller dwarf with longer legs. Orc woman: the human body gave a slimmer, lighter orc | **A body earns its place by mass and proportion, not by face or ears.** Words carry ears, skin, tusks and hair on any body; they don't carry build. Keep the dwarf, orc and large bodies. The elf body is optional, like the female human body. |
+| A goblin on the small body, a bugbear on the large body | Both clean and strongly in character | The groupings hold: small for goblin-sized creatures, large for bugbear-sized ones. |
 | Kicking, jumping, running, kneeling presets, looked at from above | Legs barely read top-down | Only the silhouette reads from above: arms and weapons, not legs. |
 
 ### Gear
@@ -46,6 +49,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | A HeroForge weapon in the fist repainted across types (sword → runed blade → battleaxe → warhammer) | Perfect grip every time | The weapon changes type freely, but **its length and angle are the mannequin's**. A repaint can't shorten a longsword into a dagger: capture a short blade too. |
 | A spear restyled by describing only a new head (noble dragonborn, 2026-10-15) | New head, but the base spear's ringed butt cap, cord-wrapped grip and collar all survived | **Anything not named is kept.** |
 | The same spear with every part named and replaced: "replace the entire spear from end to end, keeping only its length and angle in her fist: none of the old butt cap, ring bands, cord-wrapped grip or collar remain", then each new part described | Nothing of the base spear left but length and angle | **Replace gear part by part, by name.** |
+| "Repaint the spear as a plain ash shaft with a steel leaf-shaped blade" across 18 renders | The blade changed every time, but the cord-wrapped grip and the ringed butt cap survived on about half | Confirms the row above: **repaint keeps what is not named.** Use the full replace wording when the old parts matter. |
 | A round shield asked to become a heater or kite shield by description only | Stayed round; only the decoration changed | Describing the new shape is not enough. |
 | The same shield with "none of the old round disc, round rim, studs or arm straps remain, and nothing round is left" | A true heater shield | **The shield's outline can change**: name the old parts and forbid the old shape. One round shield in the captures is enough. |
 | That heater shield "turned so its face tilts up toward the viewer" | Shape and emblem clearly visible, but the owner found the tilt unnatural | **Keep the mannequin's shield angle** ("keeping its exact position and angle on his forearm, held naturally"). Edge-on, the new outline still reads; the face emblem mostly doesn't. Tilt only when heraldry matters more than realism. |
@@ -189,10 +193,14 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 
 ## Status (2026-10-15, evening)
 
-- **Filed:** `crouch-spear-shield` for all six bodies, male and female (12 captures), in
-  `fvtt-assets-actors/mannequins/`. The shot list there is a grid of setup by body. The owner
-  captures one setup at a time across every body.
-- **Next setup:** `crouch-empty`, then step 1 (the caster question) can run on it.
-- **Test renders** are local only (the owner's Desktop, `male-vs-female-body-test`,
-  `Backup/class-samples`).
-- **Not yet proven:** the small and large bodies (step 3).
+- **Filed:** `crouch-spear-shield` and `crouch-dagger-shield` for all six bodies, male and female
+  (24 captures), in `fvtt-assets-actors/mannequins/`. The shot list there is a grid of setup by
+  body. The owner captures one setup at a time across every body; `crouch-sword-shield` is in
+  progress.
+- **Tested:** 18 renders on the spear set (the body lessons above). The tokens and comparison
+  sheets are on the owner's Desktop, `Manny Tests`.
+- **Cutout defect found:** one render came back on a duller magenta plate, (235, 33, 231) against
+  the usual (252, 26, 249). The chroma cut left every background pixel faintly opaque, a visible
+  box on a dark canvas, and the tool still reported zero residual key. It belongs to the token
+  cut, not to mannequins.
+- **Next:** finish the crouch setups, then `crouch-empty` and step 1 (the caster question).
