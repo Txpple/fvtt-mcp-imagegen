@@ -36,7 +36,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | The current human male capture made into a woman, armoured, then bare-armed, same prompt as on the current female capture (2026-10-15) | Armoured: near identical. Bare-armed: both clearly a woman; on the male body the arms and shoulders a little heavier, athletic rather than slight | **One human body covers both sexes.** Write "slender" or "slight" for a delicate build. A female body earns its keep only for many slight, bare-skinned figures, and even then it is a small gain. |
 | The human body made into an elf, a tiefling, a half-orc, a dragonborn (male and female) | All clean, first pass; the dragonborn got a full draconic head and a tail the mannequin lacks | One human body covers every human-sized race. |
 | The dwarf body made into a beardless dwarf woman | Clean | One dwarf body covers both sexes. |
-| Six bodies (large, human, dwarf, small, orc, elf), each sex, made into its own race with one shared kit and finish (spear and shield crouch, 2026-10-15) | 12 of 12 clean first pass; pose, grip, spear angle and relative size all held (the halfling stays small in its token) | **Every body works.** The small and large bodies are proven. |
+| Six bodies (large, human, dwarf, small, orc, elf), each sex, made into its own race with one shared kit and finish (spear and shield combat pose, 2026-10-15) | 12 of 12 clean first pass; pose, grip, spear angle and relative size all held (the halfling stays small in its token) | **Every body works.** The small and large bodies are proven. |
 | The same race on its own body and on the human body: dwarf, goliath, orc woman, elf woman | Elf: no difference. Goliath: near identical. Dwarf: the human body gave a taller dwarf with longer legs. Orc woman: the human body gave a slimmer, lighter orc | **A body earns its place by mass and proportion, not by face or ears.** Words carry ears, skin, tusks and hair on any body; they don't carry build. Keep the dwarf, orc and large bodies. The elf body is optional, like the female human body. |
 | A goblin on the small body, a bugbear on the large body | Both clean and strongly in character | The groupings hold: small for goblin-sized creatures, large for bugbear-sized ones. |
 | Kicking, jumping, running, kneeling presets, looked at from above | Legs barely read top-down | Only the silhouette reads from above: arms and weapons, not legs. |
@@ -54,7 +54,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | The same shield with "none of the old round disc, round rim, studs or arm straps remain, and nothing round is left" | A true heater shield | **The shield's outline can change**: name the old parts and forbid the old shape. One round shield in the captures is enough. |
 | That heater shield "turned so its face tilts up toward the viewer" | Shape and emblem clearly visible, but the owner found the tilt unnatural | **Keep the mannequin's shield angle** ("keeping its exact position and angle on his forearm, held naturally"). Edge-on, the new outline still reads; the face emblem mostly doesn't. Tilt only when heraldry matters more than realism. |
 | A sunburst painted on a shield held edge-on | Came back plain; a "dragon's head boss" landed on the rim instead | Emblems on an edge-on shield face don't show; put them on the rim or accept the loss. |
-| The dagger-and-shield crouch (human male) made into a shortsword, a flanged mace, and a longsword "three times as long as the old one" with the full replace wording (2026-10-15) | All three clean, grip held, the longsword inside the frame | **A weapon can grow; it can't shrink.** Lengthening from a short blade works; shortening a longsword into a dagger did not. The short-blade capture is the flexible base for every one-handed weapon. |
+| The dagger-and-shield combat pose (human male) made into a shortsword, a flanged mace, and a longsword "three times as long as the old one" with the full replace wording (2026-10-15) | All three clean, grip held, the longsword inside the frame | **A weapon can grow; it can't shrink.** Lengthening from a short blade works; shortening a longsword into a dagger did not. The short-blade capture is the flexible base for every one-handed weapon. |
 | The same dagger made into a hand axe | A good axe, but the fist turned to hold the head pointing down, not along the old blade | A weapon with its mass off to one side may turn the grip. Accept it, or name the head's direction. |
 | The same dagger made into a sickle | A good sickle, but the whole figure came back at about half its size | **One render in 12 lost the token's scale.** Look at figure size against the mannequin in the flaw pass; a shrunken figure is redone, since an edit can't grow it back. |
 | The dagger made into a lit torch, and a bone wand with a violet spark | Both clean; each light became the key light and lit the hand | Things held in the fist change freely, not only weapons. Name the held light as the key light. |
@@ -62,7 +62,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | The dagger set's round shield replaced with a blue heater shield with a white tower | A true heater; the emblem reads clearly | This capture holds its shield more face-up than the spear capture, so **emblems show on it**. Pick the capture by how much heraldry matters. |
 | The same shield made into a small fist-held buckler, and a tower shield "twice as long" | Both clean: smaller and larger outlines both work | A shield can change size both ways, unlike a weapon. |
 | The shield removed entirely ("no disc, rim, studs or arm straps remain anywhere"), the hand given a lantern, or a second dagger | Both clean, forearm bare, the new item held naturally | **A shield capture also covers the shieldless off hand.** The `sword` (no shield) setup may be redundant; `sword-shield` with the shield removed may do. |
-| Coverage check (2026-10-15): the sword-and-shield capture made into a duelist with the shield removed and the hand open; the dagger-and-shield capture into a hooded rogue the same way; the sword-and-shield capture into a ranger with a scimitar and a long knife in the freed fist | All three clean first pass: a natural bare forearm where the shield was, the open hand reads as balance, the scimitar a full replacement | **The `sword`, `shortblade` and `twoblades` setups are dropped.** Every crouch setup is now a shield capture; the shield comes off in words. |
+| Coverage check (2026-10-15): the sword-and-shield capture made into a duelist with the shield removed and the hand open; the dagger-and-shield capture into a hooded rogue the same way; the sword-and-shield capture into a ranger with a scimitar and a long knife in the freed fist | All three clean first pass: a natural bare forearm where the shield was, the open hand reads as balance, the scimitar a full replacement | **The `sword`, `shortblade` and `twoblades` setups are dropped.** Every combat setup is now a shield capture; the shield comes off in words. |
 | A mannequin whose axe handle ran off the frame | Refused twice by the edge-clip check | The capture must hold the weapon wholly inside the frame. A spear 9–16 px from the edge on 1024 rendered fine. |
 | A bow drawn across the body | Oversized bow, string and limbs that don't add up | Bows held low, edge-on, clear of the body; never at full draw. |
 
@@ -71,7 +71,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | Test | Result | Lesson |
 | --- | --- | --- |
 | Ten classes from existing captures | 8 good first pass; wizard, sorcerer, warlock and druid the strongest | **Open hands and fists make every caster**: the spell is written in. |
-| **The caster question** (2026-10-15): the empty-handed crouch made into a human wizard (a blue arcane sphere in the cupped low hand, light trailing from the raised one) and a human sorceress (a fireball low, flames on the raised hand) | Both strong on the first pass; long robes widened the wizard's figure but read well | **The empty-handed pose makes casters; no cast pose is needed**, for any body. Put the spell in the cupped hand and make it the key light. |
+| **The caster question** (2026-10-15): the empty-handed combat pose made into a human wizard (a blue arcane sphere in the cupped low hand, light trailing from the raised one) and a human sorceress (a fireball low, flames on the raised hand) | Both strong on the first pass; long robes widened the wizard's figure but read well | **The empty-handed pose makes casters; no cast pose is needed**, for any body. Put the spell in the cupped hand and make it the key light. |
 | A style token or portrait attached beside the mannequin | The attached subject got copied in | **Never attach a second image.** Words plus one mannequin. |
 | A tail asked for on a body that loops it round the figure | Showed in two places, reading as two tails | Say "ONE tail, curving out behind to the upper left only". |
 | Variants by editing a finished render (darker, cloak, runes) | Pose held | One mannequin gives a whole wardrobe. Fix faults with a flaw pass, never a re-roll. |
@@ -80,13 +80,13 @@ humanoid whose body is in the library starts from a mannequin.**
 ### The standing pose (2026-10-15)
 
 A second pose: standing, arms held a little out from the body, the camera from in front and above
-(the face shows more than in the crouch). Three human male captures, 16 renders, all usable first
+(the face shows more than in the combat pose). Three human male captures, 16 renders, all usable first
 pass (Desktop, `Manny Tests/Stand`).
 
 | Test | Result | Lesson |
 | --- | --- | --- |
-| Two daggers pointing down made into a longsword and dagger, a sword and an added round shield, two hand axes, a mace and a lantern, a warhammer and a tower shield, a rapier and a parrying dagger | All six clean; the longsword three times the dagger, the tower shield shoulder to ankle, the rapier's swept hilt | Everything the crouch showed holds here. **A shield can also be added** where a weapon was, not only removed. |
-| Empty, loosely closed fists made into a wizard with a tall staff, a monk, a mercenary with a sword written into the empty fist, a civilian holding two tankards | All clean, including the sword | **A weapon can be written into a closed empty fist.** The crouch failure was an *open* hand. In a closed fist the grip held. |
+| Two daggers pointing down made into a longsword and dagger, a sword and an added round shield, two hand axes, a mace and a lantern, a warhammer and a tower shield, a rapier and a parrying dagger | All six clean; the longsword three times the dagger, the tower shield shoulder to ankle, the rapier's swept hilt | Everything the combat pose showed holds here. **A shield can also be added** where a weapon was, not only removed. |
+| Empty, loosely closed fists made into a wizard with a tall staff, a monk, a mercenary with a sword written into the empty fist, a civilian holding two tankards | All clean, including the sword | **A weapon can be written into a closed empty fist.** The combat-pose failure was an *open* hand. In a closed fist the grip held. |
 | Worn gear on the empty capture: a sheathed longsword at the hip with a backpack and bedroll, a greatsword slung across the back, a round shield slung on the back | All three read clearly: the bedroll above the shoulders, the greatsword's hilt over one shoulder, the shield's rim and emblem behind the head | **Worn gear works.** From this camera, gear on the back shows above the shoulders. |
 | The dagger-and-shield capture made into a kite shield with a lion, a torch with the shield removed, a dwarf on this human body with a spiked buckler, a tiefling with ONE tail, a scimitar and a heater shield | All clean; the lion emblem reads fully, since this shield faces the camera | Heraldry shows on this pose's shield. Race and size words work on the standing human body too. |
 | Sides named "the fist at the left/right of the image" | Honoured in 10 of 12; the round shield and the wizard's staff went to the other hand | Side names are mostly kept, not always. For a token it rarely matters (a mirror reads the same). |
@@ -117,7 +117,7 @@ A **pose** (how the body stands) is expensive to make in HeroForge; a **setup** 
 hold, in the same pose) is a quick re-export. Pick a mannequin by how the hands hold, never by
 class.
 
-**Crouch** (the human body, done 2026-10-15): a low forward lunge, one fist leading low, the
+**Combat** (named `crouch` until 2026-10-15; the human body, done 2026-10-15): a low forward lunge, one fist leading low, the
 other arm back and high. Eight setups:
 
 | Setup | Covers |
@@ -139,13 +139,13 @@ other arm back and high. Eight setups:
 3. **Cast**, only if the open question below says so: one arm thrust straight out, the other
    hand drawn back to the chest.
 
-**Answered 2026-10-15: yes (see Prompting).** The question was: does the empty-handed crouch make a good caster? An empty-handed lunge on an
-older capture gave one of the best class tests (a druid). If the crouch does as well for a
+**Answered 2026-10-15: yes (see Prompting).** The question was: does the empty-handed combat pose make a good caster? An empty-handed lunge on an
+older capture gave one of the best class tests (a druid). If the combat pose does as well for a
 wizard and a sorcerer, the cast pose drops out for every body. Test with two renders before
 capturing it.
 
-Then repeat for the other bodies: dwarf (crouch setups, two-hand, down), small (crouch setups
-less the crossbow, down), large (crouch empty, two-hand, down; large creatures rarely carry
+Then repeat for the other bodies: dwarf (combat setups, two-hand, down), small (combat setups
+less the crossbow, down), large (combat empty, two-hand, down; large creatures rarely carry
 shields).
 
 **Out of the library:** kneeling, jumping, running, kicking and idle standing poses.
@@ -162,7 +162,7 @@ shields).
 6. After switching body or weapon, check the weapon is still inside the frame and the grip and
    shield strap still line up.
 7. No outline.
-8. Name `mannequin-<body>-<pose>-<setup>.png`: `mannequin-human-crouch-sword-shield.png`,
+8. Name `mannequin-<body>-<pose>-<setup>.png`: `mannequin-human-male-combat-sword-shield.png`,
    `mannequin-dwarf-twohand.png`, `mannequin-small-down.png`.
 
 **Licensing:** HeroForge captures are a private intermediate. They never go in this repo (it is
@@ -202,7 +202,7 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 
 ## Build-out steps
 
-1. **Answer the open question** (two caster renders from the empty-handed crouch).
+1. **Answer the open question** (two caster renders from the empty-handed combat pose).
 2. **Capture** the rest of the human body: two-hand, down (and cast, if step 1 says so).
 3. **Prove** the small and large bodies with two or three renders each before capturing all
    their setups; then capture dwarf, small and large.
@@ -220,7 +220,7 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 
 ## Status (2026-10-15, night)
 
-- **The crouch is complete:** 12 setups for all six bodies, male and female, 144 captures in
+- **The combat pose is complete:** 12 setups for all six bodies, male and female, 144 captures in
   `fvtt-assets-actors/mannequins/` (shot list and checks in its README). The setups are spear and
   shield, dagger and shield, sword and shield, longsword and kite, sword and open hand, longsword
   and open hand, both hands empty, crossbow at the hip, crossbow pointing down, longbow low, two
@@ -232,7 +232,7 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
   scale the pose was too tall for the frame, so its tokens come out about 11% smaller.
 - **Tested:** 18 body renders, 12 gear renders, 3 coverage renders, and a dwarf with sword and
   dagger and with axe and dagger. Everything is on the owner's Desktop, `Manny Tests`.
-- **Caster question answered:** the empty-handed crouch makes casters; `cast` is dropped.
+- **Caster question answered:** the empty-handed combat pose makes casters; `cast` is dropped.
 - **Standing pose tested:** two captures per body cover it (empty fists, short blade and shield);
   16 renders, all clean, including worn gear on the back and hip.
 - **Next:** capture the standing pose for the six bodies, then two-handed and down, then step 5, the
