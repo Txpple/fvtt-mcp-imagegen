@@ -71,6 +71,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | Test | Result | Lesson |
 | --- | --- | --- |
 | Ten classes from existing captures | 8 good first pass; wizard, sorcerer, warlock and druid the strongest | **Open hands and fists make every caster**: the spell is written in. |
+| **The caster question** (2026-10-15): the empty-handed crouch made into a human wizard (a blue arcane sphere in the cupped low hand, light trailing from the raised one) and a human sorceress (a fireball low, flames on the raised hand) | Both strong on the first pass; long robes widened the wizard's figure but read well | **The empty-handed pose makes casters; no cast pose is needed**, for any body. Put the spell in the cupped hand and make it the key light. |
 | A style token or portrait attached beside the mannequin | The attached subject got copied in | **Never attach a second image.** Words plus one mannequin. |
 | A tail asked for on a body that loops it round the figure | Showed in two places, reading as two tails | Say "ONE tail, curving out behind to the upper left only". |
 | Variants by editing a finished render (darker, cloak, runes) | Pose held | One mannequin gives a whole wardrobe. Fix faults with a flaw pass, never a re-roll. |
@@ -121,7 +122,7 @@ other arm back and high. Eight setups:
 3. **Cast**, only if the open question below says so: one arm thrust straight out, the other
    hand drawn back to the chest.
 
-**Open question: does the empty-handed crouch make a good caster?** An empty-handed lunge on an
+**Answered 2026-10-15: yes (see Prompting).** The question was: does the empty-handed crouch make a good caster? An empty-handed lunge on an
 older capture gave one of the best class tests (a druid). If the crouch does as well for a
 wizard and a sorcerer, the cast pose drops out for every body. Test with two renders before
 capturing it.
@@ -214,5 +215,6 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
   scale the pose was too tall for the frame, so its tokens come out about 11% smaller.
 - **Tested:** 18 body renders, 12 gear renders, 3 coverage renders, and a dwarf with sword and
   dagger and with axe and dagger. Everything is on the owner's Desktop, `Manny Tests`.
-- **Next:** step 1, the caster question, which `crouch-empty` now allows. Then the other poses:
-  two-handed and down, plus cast only if step 1 needs it. Then step 5, the skill's mannequin route.
+- **Caster question answered:** the empty-handed crouch makes casters; `cast` is dropped.
+- **Next:** the other poses (two-handed, down, and the owner's new standing pose), then step 5,
+  the skill's mannequin route.
