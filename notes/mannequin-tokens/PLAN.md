@@ -275,3 +275,11 @@ captures' bowed heads and the frontal crop, and the server changed: `source: "ma
 `thinking`. Next: a token-head anchor per PC (the approved face rendered at the token camera,
 approved once, filed on the campaign shelf), gear crops as `object` references, and a
 twelve-render head test (the four PCs standing, three ways) after a Claude Code restart.
+
+**The first anchor attempt (2026-10-16, six portrait renders, $0.30; on the owner's Desktop in
+`imagegentests`).** From words plus the face crop: Cecil and Tychon came back near the target
+(head pitched forward, crown and brow large, eyes visible but rolled up to the camera), Kartor
+looked straight down with his eyes shut, Lysandra up at the camera. The approved Kartor token's
+head attached as a `pose` reference pulled both retries frontal: that token is itself nearly
+frontal, so it is no angle reference. The reference to use is a grey head at the target pitch (the
+owner's re-capture), which has no face to copy and only carries the angle.
