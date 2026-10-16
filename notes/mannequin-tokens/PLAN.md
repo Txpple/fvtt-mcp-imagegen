@@ -54,6 +54,14 @@ humanoid whose body is in the library starts from a mannequin.**
 | The same shield with "none of the old round disc, round rim, studs or arm straps remain, and nothing round is left" | A true heater shield | **The shield's outline can change**: name the old parts and forbid the old shape. One round shield in the captures is enough. |
 | That heater shield "turned so its face tilts up toward the viewer" | Shape and emblem clearly visible, but the owner found the tilt unnatural | **Keep the mannequin's shield angle** ("keeping its exact position and angle on his forearm, held naturally"). Edge-on, the new outline still reads; the face emblem mostly doesn't. Tilt only when heraldry matters more than realism. |
 | A sunburst painted on a shield held edge-on | Came back plain; a "dragon's head boss" landed on the rim instead | Emblems on an edge-on shield face don't show; put them on the rim or accept the loss. |
+| The dagger-and-shield crouch (human male) made into a shortsword, a flanged mace, and a longsword "three times as long as the old one" with the full replace wording (2026-10-15) | All three clean, grip held, the longsword inside the frame | **A weapon can grow; it can't shrink.** Lengthening from a short blade works; shortening a longsword into a dagger did not. The short-blade capture is the flexible base for every one-handed weapon. |
+| The same dagger made into a hand axe | A good axe, but the fist turned to hold the head pointing down, not along the old blade | A weapon with its mass off to one side may turn the grip. Accept it, or name the head's direction. |
+| The same dagger made into a sickle | A good sickle, but the whole figure came back at about half its size | **One render in 12 lost the token's scale.** Look at figure size against the mannequin in the flaw pass; a shrunken figure is redone, since an edit can't grow it back. |
+| The dagger made into a lit torch, and a bone wand with a violet spark | Both clean; each light became the key light and lit the hand | Things held in the fist change freely, not only weapons. Name the held light as the key light. |
+| "Repaint the blade as a plain steel dagger" | Kept the curved kukri shape on all four | Repaint keeps shape as well as parts; use the replace wording to change an outline. |
+| The dagger set's round shield replaced with a blue heater shield with a white tower | A true heater; the emblem reads clearly | This capture holds its shield more face-up than the spear capture, so **emblems show on it**. Pick the capture by how much heraldry matters. |
+| The same shield made into a small fist-held buckler, and a tower shield "twice as long" | Both clean: smaller and larger outlines both work | A shield can change size both ways, unlike a weapon. |
+| The shield removed entirely ("no disc, rim, studs or arm straps remain anywhere"), the hand given a lantern, or a second dagger | Both clean, forearm bare, the new item held naturally | **A shield capture also covers the shieldless off hand.** The `sword` (no shield) setup may be redundant; `sword-shield` with the shield removed may do. |
 | A mannequin whose axe handle ran off the frame | Refused twice by the edge-clip check | The capture must hold the weapon wholly inside the frame. A spear 9–16 px from the edge on 1024 rendered fine. |
 | A bow drawn across the body | Oversized bow, string and limbs that don't add up | Bows held low, edge-on, clear of the body; never at full draw. |
 
@@ -193,14 +201,17 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 
 ## Status (2026-10-15, evening)
 
-- **Filed:** `crouch-spear-shield` and `crouch-dagger-shield` for all six bodies, male and female
-  (24 captures), in `fvtt-assets-actors/mannequins/`. The shot list there is a grid of setup by
-  body. The owner captures one setup at a time across every body; `crouch-sword-shield` is in
-  progress.
-- **Tested:** 18 renders on the spear set (the body lessons above). The tokens and comparison
-  sheets are on the owner's Desktop, `Manny Tests`.
-- **Cutout defect found:** one render came back on a duller magenta plate, (235, 33, 231) against
-  the usual (252, 26, 249). The chroma cut left every background pixel faintly opaque, a visible
-  box on a dark canvas, and the tool still reported zero residual key. It belongs to the token
-  cut, not to mannequins.
-- **Next:** finish the crouch setups, then `crouch-empty` and step 1 (the caster question).
+- **Filed:** `crouch-spear-shield`, `crouch-dagger-shield` and `crouch-sword-shield` for all six
+  bodies, male and female (36 captures), in `fvtt-assets-actors/mannequins/`. The shot list there
+  is a grid of setup by body. The owner captures one setup at a time across every body.
+- **Tested:** 18 renders on the spear set (the body lessons) and 12 gear renders on the human
+  dagger set (the gear lessons). The tokens and sheets are on the owner's Desktop, `Manny Tests`
+  and `Manny Tests/Gear`.
+- **The gear tests thin the shot list:** a shield capture covers the shieldless off hand, and a
+  short blade grows into any one-handed weapon. `crouch-sword` and `crouch-shortblade` are
+  probably redundant; `twoblades` may be too (the shield-removed second dagger worked). Worth one
+  render each before capturing them.
+- **Cutout defect:** one render came back on a duller magenta plate and the chroma cut left a
+  faint alpha box. A separate session is fixing it in the token cut.
+- **Next:** `crouch-empty`, then step 1 (the caster question); the crossbow, bow, two-hand and
+  down setups.
