@@ -36,7 +36,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | The current human male capture made into a woman, armoured, then bare-armed, same prompt as on the current female capture (2026-10-15) | Armoured: near identical. Bare-armed: both clearly a woman; on the male body the arms and shoulders a little heavier, athletic rather than slight | **One human body covers both sexes.** Write "slender" or "slight" for a delicate build. A female body earns its keep only for many slight, bare-skinned figures, and even then it is a small gain. |
 | The human body made into an elf, a tiefling, a half-orc, a dragonborn (male and female) | All clean, first pass; the dragonborn got a full draconic head and a tail the mannequin lacks | One human body covers every human-sized race. |
 | The dwarf body made into a beardless dwarf woman | Clean | One dwarf body covers both sexes. |
-| Six bodies (large, human, dwarf, small, orc, elf), each sex, made into its own race with one shared kit and finish (spear and shield combat pose, 2026-10-15) | 12 of 12 clean first pass; pose, grip, spear angle and relative size all held (the halfling stays small in its token) | **Every body works.** The small and large bodies are proven. |
+| Six bodies (large, human, dwarf, small, orc, elf), each sex, made into its own race with one shared kit and finish (spear and shield combat pose, 2026-10-15) | 12 of 12 clean first pass; pose, grip and spear angle held (relative size does not carry: see the token-scale row under Prompting) | **Every body works.** The small and large bodies are proven. |
 | The same race on its own body and on the human body: dwarf, goliath, orc woman, elf woman | Elf: no difference. Goliath: near identical. Dwarf: the human body gave a taller dwarf with longer legs. Orc woman: the human body gave a slimmer, lighter orc | **A body earns its place by mass and proportion, not by face or ears.** Words carry ears, skin, tusks and hair on any body; they don't carry build. Keep the dwarf, orc and large bodies. The elf body is optional, like the female human body. |
 | A goblin on the small body, a bugbear on the large body | Both clean and strongly in character | The groupings hold: small for goblin-sized creatures, large for bugbear-sized ones. |
 | Kicking, jumping, running, kneeling presets, looked at from above | Legs barely read top-down | Only the silhouette reads from above: arms and weapons, not legs. |
@@ -72,6 +72,9 @@ humanoid whose body is in the library starts from a mannequin.**
 | --- | --- | --- |
 | Ten classes from existing captures | 8 good first pass; wizard, sorcerer, warlock and druid the strongest | **Open hands and fists make every caster**: the spell is written in. |
 | **The caster question** (2026-10-15): the empty-handed combat pose made into a human wizard (a blue arcane sphere in the cupped low hand, light trailing from the raised one) and a human sorceress (a fireball low, flames on the raised hand) | Both strong on the first pass; long robes widened the wizard's figure but read well | **The empty-handed pose makes casters; no cast pose is needed**, for any body. Put the spell in the cupped hand and make it the key light. |
+| **Token scale** (measured 2026-10-15 on the adventurer test): figure size in the token against the mannequin | Every token fills its square: the figure is trimmed to its outline and fitted at about 0.9 of the frame, so a kneeling capture filling 0.33 of its frame came back 2.7× taller, as large as a standing one | **The mannequin's scale never reaches the token.** `scripts/token_cutout.py` fits each cut to the square on purpose (VTT scale 1.0); size on the map is the token's grid size (`creatureSize`, Foundry's token width). A halfling or a downed figure fills its cell like anyone else. Earlier notes that "the halfling stays small" were wrong. |
+| **Three adventurers in four poses** (2026-10-15): a fighter (longsword, blue heater shield), a rogue (two curved daggers), a wizard (oak staff), each from the combat, standing, dead and a new kneeling capture, one character description reused across the four | 12 of 12 clean first pass; each character is plainly the same person in every pose; dead reads as dead (eyes closed, blood, gear lying beside the hands); the kneeling capture reads as knocked down | **One description carries a character across poses.** A set of pose tokens for one PC is four edits. |
+| The kneeling capture with a shield "slung on his back" | From this front-and-above camera the shield's top rose over his head like a hat | On a figure bowed toward the camera, gear on the back rises over the head. Lay it on the ground instead. |
 | A style token or portrait attached beside the mannequin | The attached subject got copied in | **Never attach a second image.** Words plus one mannequin. |
 | A tail asked for on a body that loops it round the figure | Showed in two places, reading as two tails | Say "ONE tail, curving out behind to the upper left only". |
 | Variants by editing a finished render (darker, cloak, runes) | Pose held | One mannequin gives a whole wardrobe. Fix faults with a flaw pass, never a re-roll. |
@@ -228,12 +231,14 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
 - **Verified:** every capture's body and sex, against a set exported in the owner's fixed order
   (human, large, small, dwarf, orc, elf; male then female). From that set on, `npm run mannequin --
   takeset` files a whole set in that order.
-- **One scale exception:** the crossbow-down orc pair was re-exported at 0.89 scale. At full
-  scale the pose was too tall for the frame, so its tokens come out about 11% smaller.
+- **Scale is the token's, not the capture's:** the cut fits every figure to its square, so capture
+  scale (the 0.89 crossbow-down orcs included) does not matter for tokens.
 - **Tested:** 18 body renders, 12 gear renders, 3 coverage renders, and a dwarf with sword and
   dagger and with axe and dagger. Everything is on the owner's Desktop, `Manny Tests`.
 - **Caster question answered:** the empty-handed combat pose makes casters; `cast` is dropped.
 - **Standing pose tested:** two captures per body cover it (empty fists, short blade and shield);
   16 renders, all clean, including worn gear on the back and hip.
+- **Adventurer test:** three characters across combat, standing, dead and a kneeling "prone"
+  capture, 12 renders, all clean (Desktop, `Manny Tests/Adventurers`). The kneeling capture works.
 - **Next:** capture the standing pose for the six bodies, then two-handed and down, then step 5, the
   skill's mannequin route.
