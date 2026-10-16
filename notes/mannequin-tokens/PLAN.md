@@ -63,6 +63,8 @@ humanoid whose body is in the library starts from a mannequin.**
 | The same shield made into a small fist-held buckler, and a tower shield "twice as long" | Both clean: smaller and larger outlines both work | A shield can change size both ways, unlike a weapon. |
 | The shield removed entirely ("no disc, rim, studs or arm straps remain anywhere"), the hand given a lantern, or a second dagger | Both clean, forearm bare, the new item held naturally | **A shield capture also covers the shieldless off hand.** The `sword` (no shield) setup may be redundant; `sword-shield` with the shield removed may do. |
 | Coverage check (2026-10-15): the sword-and-shield capture made into a duelist with the shield removed and the hand open; the dagger-and-shield capture into a hooded rogue the same way; the sword-and-shield capture into a ranger with a scimitar and a long knife in the freed fist | All three clean first pass: a natural bare forearm where the shield was, the open hand reads as balance, the scimitar a full replacement | **The `sword`, `shortblade` and `twoblades` setups are dropped.** Every combat setup is now a shield capture; the shield comes off in words. |
+| **A bow at full draw** (the standing `bow-draw` capture, 2026-10-15): a human ranger, an elf archer, a halfling and an orc hunter, each with "a single taut bowstring from the upper tip to the drawing fingers and on to the lower tip" | All four clean and in character; bow size and angle held, the arrow nocked and pointing true, the tight orc capture (10 px clear) did not clip. But on every one the string ran straight from tip to tip, as if undrawn | **Full draw works except the string.** The earlier full-draw failure was a bow written into the pose; a captured bow holds. The string is never pulled back to the fingers, and one flaw pass asking for "a sharp V whose point is at his fingers" changed nothing. Accept it: at token size it reads as an archer. |
+| The capture's carved leafy bow, repainted while "keeping its exact length, curve and angle" (elf) or with "none of the old carved leaf ornament remains" (the other three) | The elf's bow kept the leaves and read like ribbon; the three that named the ornament came back as clean plain bows | Repaint keeps ornament as well as shape. **Name the ornament to remove** whenever a capture's weapon is ornate (the owner could not remove it in HeroForge). |
 | A mannequin whose axe handle ran off the frame | Refused twice by the edge-clip check | The capture must hold the weapon wholly inside the frame. A spear 9–16 px from the edge on 1024 rendered fine. |
 | A bow drawn across the body | Oversized bow, string and limbs that don't add up | Bows held low, edge-on, clear of the body; never at full draw. |
 
@@ -240,5 +242,7 @@ detail on <materials>; nothing bright except <light source>, nothing left grey c
   16 renders, all clean, including worn gear on the back and hip.
 - **Adventurer test:** three characters across combat, standing, dead and a kneeling "prone"
   capture, 12 renders, all clean (Desktop, `Manny Tests/Adventurers`). The kneeling capture works.
-- **Next:** capture the standing pose for the six bodies, then two-handed and down, then step 5, the
+- **Prone and bow-draw filed:** prone (kneeling on the fists) and a standing bow at full draw for
+  all six bodies; the library is 228 captures. Full draw renders well but its string stays undrawn.
+- **Next:** then two-handed and down, then step 5, the
   skill's mannequin route.
