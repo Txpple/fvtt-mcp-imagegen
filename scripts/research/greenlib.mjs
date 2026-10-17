@@ -7,6 +7,8 @@
 //                                                      is drawn, a review sheet of the heads is written
 //   node scripts/research/greenlib.mjs render [--yes]  the thirty renders, each copied to the Desktop
 //                                                      folder as it lands
+//   BODY=human-male node scripts/research/greenlib.mjs mark|render
+//                                                      the same thirty on that one body's captures
 //
 // Overrides for a missed placement go in `overrides.json` beside the captures: { "<id>": { "left":
 // [cx, cy], "right": [cx, cy] } } in capture pixels. Paths: `DESK` overrides the Desktop folder.
@@ -27,7 +29,10 @@ const { buildToolRegistry } = await load('registry.js');
 const phase = process.argv[2];
 const args = process.argv.slice(3);
 const yes = args.includes('--yes');
-const DESK = process.env.DESK ?? 'C:/Users/sippelmc/Desktop/EyeColorTests/07-library-green';
+// BODY=human-male renders every figure on that one body's capture of its setup (the owner's
+// one-body question, 2026-10-17): the same thirty figures and setups, one race and sex of capture.
+const BODY = process.env.BODY ?? null;
+const DESK = process.env.DESK ?? (BODY ? `C:/Users/sippelmc/Desktop/EyeColorTests/08-library-green-one-body-${BODY}` : 'C:/Users/sippelmc/Desktop/EyeColorTests/07-library-green');
 const CAPS = path.join(DESK, 'captures');
 const GREEN = { r: 190, g: 240, b: 48 };
 
@@ -91,8 +96,8 @@ for (let i = 0; i < 30; i++) {
     id,
     body,
     setup,
-    source: path.join(root, 'mannequins', `mannequin-${id}.png`),
-    green: path.join(CAPS, `${String(i + 1).padStart(2, '0')}-${id}.png`),
+    source: path.join(root, 'mannequins', `mannequin-${BODY ?? body}-${setup}.png`),
+    green: path.join(CAPS, `${String(i + 1).padStart(2, '0')}-${id}${BODY ? `-on-${BODY}` : ''}.png`),
     instruction:
       `Paint it as ${LOOK[body]}, ${GEAR[setup]}. The mannequin's two bright green eyes are ${pro} eyes: paint them exactly where the green is, at the same size, the same slant and the same spacing, both open with the white and ${IRIS[body]} showing beneath the brow, and leave no green marker. ` +
       'Semi-realistic fantasy character art in the style of modern Dungeons and Dragons sourcebook illustration and premium token packs, realistic proportions, smooth blended shading with crisp edges and fine detail on the face, hands, leather, steel and cloth, warm golden light falling across ' +
@@ -187,7 +192,7 @@ if (phase === 'render') {
     process.exit(0);
   }
   const stamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '-');
-  const runDir = path.join(config.outputDir, 'headtest', `${stamp}-greenlib`);
+  const runDir = path.join(config.outputDir, 'headtest', `${stamp}-greenlib${BODY ? `-${BODY}` : ''}`);
   fs.mkdirSync(runDir, { recursive: true });
   fs.mkdirSync(path.join(DESK, 'tokens'), { recursive: true });
   const gemini = new Gemini({ apiKey: config.geminiApiKey, timeoutMs: config.timeoutMs });
@@ -205,7 +210,7 @@ if (phase === 'render') {
           instruction: it.instruction,
           kind: 'token',
           source: 'mannequin',
-          slug: `greenlib-${it.id}`,
+          slug: `greenlib-${it.id}${BODY ? `-on-${BODY}` : ''}`,
           headRetries: 0,
           ...(it.creatureSize ? { creatureSize: it.creatureSize } : {}),
         });

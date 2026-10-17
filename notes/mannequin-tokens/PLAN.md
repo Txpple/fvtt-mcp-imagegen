@@ -1163,6 +1163,28 @@ ten on their own, before any recapture; with the 90-degree camera the owner's ca
 30 in the same ballpark, and the bowed-head staff poses are the remaining class of miss. One run
 each; the owner's eye on the sheet.
 
+**The same thirty on the human-male captures only (2026-10-17, 19:09, on the owner's word: "do
+those same inputs, this time just use the male human pose for them all ... I want to see if we
+can cut the number of total poses since other tests showed male pretty much works"; 30 socket
+calls and 30 renders, $1.43; `headtest/2026-10-17-19-09-greenlib-human-male/`, filed as
+`EyeColorTests\08-library-green-one-body-human-male` with each token beside its own-body twin from
+folder 07 on one sheet).** The thirty figures and setups of the previous run, the words unchanged,
+every one on the human-male capture of its setup with green eyes scripted the same way (every
+placement reviewed, none overridden); twenty-four distinct captures, six used twice. *Result:* by
+the eyes check **28 of 30** (against 27 of 30 on the matched bodies), the two misses the human
+man on `twohand-staff-brace` (`far-down`, a capture that passed in the matched run, so variance)
+and the dwarf on `stand-shortbow-draw` (`down`, no eyes); **the three staff-and-axe misses of the
+matched run all passed on the human-male captures**, whose heads are bowed less than the dwarf's,
+the goliath's and the orc's on those setups. By my eye on the pairs sheet the builds held from
+words alone: the dwarves broad and short, the halfling and gnome small, the goliaths huge, the
+orcs tusked and heavy, the elves slim, each pair near-twins in pose, weapon and kit, the
+human-male one a touch taller through the body on the dwarves and small folk. So on this run the
+one-body route costs nothing in eyes and little in build, which is the one-body question of
+2026-10-16 asked again with the green marks and the current checks in place and answered the same
+way; the library of 312 could be the 26 human-male captures (recaptured at 90 with green eyes)
+plus whatever the owner's eye says the small and large bodies still need. The owner rules from
+the pairs sheet; nothing is cut on this.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
