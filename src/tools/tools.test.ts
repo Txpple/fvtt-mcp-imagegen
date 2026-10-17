@@ -793,6 +793,34 @@ describe('edit-image', () => {
     });
   });
 
+  it('mannequin source: a bust named beside a character reference binds it to identity only and steers the bust', async () => {
+    const { dispatch } = build();
+    verdicts = ['FAR-UP', 'RIGHT'];
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a dwarf',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'dwarf',
+      headAnchor: 'bust-2',
+      references: [{ path: refPng, role: 'character', label: 'the dwarf' }],
+    });
+    expect(sent).toHaveLength(2);
+    expect(sent[0].body.contents[0].parts).toHaveLength(4); // source, portrait, bust, text
+    expect(sentBust(0)).toBe('bust-2');
+    const text = sent[0].body.contents[0].parts[3].text;
+    expect(text).toMatch(/Image 2 \(the dwarf\) is a CHARACTER reference: paint the features/);
+    expect(text).toMatch(/posed and framed as the prompt and the source image say/);
+    expect(text).not.toMatch(/this figure's head/);
+    expect(text).toContain(bustBinding(3));
+    expect(sentBust(1)).toBe('bust-1');
+    expect(r.head).toMatchObject({
+      verdict: 'right',
+      first: 'far-up',
+      anchorUsed: 'bust-1 + identity',
+    });
+  });
+
   it('mannequin source: headRetries 0 delivers the first render flagged, and unclear never retries', async () => {
     const { dispatch } = build();
     verdicts = ['FAR-UP'];

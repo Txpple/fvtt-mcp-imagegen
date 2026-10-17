@@ -7,7 +7,7 @@
 // built server exactly as the MCP does (dist/), so build first.
 //
 //   node scripts/headtest.mjs [--pcs <pcs.json>] [--npcs-only | --pcs-only] [--repeat <n>]
-//                             [--bust <1-4>] [--yes]
+//                             [--bust <1-4>] [--universal] [--yes]
 //   node scripts/headtest.mjs --rejudge <run dir>          re-judge a run's plates, no renders
 //   node scripts/headtest.mjs --judge <image> [<image>...]  judge any plates or tokens, no renders
 //
@@ -17,7 +17,9 @@
 // kept in the campaign repo): [{ "id", "capture", "instruction", "references": [{ "path",
 // "role", "label" }] }], paths relative to the file; the character reference is the PC's
 // approved token head (mannequins/heads/band/ or the campaign shelf), the object one the
-// portrait's head-to-waist crop for the outfit.
+// portrait's head-to-waist crop for the outfit. --universal renders each PC's "universal" entry
+// instead (the portrait crop as character, bound to identity only, with the bust carrying the
+// head, bust-2 or --bust N): the route that needs no approved token head.
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -120,6 +122,7 @@ const bust = opt('--bust');
 const rejudgeDir = opt('--rejudge');
 const judgeAt = args.indexOf('--judge');
 const yes = flag('--yes');
+const universal = flag('--universal');
 if (bust && !/^[1-4]$/.test(bust)) {
   console.error('--bust takes 1, 2, 3 or 4');
   process.exit(2);
@@ -268,7 +271,7 @@ if (rejudgeDir) {
 // The plan.
 const items = [];
 const pcsOnly = flag('--pcs-only');
-const npcsOnly = flag('--npcs-only') || Boolean(bust);
+const npcsOnly = flag('--npcs-only') || (Boolean(bust) && !universal);
 if (!npcsOnly) {
   if (!pcsFile) {
     console.log(
@@ -278,24 +281,33 @@ if (!npcsOnly) {
     const dir = path.dirname(path.resolve(pcsFile));
     const pcs = JSON.parse(fs.readFileSync(pcsFile, 'utf8'));
     for (const pc of pcs) {
+      const entry = universal ? pc.universal : pc;
+      if (!entry) {
+        console.log(`${pc.id}: no "universal" entry, skipped`);
+        continue;
+      }
       items.push({
         id: pc.id,
-        group: 'pc',
+        group: universal ? 'pc universal' : 'pc',
         args: {
-          sourceImage: mannequin(pc.capture),
-          instruction: pc.instruction,
+          sourceImage: mannequin(entry.capture ?? pc.capture),
+          instruction: entry.instruction,
           kind: 'token',
           source: 'mannequin',
-          slug: `headtest-${pc.id}`,
-          ...(pc.references
+          slug: `headtest-${pc.id}${universal ? '-universal' : ''}`,
+          ...(entry.references
             ? {
-                references: pc.references.map(r => ({
+                references: entry.references.map(r => ({
                   ...r,
                   path: path.resolve(dir, r.path),
                 })),
               }
             : {}),
-          ...(pc.headAnchor ? { headAnchor: pc.headAnchor } : {}),
+          ...(universal
+            ? { headAnchor: `bust-${bust ?? '2'}`, ...(bust ? { headRetries: 0 } : {}) }
+            : pc.headAnchor
+              ? { headAnchor: pc.headAnchor }
+              : {}),
         },
       });
     }
@@ -329,10 +341,11 @@ if (!items.length) {
 // to two renders to any item, and about a third of first renders have needed one.
 const perRender = PRICE.flash['1K'] + 0.01;
 const retriesOn = !bust;
+const pcCount = items.filter(i => i.group.startsWith('pc')).length;
 const expected = items.length * perRender * (retriesOn ? 1.35 : 1);
 const worst = items.length * perRender * (retriesOn ? 3 : 1);
 console.log(
-  `headtest: ${items.length} renders (${items.filter(i => i.group === 'pc').length} PC, ${items.filter(i => i.group !== 'pc').length} NPC)` +
+  `headtest: ${items.length} renders (${pcCount} PC${universal ? ' universal' : ''}, ${items.length - pcCount} NPC)` +
     (bust
       ? ` on bust-${bust}, no retries (calibration)`
       : ` on the server's ${DEFAULT_BUST} anchor, steering on`)
@@ -346,7 +359,11 @@ if (!yes) {
 }
 
 const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 16);
-const runDir = path.join(config.outputDir, 'headtest', bust ? `${stamp}-bust-${bust}` : stamp);
+const runDir = path.join(
+  config.outputDir,
+  'headtest',
+  `${stamp}${bust ? `-bust-${bust}` : ''}${universal ? '-universal' : ''}`
+);
 fs.mkdirSync(runDir, { recursive: true });
 const spend = new SpendMeter();
 const { dispatch } = buildToolRegistry({
@@ -399,7 +416,7 @@ const lines = report(items, spend.totalUsd);
 const sheetPath = path.join(runDir, 'sheet.png');
 await writeSheet(
   items,
-  `headtest ${stamp}${bust ? ` on bust-${bust}` : ''}: ${lines.join('; ')}`,
+  `headtest ${stamp}${bust ? ` on bust-${bust}` : ''}${universal ? ' (universal PCs)' : ''}: ${lines.join('; ')}`,
   sheetPath
 );
 save();

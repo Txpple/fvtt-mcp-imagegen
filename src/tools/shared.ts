@@ -233,9 +233,10 @@ export interface RenderInput {
   /**
    * Tokens from a mannequin: the head anchor the render carries (a bust render() attaches after
    * the images, the caller's character head, or none) and how many steered retries a verdict
-   * outside the band may buy.
+   * outside the band may buy; `identity` says a character reference rides beside the bust,
+   * bound to identity only.
    */
-  head?: { anchor: HeadAnchor; retries: number };
+  head?: { anchor: HeadAnchor; retries: number; identity?: boolean };
 }
 
 /** Kinds rendered on a chroma plate, edge-checked, and cut to alpha. */
@@ -355,8 +356,10 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
   // counted, never delivered; the earlier clean plate stays.
   let head: HeadReport | undefined;
   if (cut && chromaKey && input.head) {
-    const anchorName = (b: Bust | undefined) =>
-      input.head?.anchor === 'character' ? (b ? `character + ${b}` : 'character') : (b ?? 'none');
+    const anchorName = (b: Bust | undefined) => {
+      if (input.head?.anchor === 'character') return b ? `character + ${b}` : 'character';
+      return `${b ?? 'none'}${input.head?.identity ? ' + identity' : ''}`;
+    };
     let checked = await checkHead(deps, png);
     const verdicts: HeadVerdict[] = [checked.verdict];
     const kept: string[] = [];

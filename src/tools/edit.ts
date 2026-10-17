@@ -70,9 +70,11 @@ const editImageSchema = z.object({
       'Mannequin tokens only. The grey bust the tool attaches after your references as the ' +
         'head-angle anchor, bust-1 (the lowest tilt, crown only) to bust-4 (eyes, nose, mouth ' +
         'and the chin edge); the default bust-2 centres the owner\'s band. "none" attaches no ' +
-        'bust on the first render (a steered retry still adds one). Ignored when a reference of ' +
-        'role character is attached: that is taken as the approved token head and carries the ' +
-        'tilt itself.'
+        'bust on the first render (a steered retry still adds one). With a reference of role ' +
+        'character attached: unset, the reference is taken as the approved token head and ' +
+        'carries the tilt itself (no bust); a bust named here rides beside the reference, which ' +
+        'is then bound to identity only (features, hair, skin, build and kit), the route for a ' +
+        'portrait crop.'
     ),
   headRetries: z
     .number()
@@ -184,20 +186,24 @@ export const PROP_EDIT_PAD = 0.12;
 /**
  * Assemble the edit prompt for a kind. The token plate sentence is appended later by render(),
  * and so is a mannequin token's bust binding (render attaches the bust, and may swap it on a
- * steered retry). `headAnchored` says an image carries the head, so the head words are left out.
+ * steered retry). `headAnchored` says an image carries the head, so the head words are left out;
+ * `characterIsHead` says a character reference is the approved token head (bound to carry the
+ * tilt) rather than a portrait beside a bust (bound to identity only).
  */
 export function editPrompt(
   kind: Kind,
   instruction: string,
   refs: Reference[],
   source?: EditSource,
-  headAnchored = true
+  headAnchored = true,
+  characterIsHead = true
 ): string {
   // Shift reference numbering past the source image.
-  const preamble = referencePreamble(refs, kind, source).replace(
-    /Image (\d+)/g,
-    (_, n) => `Image ${Number(n) + 1}`
-  );
+  const preamble = referencePreamble(
+    refs,
+    kind,
+    source === 'mannequin' && characterIsHead ? source : undefined
+  ).replace(/Image (\d+)/g, (_, n) => `Image ${Number(n) + 1}`);
   if (source === 'mannequin') {
     const body = instruction.trim().replace(/[.\s]+$/, '');
     if (headAnchored) return `${MANNEQUIN_EDIT_SOURCE}${preamble}${body}. ${MANNEQUIN_EDIT_KEEP}`;
@@ -242,7 +248,8 @@ export class EditImageTool {
           'grip bound to the capture, and carries the head by an image, never by words: with no ' +
           'character reference the tool attaches a grey bust at the wanted tilt (headAnchor, ' +
           'default bust-2); a character reference is taken as the approved token head and ' +
-          'carries the tilt itself. A judge model then grades the plate against four ruled head ' +
+          'carries the tilt itself, or, with headAnchor named too, binds identity only while the ' +
+          'bust carries the head. A judge model then grades the plate against four ruled head ' +
           'crops on five steps (far-down, down, right, up, far-up) plus camera-dropped and ' +
           "unclear; down, right and up are inside the owner's band and deliver. far-down is " +
           're-rendered with the next bust up, far-up with bust-1, a dropped camera once ' +
@@ -276,13 +283,29 @@ export class EditImageTool {
     const refs = (p.references ?? []).map(r => ({ ...r }));
     const images = [loadImage(p.sourceImage), ...refs.map(r => loadImage(r.path))];
     // A mannequin token's head anchor: the caller's character head, else a bust render() attaches.
+    // A mannequin token's head anchor: with no character reference, a bust render() attaches;
+    // with one, the reference is the approved token head and carries the tilt, unless the caller
+    // names a bust too, when the bust carries the head and the reference binds identity only (a
+    // portrait crop, the universal route).
     let headAnchor: HeadAnchor | undefined;
+    let identity = false;
     if (p.source === 'mannequin') {
-      headAnchor = refs.some(r => r.role === 'character')
-        ? 'character'
-        : (p.headAnchor ?? DEFAULT_BUST);
+      const hasCharacter = refs.some(r => r.role === 'character');
+      if (hasCharacter && p.headAnchor && p.headAnchor !== 'none') {
+        headAnchor = p.headAnchor;
+        identity = true;
+      } else {
+        headAnchor = hasCharacter ? 'character' : (p.headAnchor ?? DEFAULT_BUST);
+      }
     }
-    const prompt = editPrompt(p.kind, p.instruction, refs, p.source, headAnchor !== 'none');
+    const prompt = editPrompt(
+      p.kind,
+      p.instruction,
+      refs,
+      p.source,
+      headAnchor !== 'none',
+      !identity
+    );
     // A prop comes back at its source's exact size, with the new art in the box the original
     // occupied, so it drops into the same tile slot at the same scale. The model is shown the
     // source with a transparent margin: a crate drawn edge to edge on its tile was otherwise
@@ -328,7 +351,13 @@ export class EditImageTool {
       ...(p.creatureSize ? { creatureSize: p.creatureSize } : {}),
       ...(p.thinking ? { thinking: p.thinking } : {}),
       ...(headAnchor
-        ? { head: { anchor: headAnchor, retries: p.headRetries ?? HEAD_RETRIES } }
+        ? {
+            head: {
+              anchor: headAnchor,
+              retries: p.headRetries ?? HEAD_RETRIES,
+              ...(identity ? { identity: true } : {}),
+            },
+          }
         : {}),
       ...propFit,
     });
