@@ -25,7 +25,8 @@ import {
 } from '../gemini.js';
 import { type DriftReport, measureDrift, overlandDrifted } from '../drift.js';
 import { EDGE_BAND, EDGE_LIMIT, edgeContact } from '../edge.js';
-import { type HeadReport, judgeHead } from '../head.js';
+import { type HeadReport, type HeadVerdict, inBand, judgeHead, needsRetry } from '../head.js';
+import { type Bust, bustBinding, type HeadAnchor, isBust, loadBust, steerBust } from '../heads.js';
 import { type Box, type Dimensions, dimensions, fitRect, postProcess } from '../post.js';
 import {
   CREATURE_SIZES,
@@ -155,13 +156,23 @@ export function loadImage(p: string): InlineImage {
  * A battlemap's style reference lends its finish only: "match its camera angle" would tilt a
  * straight-down map, and its subject is another map whose layout must not leak in.
  */
-export function referencePreamble(refs: Reference[], kind?: Kind): string {
+export function referencePreamble(refs: Reference[], kind?: Kind, source?: string): string {
   if (refs.length === 0) return '';
   const lines: string[] = [];
   refs.forEach((r, i) => {
     const n = i + 1;
     const who = r.label ? ` (${r.label})` : '';
-    if (r.role === 'character') {
+    if (r.role === 'character' && source === 'mannequin') {
+      // On a mannequin edit the character reference is the approved token head (owner rule
+      // 2026-10-16): a head-and-shoulders crop at the token camera held the band four of four
+      // and carries its own tilt, where a frontal portrait crop pulled the face to the camera.
+      lines.push(
+        `Image ${n}${who} is a CHARACTER reference: this figure's head as it appears on its ` +
+          'approved tokens, seen from this same overhead token camera. Take the face, hair, ' +
+          'skin, eyes and the tilt of the head from it, the head tipped exactly as it is there, ' +
+          'and nothing of its framing, lighting or background.'
+      );
+    } else if (r.role === 'character') {
       // "keep this exact face" carried a frontal portrait crop's angle onto top-down tokens
       // (two campaign tokens, 2026-10-11 to 16): identity is bound here, pose and camera are not.
       lines.push(
@@ -219,8 +230,12 @@ export interface RenderInput {
   map?: { source: Buffer; plan: PadPlan };
   /** Thinking level for the render; unset leaves the model's default (medium on flash). */
   thinking?: ThinkingLevel;
-  /** Tokens from a mannequin: ask the judge whether the head came out ahead, bowed or up. */
-  headCheck?: boolean;
+  /**
+   * Tokens from a mannequin: the head anchor the render carries (a bust render() attaches after
+   * the images, the caller's character head, or none) and how many steered retries a verdict
+   * outside the band may buy.
+   */
+  head?: { anchor: HeadAnchor; retries: number };
 }
 
 /** Kinds rendered on a chroma plate, edge-checked, and cut to alpha. */
@@ -243,7 +258,7 @@ export interface RenderOutput {
   cutout?: Omit<CutoutResult, 'file' | 'width' | 'height'>;
   /** Tokens and props: the first render clipped the subject at the edge and was redone. */
   edgeRetried?: boolean;
-  /** Mannequin tokens: the judge's word on the head, and whether a bowed or up head was redone. */
+  /** Mannequin tokens: the judge's word on the head, the anchor used, and any steered retries. */
   head?: HeadReport;
   /** Battlemaps: the source's pixel size and the whole-number scale the map was delivered at. */
   source?: { width: number; height: number };
@@ -260,7 +275,6 @@ export interface RenderOutput {
 export async function render(deps: ToolDeps, input: RenderInput): Promise<RenderOutput> {
   const preset = PRESETS[input.kind];
   const cut = CUT_KINDS.has(input.kind);
-  let prompt = input.prompt;
   let chromaKey: ChromaKey | undefined;
   if (cut) {
     // Sample every attached image (source token for edits, reference tokens for generates) and
@@ -269,17 +283,25 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       input.images.map(i => i.data),
       input.prompt
     );
-    prompt = `${prompt} ${chromaSuffix(chromaKey)}`;
   }
+  // A mannequin token's bust goes last, bound by its number; the plate sentence closes the prompt.
+  const promptWith = (bust: Bust | undefined) =>
+    [
+      input.prompt,
+      bust ? bustBinding(input.images.length + 1) : '',
+      chromaKey ? chromaSuffix(chromaKey) : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
 
   fs.mkdirSync(deps.outputDir, { recursive: true });
   const id = newId();
   if (input.kind === 'battlemap' || input.kind === 'overland') return renderMap(deps, input, id);
-  const once = async () => {
+  const once = async (bust?: Bust) => {
     const result = await deps.gemini.generate({
       tier: input.tier,
-      prompt,
-      images: input.images,
+      prompt: promptWith(bust),
+      images: bust ? [...input.images, loadBust(bust)] : input.images,
       aspect: input.aspect ?? preset.aspect,
       size: preset.size,
       ...(input.thinking ? { thinking: input.thinking } : {}),
@@ -294,7 +316,9 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     return { result, png, usd };
   };
 
-  let { result, png, usd: estimatedUsd } = await once();
+  let bust: Bust | undefined =
+    input.head && isBust(input.head.anchor) ? input.head.anchor : undefined;
+  let { result, png, usd: estimatedUsd } = await once(bust);
   let thinkingTokens = result.usage?.thinking;
   let edgeRetried: boolean | undefined;
   const clippedPath = (n: number) =>
@@ -305,7 +329,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     let contact = await edgeContact(png, chromaKey);
     if (contact > EDGE_LIMIT) {
       fs.writeFileSync(clippedPath(1), png);
-      const again = await once();
+      const again = await once(bust);
       ({ result, png } = again);
       estimatedUsd += again.usd;
       if (again.result.usage) thinkingTokens = (thinkingTokens ?? 0) + again.result.usage.thinking;
@@ -322,35 +346,67 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       }
     }
   }
-  // The head check (owner rule 2026-10-16): a mannequin token's face looks ahead, never bowed
-  // into the chest or up at the camera. The judge's word steers one re-render and is reported;
-  // it never refuses (head.ts). A re-render that clips is refused like any second clip.
+  // The head check (owner rule 2026-10-16): a mannequin token's head sits inside the owner's
+  // band (down, right or up), never bowed with the eyes hidden, never the face lifted to the
+  // camera, never a dropped camera. The judge's word steers a re-render (head.ts, heads.ts):
+  // far-down goes up the bust dial, far-up to bust-1, a dropped camera is redone once unchanged
+  // and then blamed on the capture. At most `retries` re-renders, then the token is delivered
+  // flagged; it never refuses, since the judge can be wrong. A retry that clips is kept and
+  // counted, never delivered; the earlier clean plate stays.
   let head: HeadReport | undefined;
-  if (cut && chromaKey && input.headCheck) {
-    head = await checkHead(deps, png);
-    if (head.verdict === 'bowed' || head.verdict === 'up') {
-      const kept = path.join(
+  if (cut && chromaKey && input.head) {
+    const anchorName = (b: Bust | undefined) =>
+      input.head?.anchor === 'character' ? (b ? `character + ${b}` : 'character') : (b ?? 'none');
+    let checked = await checkHead(deps, png);
+    const verdicts: HeadVerdict[] = [checked.verdict];
+    const kept: string[] = [];
+    let retries = 0;
+    let drops = 0;
+    while (!checked.error && needsRetry(checked.verdict) && retries < input.head.retries) {
+      const verdict = checked.verdict;
+      let next = bust;
+      if (verdict === 'camera-dropped') {
+        if (drops) break; // twice: the capture is the cause, not the bust
+        drops++;
+      } else {
+        next = steerBust(verdict, bust);
+      }
+      const keptPath = path.join(
         deps.outputDir,
-        `${input.kind}-${slugOf(input.slug)}-${id}-head-${head.verdict}.png`
+        `${input.kind}-${slugOf(input.slug)}-${id}-head${kept.length + 1}-${verdict}.png`
       );
-      fs.writeFileSync(kept, png);
-      const again = await once();
+      fs.writeFileSync(keptPath, png);
+      kept.push(keptPath);
+      const again = await once(next);
       estimatedUsd += again.usd;
       if (again.result.usage) thinkingTokens = (thinkingTokens ?? 0) + again.result.usage.thinking;
-      const contact = await edgeContact(again.png, chromaKey);
-      if (contact > EDGE_LIMIT) {
-        fs.writeFileSync(clippedPath(2), again.png);
-        throw new Error(
-          `The head re-render clipped the subject at the image edge (${contact} subject pixels ` +
-            `in the outer ${EDGE_BAND} px); a clipped ${input.kind} is never delivered. Kept for ` +
-            `inspection: ${kept} (head ${head.verdict}), ${clippedPath(2)}. Spent about ` +
-            `$${estimatedUsd.toFixed(2)}.`
-        );
+      retries++;
+      if ((await edgeContact(again.png, chromaKey)) > EDGE_LIMIT) {
+        // Never delivered; the verdict and the plate stand as they were, so the loop may try again.
+        fs.writeFileSync(clippedPath(kept.length + 1), again.png);
+        kept.pop();
+        fs.rmSync(keptPath, { force: true });
+        continue;
       }
       ({ result, png } = again);
-      const second = await checkHead(deps, png);
-      head = { ...second, first: head.verdict, retried: true, kept };
+      bust = next;
+      checked = await checkHead(deps, png);
+      verdicts.push(checked.verdict);
     }
+    head = {
+      verdict: checked.verdict,
+      inBand: inBand(checked.verdict),
+      anchorUsed: anchorName(bust),
+      ...(verdicts.length > 1 ? { first: verdicts[0], verdicts, retried: true, kept } : {}),
+      ...(checked.verdict === 'camera-dropped'
+        ? {
+            advice:
+              'The camera dropped (the body seen from the front) on this capture; change the ' +
+              'capture rather than the words or the bust.',
+          }
+        : {}),
+      ...(checked.error ? { error: checked.error } : {}),
+    };
   }
   const base = {
     kind: input.kind,
@@ -396,7 +452,10 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
 }
 
 /** Ask the judge about a plate's head; a judge that cannot be reached never blocks the render. */
-async function checkHead(deps: ToolDeps, plate: Buffer): Promise<HeadReport> {
+async function checkHead(
+  deps: ToolDeps,
+  plate: Buffer
+): Promise<{ verdict: HeadVerdict; error?: string }> {
   try {
     const verdict = await judgeHead(deps.gemini, plate);
     deps.spend.recordJudge(JUDGE_USD);

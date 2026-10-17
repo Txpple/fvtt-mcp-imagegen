@@ -32,12 +32,13 @@ export const TEXT_OUT_PRICE: Record<Tier, number> = { flash: 7.5, pro: 12 };
 
 /** The vision text model the head check asks: the cheapest non-preview flash lite the key lists (2026-10-16). */
 export const JUDGE_MODEL = 'gemini-3.5-flash-lite';
-/** A flat estimate per judge call: a 1024 plate in, one word out, well under a tenth of a cent. */
-export const JUDGE_USD = 0.0005;
+/** A flat estimate per judge call: four 512 crops and a 1024 plate in, one word out, about a tenth of a cent. */
+export const JUDGE_USD = 0.001;
 
 export interface JudgeRequest {
   prompt: string;
-  image: InlineImage;
+  /** The images, in the order the prompt names them; the text goes last. */
+  images: InlineImage[];
 }
 
 /** Token counts the API reports for one call; thinking is billed as output text. */
@@ -181,27 +182,17 @@ export class Gemini {
   }
 
   /**
-   * One short text answer about an image from the judge model, for a check no pixel measure
-   * can make (the head check, head.ts). Temperature 0 so the same plate gets the same word.
+   * One short text answer about some images from the judge model, for a check no pixel measure
+   * can make (the head check, head.ts: four ruled crops and the plate). Temperature 0 so the
+   * same plate gets the same word.
    */
   async judge(req: JudgeRequest): Promise<string> {
     if (!this.hasKey) throw new Error('GEMINI_API_KEY is not set in .env');
-    const body = {
-      contents: [
-        {
-          parts: [
-            {
-              inline_data: {
-                mime_type: req.image.mimeType,
-                data: req.image.data.toString('base64'),
-              },
-            },
-            { text: req.prompt },
-          ],
-        },
-      ],
-      generationConfig: { temperature: 0 },
-    };
+    const parts: Array<Record<string, unknown>> = req.images.map(img => ({
+      inline_data: { mime_type: img.mimeType, data: img.data.toString('base64') },
+    }));
+    parts.push({ text: req.prompt });
+    const body = { contents: [{ parts }], generationConfig: { temperature: 0 } };
     const res = await this.fetchFn(`${this.baseUrl}/models/${JUDGE_MODEL}:generateContent`, {
       method: 'POST',
       headers: { 'x-goog-api-key': this.opts.apiKey, 'content-type': 'application/json' },

@@ -8,11 +8,13 @@ import { Gemini, JUDGE_MODEL } from '../gemini.js';
 import { buildToolRegistry } from '../registry.js';
 import { SpendMeter } from '../spend.js';
 import { PROP_FRAMING, TOKEN_FRAMING } from '../presets.js';
+import { bustBinding, bustPath } from '../heads.js';
 import {
   BATTLEMAP_EDIT_KEEP,
   EDIT_PREAMBLE,
   MANNEQUIN_EDIT_KEEP,
   MANNEQUIN_EDIT_SOURCE,
+  MANNEQUIN_HEAD_WORDS,
   OVERLAND_EDIT_KEEP,
   PROP_EDIT_KEEP,
   TOKEN_EDIT_KEEP,
@@ -26,7 +28,7 @@ let propSrc: string;
 let mapSrc: string;
 let sent: Array<{ url: string; body: any }>;
 let cuts: CutoutOptions[];
-/** The judge's answers, in order; 'ERROR' makes the judge call fail; empty answers AHEAD. */
+/** The judge's answers, in order; 'ERROR' makes the judge call fail; empty answers RIGHT. */
 let verdicts: string[] = [];
 let judged: Array<{ url: string; body: any }> = [];
 
@@ -38,7 +40,7 @@ function fakeGemini(width = 1024, height = 1024, usage?: Record<string, number>)
     const body = JSON.parse(init.body);
     if (String(url).includes(`/models/${JUDGE_MODEL}:`)) {
       judged.push({ url: String(url), body });
-      const word = verdicts.shift() ?? 'AHEAD';
+      const word = verdicts.shift() ?? 'RIGHT';
       if (word === 'ERROR')
         return new Response('{"error":{"message":"judge down"}}', { status: 500 });
       return new Response(
@@ -581,7 +583,19 @@ describe('edit-image', () => {
     expect(text).not.toContain(TOKEN_FRAMING);
   });
 
-  it('mannequin source: binds pose, camera, grip and head to the capture, nothing left grey', async () => {
+  /** The bust a sent request carried, read off its last image part. */
+  const sentBust = (i: number): string | undefined => {
+    const parts = sent[i].body.contents[0].parts;
+    const last = parts[parts.length - 2];
+    if (!last?.inline_data) return undefined;
+    const data = Buffer.from(last.inline_data.data, 'base64');
+    for (const b of ['bust-1', 'bust-2', 'bust-3', 'bust-4'] as const) {
+      if (data.equals(fs.readFileSync(bustPath(b)))) return b;
+    }
+    return undefined;
+  };
+
+  it('mannequin source with a character head: binds pose, camera and grip to the capture, the head to the reference, no bust', async () => {
     const { dispatch } = build();
     await dispatch('edit-image', {
       sourceImage: refPng,
@@ -598,23 +612,28 @@ describe('edit-image', () => {
     expect(parts).toHaveLength(4);
     const text = parts[3].text;
     expect(text.startsWith(MANNEQUIN_EDIT_SOURCE)).toBe(true);
-    expect(text).toMatch(/Image 2 \(the dwarf\) is a CHARACTER reference/);
+    expect(text).toMatch(/Image 2 \(the dwarf\) is a CHARACTER reference: this figure's head/);
+    expect(text).toMatch(/the tilt of the head from it, the head tipped exactly as it is there/);
     expect(text).toMatch(/Image 3 \(the battleaxe\) is an OBJECT reference/);
     expect(text).toContain(`in worn steel plate. ${MANNEQUIN_EDIT_KEEP}`);
     expect(text).toContain('chroma-key');
+    expect(text).not.toContain(MANNEQUIN_HEAD_WORDS);
+    expect(text).not.toContain('grey clay head');
     expect(text).not.toContain(TOKEN_EDIT_KEEP);
     expect(text).not.toContain(EDIT_PREAMBLE);
     expect(text).not.toContain(TOKEN_FRAMING);
-    // The owner's standard: a 90-degree orthographic body with the head tilted up (8 of 8 in
-    // the ortho test, 2026-10-16); the camera comes from these words, not the capture.
+    expect(sentBust(0)).toBeUndefined();
+    // The owner's standard: a 90-degree orthographic body (8 of 8 in the ortho test,
+    // 2026-10-16); the camera comes from these words, the head from an image, never words.
     expect(MANNEQUIN_EDIT_SOURCE).toMatch(/90-degree orthographic top-down view/);
-    expect(MANNEQUIN_EDIT_SOURCE).toMatch(/both eyes and the nose show in front of the crown/);
-    expect(MANNEQUIN_EDIT_KEEP).toMatch(/camera straight down and the head tilted up/);
+    expect(MANNEQUIN_EDIT_SOURCE).not.toMatch(/eyes/);
+    expect(MANNEQUIN_EDIT_KEEP).toMatch(/the camera straight down\./);
+    expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/head/);
     expect(MANNEQUIN_EDIT_KEEP).toMatch(/nothing left grey/);
     expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/face, hair/);
   });
 
-  it('mannequin source: the head check asks the judge once and reports an ahead head', async () => {
+  it('mannequin source with no character: attaches bust-2 last, bound as the head-angle dial, and grades against the four exemplars', async () => {
     const { dispatch, spend } = build();
     const r: any = await dispatch('edit-image', {
       sourceImage: refPng,
@@ -622,23 +641,57 @@ describe('edit-image', () => {
       kind: 'token',
       source: 'mannequin',
       slug: 'guard',
+      references: [{ path: refPng, role: 'object', label: 'the spear head' }],
     });
     expect(sent).toHaveLength(1);
+    const parts = sent[0].body.contents[0].parts;
+    expect(parts).toHaveLength(4); // source, object, bust, text
+    expect(sentBust(0)).toBe('bust-2');
+    const text = parts[3].text;
+    expect(text).toContain(`${MANNEQUIN_EDIT_KEEP} ${bustBinding(3)} The ENTIRE image background`);
+    expect(text).not.toContain(MANNEQUIN_HEAD_WORDS);
     expect(judged).toHaveLength(1);
-    expect(judged[0].body.contents[0].parts[1].text).toMatch(/Judge the camera and the head/);
-    // A lying figure (dead) reads face-on from above by nature; the judge is told so first.
-    expect(judged[0].body.contents[0].parts[1].text).toMatch(/lying on the ground.*answer UNCLEAR/);
-    expect(r.head).toEqual({ verdict: 'ahead' });
-    // The session total is rounded to a tenth of a cent; the meter itself shows the judge added.
+    const jp = judged[0].body.contents[0].parts;
+    expect(jp).toHaveLength(6);
+    expect(jp[5].text).toMatch(/Image 1 is DOWN.*Image 5 is the token to grade/);
+    expect(r.head).toEqual({ verdict: 'right', inBand: true, anchorUsed: 'bust-2' });
     expect(spend.totalUsd).toBeGreaterThanOrEqual(0.034);
     const m = new SpendMeter();
-    m.recordJudge(0.0005);
+    m.recordJudge(0.001);
     expect(m.totalUsd).toBeCloseTo(0.001, 3);
   });
 
-  it('mannequin source: a bowed head is rendered once more, the first plate kept, both verdicts reported', async () => {
+  it('mannequin source: headAnchor picks the bust, and "none" sends no bust with the head in words', async () => {
     const { dispatch } = build();
-    verdicts = ['BOWED', 'AHEAD'];
+    await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+      headAnchor: 'bust-4',
+    });
+    expect(sentBust(0)).toBe('bust-4');
+    expect(sent[0].body.contents[0].parts.at(-1).text).toContain(bustBinding(2));
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+      headAnchor: 'none',
+    });
+    expect(sent[1].body.contents[0].parts).toHaveLength(2);
+    const text = sent[1].body.contents[0].parts[1].text;
+    expect(text).toContain(MANNEQUIN_HEAD_WORDS);
+    expect(text).toMatch(/the camera straight down and the head tilted up as described\./);
+    expect(text).not.toContain('grey clay head');
+    expect(r.head.anchorUsed).toBe('none');
+  });
+
+  it('mannequin source: far-down is re-rendered with bust-3, the first plate kept, every verdict reported', async () => {
+    const { dispatch } = build();
+    verdicts = ['FAR-DOWN', 'UP'];
     const r: any = await dispatch('edit-image', {
       sourceImage: refPng,
       instruction: 'a guard',
@@ -648,15 +701,52 @@ describe('edit-image', () => {
     });
     expect(sent).toHaveLength(2);
     expect(judged).toHaveLength(2);
-    expect(r.head).toMatchObject({ verdict: 'ahead', first: 'bowed', retried: true });
-    expect(path.basename(r.head.kept)).toMatch(/^token-guard-[0-9a-f]{8}-head-bowed\.png$/);
-    expect(fs.existsSync(r.head.kept)).toBe(true);
+    expect(sentBust(0)).toBe('bust-2');
+    expect(sentBust(1)).toBe('bust-3');
+    expect(r.head).toMatchObject({
+      verdict: 'up',
+      inBand: true,
+      first: 'far-down',
+      verdicts: ['far-down', 'up'],
+      retried: true,
+      anchorUsed: 'bust-3',
+    });
+    expect(r.head.kept).toHaveLength(1);
+    expect(path.basename(r.head.kept[0])).toMatch(/^token-guard-[0-9a-f]{8}-head1-far-down\.png$/);
+    expect(fs.existsSync(r.head.kept[0])).toBe(true);
     expect(r.estimatedUsd).toBeCloseTo(0.0336 * 2, 6);
   });
 
-  it('mannequin source: two bad verdicts still deliver the token, flagged, never a third render', async () => {
+  it('mannequin source: far-up is re-rendered with bust-1; a third bad verdict still delivers, flagged, never a fourth render', async () => {
     const { dispatch } = build();
-    verdicts = ['UP', 'BOWED'];
+    verdicts = ['FAR-UP', 'FAR-DOWN', 'FAR-UP'];
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+    });
+    expect(sent).toHaveLength(3);
+    expect([sentBust(0), sentBust(1), sentBust(2)]).toEqual(['bust-2', 'bust-1', 'bust-3']);
+    expect(r.head).toMatchObject({
+      verdict: 'far-up',
+      inBand: false,
+      first: 'far-up',
+      verdicts: ['far-up', 'far-down', 'far-up'],
+      retried: true,
+      anchorUsed: 'bust-3',
+    });
+    expect(
+      r.head.kept.map((k: string) => path.basename(k).replace(/^token-guard-[0-9a-f]{8}-/, ''))
+    ).toEqual(['head1-far-up.png', 'head2-far-down.png']);
+    expect(fs.existsSync(r.file)).toBe(true);
+    expect(r.head.advice).toBeUndefined();
+  });
+
+  it('mannequin source: a dropped camera is re-rendered once unchanged, then blamed on the capture', async () => {
+    const { dispatch } = build();
+    verdicts = ['CAMERA-DROPPED', 'CAMERA-DROPPED'];
     const r: any = await dispatch('edit-image', {
       sourceImage: refPng,
       instruction: 'a guard',
@@ -665,8 +755,67 @@ describe('edit-image', () => {
       slug: 'guard',
     });
     expect(sent).toHaveLength(2);
-    expect(r.head).toMatchObject({ verdict: 'bowed', first: 'up', retried: true });
+    expect([sentBust(0), sentBust(1)]).toEqual(['bust-2', 'bust-2']);
+    expect(r.head).toMatchObject({
+      verdict: 'camera-dropped',
+      inBand: false,
+      verdicts: ['camera-dropped', 'camera-dropped'],
+      anchorUsed: 'bust-2',
+    });
+    expect(r.head.advice).toMatch(/change the capture/);
     expect(fs.existsSync(r.file)).toBe(true);
+  });
+
+  it('mannequin source: a character head is steered by adding a bust beside it, not replacing it', async () => {
+    const { dispatch } = build();
+    verdicts = ['FAR-UP', 'RIGHT'];
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a dwarf',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'dwarf',
+      references: [{ path: refPng, role: 'character', label: 'the dwarf' }],
+    });
+    expect(sent).toHaveLength(2);
+    expect(sent[0].body.contents[0].parts).toHaveLength(3);
+    expect(sentBust(0)).toBeUndefined();
+    expect(sent[1].body.contents[0].parts).toHaveLength(4);
+    expect(sentBust(1)).toBe('bust-1');
+    expect(sent[1].body.contents[0].parts[3].text).toMatch(
+      /is a CHARACTER reference: this figure's head/
+    );
+    expect(sent[1].body.contents[0].parts[3].text).toContain(bustBinding(3));
+    expect(r.head).toMatchObject({
+      verdict: 'right',
+      first: 'far-up',
+      anchorUsed: 'character + bust-1',
+    });
+  });
+
+  it('mannequin source: headRetries 0 delivers the first render flagged, and unclear never retries', async () => {
+    const { dispatch } = build();
+    verdicts = ['FAR-UP'];
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+      headRetries: 0,
+    });
+    expect(sent).toHaveLength(1);
+    expect(r.head).toEqual({ verdict: 'far-up', inBand: false, anchorUsed: 'bust-2' });
+    verdicts = ['UNCLEAR'];
+    const r2: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a hooded guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+    });
+    expect(sent).toHaveLength(2);
+    expect(r2.head).toEqual({ verdict: 'unclear', inBand: false, anchorUsed: 'bust-2' });
   });
 
   it('mannequin source: a judge that cannot be reached never blocks the render', async () => {
