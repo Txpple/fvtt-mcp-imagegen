@@ -1069,6 +1069,23 @@ Tobin, Cassia; Brom not), against about half on the grey captures. The owner's e
 owner's word, and every later set on this route goes there too. `TokenImprovements2` keeps the
 end-to-end run and the drawn-eyes busts.
 
+**Kartor, Lysandra and the ten PHB species (2026-10-17, evening, on the owner's word: "do the other
+2 pcs using this method, then do one of each of the PHB races, each sex, with a variety of items
+they might be holding"; 23 renders, about $1.00; filed as `EyeColorTests\03-kartor-and-lysandra`
+and `04-phb-species`, the tokens copied to the Desktop as each landed, the owner's rule from here).**
+The two PCs the campaign's way (crop as `character` beside bust-2): both with eyes reading, Kartor
+at the capture's tilt with the battleaxe and plank shield, Lysandra's head a step down with the
+gold eyes showing, the runed sword and the violet flame placed. The twenty species words-only (no
+crop, so the server attached bust-2 itself), each an invented figure in the house finish with a
+different held item, on the one human-male capture: by my eye **nineteen of twenty with the face
+and both eyes reading on the first render**; the one miss the aasimar woman, head bowed (the check:
+`far-down`, no eyes); the dragonborn read as snouts from above with the eyes at the edge. Build
+came from words alone: the dwarves and halflings short and broad, the goliaths hulking, the gnomes
+small, which the one-body question asked and this answers on twenty. One refusal: the dwarf
+woman's level crossbow clipped the edge twice and was redone held upright. Across the evening on
+the green-eyed capture with bust-2 (the Elders, the four PCs, the twenty): **eyes reading on 27 of
+30 first renders** by my eye, against about half on the grey captures; the owner's eye rules.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
