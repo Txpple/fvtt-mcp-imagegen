@@ -1,0 +1,72 @@
+[
+  {
+    "from": "stage 2b",
+    "id": "kartor-combat",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-15-15-universal\\token-headtest-kartor-combat-universal-af2381d1.png"
+  },
+  {
+    "from": "stage 2b",
+    "id": "cecil-stand",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-15-15-universal\\token-headtest-cecil-stand-universal-d54dcaf1.png"
+  },
+  {
+    "from": "stage 2b",
+    "id": "cecil-combat",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-15-15-universal\\token-headtest-cecil-combat-universal-d4c94eff.png"
+  },
+  {
+    "from": "stage 3 cell 6",
+    "id": "lysandra-combat",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-lysandra-combat-universal-6e313a14.png"
+  },
+  {
+    "from": "stage 3 cell 12",
+    "id": "knight-1",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-knight-1-0ad3f87d.png"
+  },
+  {
+    "from": "stage 3 cell 13",
+    "id": "knight-2",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-knight-2-2bcd5445.png"
+  },
+  {
+    "from": "stage 3 cell 14",
+    "id": "knight-3",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-knight-3-413cc708.png"
+  },
+  {
+    "from": "stage 3 cell 16",
+    "id": "orc-2",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-orc-2-5effc4c9.png"
+  },
+  {
+    "from": "stage 3 cell 18",
+    "id": "dwarf-woman-1",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-dwarf-woman-1-43d65b5e.png"
+  },
+  {
+    "from": "stage 3 cell 19",
+    "id": "dwarf-woman-2",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-dwarf-woman-2-f546f8c4.png"
+  },
+  {
+    "from": "stage 3 cell 20",
+    "id": "dwarf-woman-3",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-dwarf-woman-3-891f5809.png"
+  },
+  {
+    "from": "stage 3 cell 24",
+    "id": "bugbear-1",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-bugbear-1-15f26014.png"
+  },
+  {
+    "from": "stage 3 cell 25",
+    "id": "bugbear-2",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-bugbear-2-ba8cf7ec.png"
+  },
+  {
+    "from": "stage 3 cell 26",
+    "id": "bugbear-3",
+    "file": "D:\\Workbench\\LOCAL\\artificer-output\\headtest\\2026-10-17-14-08-universal-body-human-male\\token-headtest-bugbear-3-5a6b3013.png"
+  }
+]

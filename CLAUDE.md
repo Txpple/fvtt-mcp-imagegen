@@ -25,10 +25,11 @@ mannequin token is carried by an image, never words: a bust the server attaches
 five-step head check on flash against the owner's ruled crops and an eyes gate (`src/head.ts`),
 steered retries, and `npm run headtest` (`scripts/headtest.mjs`) as the measurement; and the anatomy check
 (`src/anatomy.ts`): every token and portrait render counted by the head check against an optional
-`anatomy` line, a token's facing included, reported as `anatomy`. Open research, nothing
-ruled: whether one human male capture per setup can replace the library, tested together with
-the head anchor and the anatomy check in staged `npm run headtest` runs (`--body`), the
-programme in `notes/mannequin-tokens/PLAN.md`. Release detail is the GitHub release notes; the
+`anatomy` line, a token's facing included, reported as `anatomy`; and the no-eyes remedy, one edit
+on the plate (`EYES_OPEN_PROMPT`), never a re-render first. Open research, nothing ruled: the token
+reliability programme, its record in `notes/mannequin-tokens/PLAN.md` and the next session's agenda
+in `notes/mannequin-tokens/HANDOFF.md` (the research scripts in `scripts/research/`); one body is
+parked. Release detail is the GitHub release notes; the
 dated journal is `docs/log/YYYY-MM.md`.
 
 The server runs on the Gemini API. The first version of this server wrapped
