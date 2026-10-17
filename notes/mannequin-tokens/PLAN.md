@@ -523,8 +523,8 @@ Tokens` and `Headtest`, the runs under `headtest/` in the output folder):
   list of 26 to vet once each instead of 312.
 - Does a portrait beside the bust want bust-3 to centre the band, and does a tighter face crop
   pull the head less than the head-to-waist crop?
-- Are busts shot at the library's Booth camera (about fifteen degrees off vertical) the right
-  dial for a 90-degree body, or do they want re-capturing straight down?
+- (Answered by the owner, 2026-10-17: the busts were shot straight down with only the head tilted,
+  so they already sit at the 90-degree standard; the library itself is at about 80 degrees.)
 - What else the owner has in mind for the head path; the list above is what the record shows,
   not the owner's.
 
@@ -540,7 +540,7 @@ before it. Nothing renders without the owner's word.
 | 2. The hair line | Does the universal hair sentence keep Cecil's eyes clear and leave the other three alone? | 8 PC renders, $0.47 (`--universal --pcs-only`) | each head; Cecil's hair | the sentence stays or goes; the skill's fringe rule |
 | 3. One body, the full set | The same subjects, words and busts, on the human-male capture of each pose and setup | 26 renders, $1.53 (`--universal --body human-male`) | the head per cell against run 1 and stage 2; the build per cell (the dwarf woman, the goblin, the bugbear, the orc, Kartor); every anatomy verdict by eye | whether the band rate holds or moves on one body; whether build survives in words; the anatomy check's first score |
 | 4. One body, lying down and the hard builds | Prone and dead on the human-male captures for a dwarf, a goblin and a bugbear; a halfling woman and an ogre standing | about 8 renders, $0.45 | build; the lying head (`unclear` is right there) | the last body cases before any ruling |
-| 5. The head anchor tweaks | From stages 1 to 3 and the owner's own list: bust-3 as the universal default (8, $0.35); a tight face crop against the head-to-waist crop (8, $0.47); busts re-captured straight down (the owner's HeroForge, then 18, $0.90); wider exemplars (free, then a re-check of every run, cents) | each an A/B through headtest | each sheet beside its baseline | the head path for hundreds of tokens: band rate first render, retries per token |
+| 5. The head anchor tweaks | From stages 1 to 3 and the owner's own list: bust-3 as the universal default (8, $0.35); a tight face crop against the head-to-waist crop (8, $0.47); wider exemplars (free, then a re-check of every run, cents) | each an A/B through headtest | each sheet beside its baseline | the head path for hundreds of tokens: band rate first render, retries per token |
 | 6. The camera vetting | Which of the 26 human-male captures drop the camera? | the 15 captures stage 3 does not reach, $0.90; the other 11 are in stage 3's manifest | the dropped ones | the captures to re-export before any pose is added |
 
 Stages 1 and 2 first, the baseline on the bodies we have, one of them free; 3 and 4 only
@@ -685,8 +685,8 @@ one: the human male for every medium race, the small body kept, the large body o
 *A third lead, the captures' camera (the owner, 2026-10-17):* the library was shot at about 80
 degrees, not straight down (the README's "about fifteen degrees off vertical"), and the owner would
 capture at 90 if the mannequins are ever redone. It bears on the standing captures' bodies leaning
-front-and-above (stage-2 cells 1 and 7, stage-3 cell 7) and on the busts, shot from the same camera;
-for now the words set the camera and the captures give pose, proportions and grip. Something to look
+front-and-above (stage-2 cells 1 and 7, stage-3 cell 7); the busts are not affected, they were shot
+straight down with only the head tilted (the owner, 2026-10-17). For now the words set the camera and the captures give pose, proportions and grip. Something to look
 at later, not before the eyes are settled.
 
 ### Scoring the checks
