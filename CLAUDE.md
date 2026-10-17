@@ -22,12 +22,12 @@ the token changes of 2026-10-16:
 camera, a 90-degree orthographic body (the fifteen-degree pitch is retired), and the head of a
 mannequin token is carried by an image, never words: a bust the server attaches
 (`mannequins/heads/`, `src/heads.ts`, `headAnchor`) or the approved token head as `character`, a
-five-step judge on flash against the owner's ruled crops (`src/head.ts`), steered retries, and
+five-step head check on flash against the owner's ruled crops (`src/head.ts`), steered retries, and
 `npm run headtest` (`scripts/headtest.mjs`) as the measurement; and the anatomy check
-(`src/anatomy.ts`): every token and portrait render counted by the judge against an optional
+(`src/anatomy.ts`): every token and portrait render counted by the head check against an optional
 `anatomy` line, a token's facing included, reported as `anatomy`. Open research, nothing
 ruled: whether one human male capture per setup can replace the library, tested together with
-the head anchor and the anatomy judge in staged `npm run headtest` runs (`--body`), the
+the head anchor and the anatomy check in staged `npm run headtest` runs (`--body`), the
 programme in `notes/mannequin-tokens/PLAN.md`. Release detail is the GitHub release notes; the
 dated journal is `docs/log/YYYY-MM.md`.
 

@@ -39,7 +39,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | Six bodies (large, human, dwarf, small, orc, elf), each sex, made into its own race with one shared kit and finish (spear and shield combat pose, 2026-10-15) | 12 of 12 clean first pass; pose, grip and spear angle held (relative size does not carry: see the token-scale row under Prompting) | **Every body works.** The small and large bodies are proven. |
 | The same race on its own body and on the human body: dwarf, goliath, orc woman, elf woman | Elf: no difference. Goliath: near identical. Dwarf: the human body gave a taller dwarf with longer legs. Orc woman: the human body gave a slimmer, lighter orc | **A body earns its place by mass and proportion, not by face or ears.** Words carry ears, skin, tusks and hair on any body; they don't carry build. Keep the dwarf, orc and large bodies. The elf body is optional, like the female human body. |
 | A goblin on the small body, a bugbear on the large body | Both clean and strongly in character | The groupings hold: small for goblin-sized creatures, large for bugbear-sized ones. |
-| **Twenty characters, each on its matched body and on the human male** (the owner's own sheet, the evening of 2026-10-16: dwarves, a gnome, halflings, a goliath, humans of both sexes, a tiefling woman; Desktop `TestTokens5/compare-matched-vs-human-male.png`) | To the owner's eye the human-male column held race, sex, build and kit. By its timestamps the matched arm predates the busts and the human-male arm the server's bust anchor; the first judge's words are on its labels | **One body is a live hypothesis, not a ruling.** It contradicts the 2026-10-15 rows (a taller dwarf, a slimmer orc woman) and has never met the head anchor; "Research: one body and the head anchor, together" below tests them as one. |
+| **Twenty characters, each on its matched body and on the human male** (the owner's own sheet, the evening of 2026-10-16: dwarves, a gnome, halflings, a goliath, humans of both sexes, a tiefling woman; Desktop `TestTokens5/compare-matched-vs-human-male.png`) | To the owner's eye the human-male column held race, sex, build and kit. By its timestamps the matched arm predates the busts and the human-male arm the server's bust anchor; the first head check's words are on its labels | **One body is a live hypothesis, not a ruling.** It contradicts the 2026-10-15 rows (a taller dwarf, a slimmer orc woman) and has never met the head anchor; "Research: one body and the head anchor, together" below tests them as one. |
 | Kicking, jumping, running, kneeling presets, looked at from above | Legs barely read top-down | Only the silhouette reads from above: arms and weapons, not legs. |
 
 ### Gear
@@ -473,7 +473,7 @@ tool's line and wants rewriting once the run confirms it.
 ## Research: one body and the head anchor, together (2026-10-17)
 
 Nothing in this section is ruled. Three efforts ran apart over two days and each is
-unfinished: the head carried by an image (the busts, the judge, steering), the anatomy count,
+unfinished: the head carried by an image (the busts, the head check, steering), the anatomy count,
 and the question whether one human male capture per setup can replace the library of 312. The
 owner's own twenty-pair sheet of 2026-10-16 (the Bodies table) is the reason to pursue the
 last; by its timestamps its matched arm was rendered at 21:10, before the busts existed, and
@@ -494,7 +494,7 @@ Tokens` and `Headtest`, the runs under `headtest/` in the output folder):
 | Words-only NPCs on bust-2: six subjects across six bodies, three renders each | 17 of 18 first renders in the band, 18 of 18 after steering; one `far-down` (a goblin) | run 1, 2026-10-17 01:59, $1.22 with the PCs |
 | PCs on their legacy token heads as `character` | 7 of 8, 8 of 8 | run 1 |
 | PCs universal: the portrait's head-to-waist crop as `character` beside bust-2 | 6 of 8, 8 of 8; the heads a step lower than the NPCs' (six `down`), three steered retries in eight | run 2, 02:16, $0.51 |
-| The judge (flash, four exemplars) against the owner's 21 ruled PC heads | 19 of 21 | 2026-10-16 |
+| The head check (flash, four exemplars) against the owner's 21 ruled PC heads | 19 of 21 | 2026-10-16 |
 | A frontal portrait with a fringe beside any bust | hair over the eyes, seven of seven; words-only on bust-2 with the hair described, `right` first time | Cecil, eleven renders, $0.80 |
 | A camera drop belongs to the capture | `combat-empty` with a lute across the chest, three of three; `dwarf-female-stand-empty`, two of two; a different capture, first time | 2026-10-16 |
 
@@ -504,11 +504,11 @@ Tokens` and `Headtest`, the runs under `headtest/` in the output folder):
   humans of both sexes, each on its matched body and on the human male, and to the owner's eye
   the human-male column held. Against it, the 2026-10-15 rows above (the old camera, no
   anchor): a dwarf on the human body came out taller, an orc woman slimmer. Neither sheet had a
-  bust, the calibrated judge or the anatomy count behind it.
+  bust, the calibrated head check or the anatomy count behind it.
 - **The hair sentence** in the keep line (universal; a no-op for short hair). Unmeasured.
-- **The anatomy judge.** Live on every token and portrait since last night; never scored
+- **The anatomy check.** Live on every token and portrait since last night; never scored
   against a sheet the owner has marked.
-- **The judge on NPC heads.** Its 19 of 21 is on human PC heads, and its exemplars are four
+- **The head check on NPC heads.** Its 19 of 21 is on human PC heads, and its exemplars are four
   PC crops. On an orc, a goblin, a bugbear, a hood or a helmet nobody has checked its words
   against the owner's eye.
 
@@ -536,11 +536,11 @@ before it. Nothing renders without the owner's word.
 
 | Stage | Question | Renders, about | The owner rules on | Decides |
 | --- | --- | --- | --- | --- |
-| 1. The judge on NPC heads | Is the judge right on non-human heads? | none: run 1's 18 NPC plates are on disk (`headtest/2026-10-17-01-59/`) | each NPC head, right or wrong | the judge's accuracy across races and gear; whether ruled NPC crops join the exemplars; the first scored set |
+| 1. The head check on NPC heads | Is the head check right on non-human heads? | none: run 1's 18 NPC plates are on disk (`headtest/2026-10-17-01-59/`) | each NPC head, right or wrong | the head check's accuracy across races and gear; whether ruled NPC crops join the exemplars; the first scored set |
 | 2. The hair line | Does the universal hair sentence keep Cecil's eyes clear and leave the other three alone? | 8 PC renders, $0.47 (`--universal --pcs-only`) | each head; Cecil's hair | the sentence stays or goes; the skill's fringe rule |
-| 3. One body, the full set | The same subjects, words and busts, on the human-male capture of each pose and setup | 26 renders, $1.53 (`--universal --body human-male`) | the head per cell against run 1 and stage 2; the build per cell (the dwarf woman, the goblin, the bugbear, the orc, Kartor); every anatomy verdict by eye | whether the band rate holds or moves on one body; whether build survives in words; the anatomy judge's first score |
+| 3. One body, the full set | The same subjects, words and busts, on the human-male capture of each pose and setup | 26 renders, $1.53 (`--universal --body human-male`) | the head per cell against run 1 and stage 2; the build per cell (the dwarf woman, the goblin, the bugbear, the orc, Kartor); every anatomy verdict by eye | whether the band rate holds or moves on one body; whether build survives in words; the anatomy check's first score |
 | 4. One body, lying down and the hard builds | Prone and dead on the human-male captures for a dwarf, a goblin and a bugbear; a halfling woman and an ogre standing | about 8 renders, $0.45 | build; the lying head (`unclear` is right there) | the last body cases before any ruling |
-| 5. The head anchor tweaks | From stages 1 to 3 and the owner's own list: bust-3 as the universal default (8, $0.35); a tight face crop against the head-to-waist crop (8, $0.47); busts re-captured straight down (the owner's HeroForge, then 18, $0.90); wider exemplars (free, then a re-judge of every run, cents) | each an A/B through headtest | each sheet beside its baseline | the head path for hundreds of tokens: band rate first render, retries per token |
+| 5. The head anchor tweaks | From stages 1 to 3 and the owner's own list: bust-3 as the universal default (8, $0.35); a tight face crop against the head-to-waist crop (8, $0.47); busts re-captured straight down (the owner's HeroForge, then 18, $0.90); wider exemplars (free, then a re-check of every run, cents) | each an A/B through headtest | each sheet beside its baseline | the head path for hundreds of tokens: band rate first render, retries per token |
 | 6. The camera vetting | Which of the 26 human-male captures drop the camera? | the 15 captures stage 3 does not reach, $0.90; the other 11 are in stage 3's manifest | the dropped ones | the captures to re-export before any pose is added |
 
 Stages 1 and 2 first, the baseline on the bodies we have, one of them free; 3 and 4 only
@@ -549,21 +549,21 @@ to 3 (the owner had no tweaks in mind as of the morning of 2026-10-17; the candi
 record's). About $3.50 for stages 1 to 4; 5 and 6 as picked.
 
 **Stage 1 result (2026-10-17, no renders).** The owner ruled blind on run 1's 18 delivered NPC
-heads and the one first render the judge sent back (a numbered sheet, no verdicts on it; the
+heads and the one first render the head check sent back (a numbered sheet, no verdicts on it; the
 rulings and the score are `stage1-rulings.json` beside the run's manifest and in the Desktop
 review folder): the 18 are right ("what I expect"), and the rejected goblin render is bowed ("I
-prefer 14 over 19 because I can see its eyes"). The judge had called the 18 `right` (11) or
+prefer 14 over 19 because I can see its eyes"). The head check had called the 18 `right` (11) or
 `down` (7) and the rejected one `far-down`, so it agrees with the owner 19 of 19 on in-band
 against out, across a human man and woman, an orc, a dwarf woman, a goblin and a bugbear; its
 `down` against `right` is unscored, since the owner accepts both. The set holds one rejected
-head and no hoods or helmets, so this scores the judge's acceptances and barely its rejections;
+head and no hoods or helmets, so this scores the head check's acceptances and barely its rejections;
 those get scored as stages 2 and 3 produce them. Nothing in the head path changes on it.
 
-### Scoring the judges
+### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
-folder beside the manifest, against the judge's verdicts. The numbers to watch are the head
-judge's agreement with the owner, per race and per pose, and the anatomy judge's hits and
+folder beside the manifest, against the head check's verdicts. The numbers to watch are the head
+check's agreement with the owner, per race and per pose, and the anatomy check's hits and
 misses on real flaws. The tooling for it (a numbered sheet, a rulings file, a score line) is
 the next code step, built when stage 1 produces the first rulings and not before.
 
