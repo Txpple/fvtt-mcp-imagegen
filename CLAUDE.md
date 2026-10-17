@@ -25,10 +25,11 @@ mannequin token is carried by an image, never words: a bust the server attaches
 five-step judge on flash against the owner's ruled crops (`src/head.ts`), steered retries, and
 `npm run headtest` (`scripts/headtest.mjs`) as the measurement; and the anatomy check
 (`src/anatomy.ts`): every token and portrait render counted by the judge against an optional
-`anatomy` line, a token's facing included, reported as `anatomy`. Next, on the owner's word,
-the single-body question, one human male capture per setup, measured by
-`npm run headtest -- --body human-male` (the plan is `notes/mannequin-tokens/PLAN.md`).
-Release detail is the GitHub release notes; the dated journal is `docs/log/YYYY-MM.md`.
+`anatomy` line, a token's facing included, reported as `anatomy`. Open research, nothing
+ruled: whether one human male capture per setup can replace the library, tested together with
+the head anchor and the anatomy judge in staged `npm run headtest` runs (`--body`), the
+programme in `notes/mannequin-tokens/PLAN.md`. Release detail is the GitHub release notes; the
+dated journal is `docs/log/YYYY-MM.md`.
 
 The server runs on the Gemini API. The first version of this server wrapped
 a local ComfyUI install with FLUX models and a trained house-style LoRA. That direction is dead:
