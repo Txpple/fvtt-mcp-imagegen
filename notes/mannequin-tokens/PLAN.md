@@ -682,6 +682,13 @@ be the large body's mass, not its head pose); and the smaller creatures are "def
 on the small mannequin (the goblin pairs 21 and 22). If those hold, the answer is fewer bodies, not
 one: the human male for every medium race, the small body kept, the large body open.
 
+*A third lead, the captures' camera (the owner, 2026-10-17):* the library was shot at about 80
+degrees, not straight down (the README's "about fifteen degrees off vertical"), and the owner would
+capture at 90 if the mannequins are ever redone. It bears on the standing captures' bodies leaning
+front-and-above (stage-2 cells 1 and 7, stage-3 cell 7) and on the busts, shot from the same camera;
+for now the words set the camera and the captures give pose, proportions and grip. Something to look
+at later, not before the eyes are settled.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
