@@ -17,10 +17,13 @@ library (`mannequins/`, 312 grey captures, `scripts/mannequin.mjs`), the `illust
 skill's newer owner rules for maps, tiles and tokens, the `art-audit` skill (the batch-level
 second count of limbs, eyes, tendrils and token facing over an installed set, fixed in place), and
 the token changes of 2026-10-16:
-`edit-image` takes `source: "mannequin"` (with a judge-model head check, `src/head.ts`), references
-take role `object`, both render tools take `thinking` and report `thinkingTokens`, and the token
-framing and the mannequin line set the owner's camera, a 90-degree orthographic body with the head
-tilted up (the fifteen-degree pitch is retired). Release
+`edit-image` takes `source: "mannequin"`, references take role `object`, both render tools take
+`thinking` and report `thinkingTokens`, the token framing and the mannequin line set the owner's
+camera, a 90-degree orthographic body (the fifteen-degree pitch is retired), and the head of a
+mannequin token is carried by an image, never words: a bust the server attaches
+(`mannequins/heads/`, `src/heads.ts`, `headAnchor`) or the approved token head as `character`, a
+five-step judge on flash against the owner's ruled crops (`src/head.ts`), steered retries, and
+`npm run headtest` (`scripts/headtest.mjs`) as the measurement. Release
 detail is the GitHub release notes; the dated journal is `docs/log/YYYY-MM.md`.
 
 The server runs on the Gemini API. The first version of this server wrapped
@@ -68,14 +71,22 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
 - Small server: `generate-image`, `edit-image`, `cutout-image`, `imagegen-status`. Resist tool
   sprawl. New work arrives as a `kind`, not a tool (props, battlemaps and overland maps all
   came that way).
-- **The head check** (`src/head.ts`, an owner rule): a mannequin token is a 90-degree overhead
-  body with the head tilted up so the face shows, never bowed into the chest and never a lowered
-  camera that shows the chest head-on. No pixel measure tells those apart across
-  races, hoods and helmets, so the plate is shown to `JUDGE_MODEL` (a flash-lite vision model,
-  temperature 0, a flat `JUDGE_USD` in the session total) for one word. A bowed or up first
-  render is redone once, both billed; the result reports `head`; two bad verdicts still deliver,
-  flagged, since the judge can be wrong and the skill's flaw pass reads every token. A judge
-  that cannot be reached never blocks a render. Tests mock the judge like every other call.
+- **The head** (`src/heads.ts`, `src/head.ts`, owner rules): a mannequin token's head faces the
+  way the body faces, tipped just enough toward the overhead camera that brow, eyes, nose and
+  mouth read, never bowed with the eyes hidden, never the face lifted to the camera, never a
+  dropped camera. Words about the angle fail and a render leans toward the head tilt of any
+  reference that has a head (about 95 renders), so the head is an image: with no
+  `character` reference the server attaches `mannequins/heads/bust-2.png` after the caller's
+  references, bound as a dial (`headAnchor` picks bust-1 to bust-4 or none); a `character`
+  reference is the approved token head and carries the tilt. Then the plate is shown to
+  `JUDGE_MODEL` (flash, temperature 0, a flat `JUDGE_USD` in the session total) beside four crops
+  the owner ruled on (`mannequins/heads/band/`) for one of `far-down`, `down`, `right`, `up`,
+  `far-up`, `camera-dropped`, `unclear`; `down`, `right` and `up` deliver. `far-down` is redone
+  with the next bust up, `far-up` with bust-1, a dropped camera once unchanged (then "change the
+  capture"), at most two retries (`headRetries`), every call billed, then delivered flagged; the
+  result reports `head`. A judge that cannot be reached never blocks a render. Tests mock the
+  judge like every other call; `npm run headtest` is the live measurement, run only on the
+  owner's word (about $1.50 a run), and every change to the head path goes through it.
 
 ## Models and tiers
 

@@ -344,5 +344,78 @@ not raised (ruled not worth it); the words carry the camera.
 
 The same day the tool grew a head check
 (`src/head.ts`): the plate goes to a judge model for one word, a bowed or up first render is redone
-once, and `head` is reported; it never refuses, since the judge can be wrong. Live after the next
-restart; its first verdicts on real renders are the thing to watch.
+once, and `head` is reported; it never refuses, since the judge can be wrong. Its first verdicts on
+real renders, below, found it noise on the head.
+
+**The head is an image, never words (2026-10-16, evening; about 95 renders, about $1.30; the
+sheets are on the owner's Desktop in `PC Tokens`, numbered 1 to 37 across `head-angle-sheet.png`,
+`head-test-sheet.png`, `npc-anchor-sheet.png`, `generic-anchor-sheet.png`, `bust-test-sheet.png`,
+`bust-2-bodies-sheet.png`, `bust-dial-sheet.png` and `busts-range-sheet.png`).** The owner called
+head drift "a real issue in all our tokens" and asked for a systemic, measured fix instead of more
+wording. What the day established:
+
+1. **The band.** The owner ruled on `head-angle-sheet.png`: heads 5, 6, 7, 9, 10, 11 (the live
+   standing and combat tokens of Tychon, Kartor and Lysandra) are right; 1 (a face to the camera)
+   and Cecil's 8 and 12 are wrong. The band runs from eyes-down (5) to face-forward (11): the head
+   faces the way the body faces, tipped just enough toward the overhead camera that brow, eyes,
+   nose and mouth read, hair over the top half of the head; never the face lifted to the camera
+   (chin underside, throat), which the owner dislikes most.
+2. **A render leans toward the head tilt of any reference image that has a head.** Words about
+   the angle (absolute lines, degrees, gaze targets, edits, "exactly as the mannequin's head")
+   fail; binding the head to the mannequin by words held 1 of 4, and a frontal portrait crop was
+   the stronger pull.
+3. **PCs: the approved token head as `character`.** A head-and-shoulders crop of the approved
+   token (about 190 px of the 512, upscaled) held the band 4 of 4 and carries its own tilt; the
+   portrait's head-to-waist crop then goes in as `object` for the outfit only.
+4. **Words-only NPCs: a grey bust as a dial.** The owner captured four busts of the bald human
+   mannequin from the library's Booth camera (`mannequins/heads/bust-1.png` to `bust-4.png`: crown
+   only; brow and eye sockets; eyes, nose and mouth; plus the chin edge; none shows the throat).
+   Bound as a `pose` reference ("a grey clay head showing only how far a head is tipped toward
+   this overhead camera: tip the figure's head exactly like it ... take nothing else from it"),
+   bust-1 sent a guard eyes-down, bust-2 mid-band, bust-3 face-forward; bust-2 on an orc, a goblin,
+   a knight and a dwarf centred the heads with about one step of spread (the goblin and one knight
+   eyes-down); bust-4 sent one guard eyes-down. A bias with spread, not a lock; no identity bleed.
+   The dwarf `stand-empty` capture dropped the camera twice (a front-on body), the known "change
+   the capture" problem, separate from the head.
+5. **The first judge was noise on the head.** It called bowed heads `up` (13, 21, 35), a
+   face-to-camera head `ahead` (1), in-band heads `up` (17, 29, 32) and a bowed one `ahead` (25);
+   its `up` ("the camera dropped") it did catch (32, 33). Its identical re-roll was a coin flip that
+   doubled the cost.
+
+**What the server does now (committed the same night).** `mannequins/heads/` holds the busts and
+the ruled band crops with a README. `edit-image` with `source: "mannequin"` attaches bust-2 after
+the caller's references and binds it as the dial whenever no `character` reference is attached;
+a `character` reference is taken as the approved token head and bound to carry the tilt; the head
+words left the mannequin lead and keep lines (an image carries the head, the words only the
+camera and the no-grey rule; `headAnchor: "none"` brings the words back for a test). The judge
+(`src/head.ts`) sees three band exemplars (`right-05` as DOWN, `right-10` as RIGHT, `right-11` as
+UP) and `wrong-12` as FAR-UP beside the plate and grades `far-down`, `down`, `right`, `up`,
+`far-up`, `camera-dropped`, `unclear`; `down`, `right` and `up` deliver. On the owner's ruled set
+of 21 heads, flash-lite hit the band 16 times (and called a bowed guard `camera-dropped`);
+`gemini-3.5-flash` with the same prompt hit 19 with every known step matched (5 down, 10 right,
+11 up, the bust-3 guard up), and a feature checklist or a locate-then-crop step bought nothing, so
+the judge is flash (a fifth of a cent a call). `render()` steers: `far-down` re-renders with the
+next bust up (bust-3 at least), `far-up` with bust-1, a dropped camera once unchanged and then
+`advice: change the capture`; at most two retries (`headRetries`), then delivered flagged; a PC
+render is steered by adding the bust beside the character head. `head` reports `verdict`,
+`inBand`, `anchorUsed`, `first`, every verdict and the kept plates. `npm run headtest` is the
+measurement: the four PCs on a stand and a combat capture (their band crops as `character`, the
+portrait crop as `object`; Cecil words-only until the owner approves a head of his) and six
+words-only NPCs across bodies (a guard, a knight, an orc, a dwarf woman, a goblin on the small
+body, a bugbear on the large body), three renders each, on bust-2 with steering on; a contact
+sheet with every verdict, the hit rate first render and after steering; `--bust N` runs one bust
+across the NPC set with no retries, `--rejudge` re-grades a run's plates, `--judge` grades any
+images. Every change to the head path runs through it, never one render at a time. The PC set
+is campaign content and lives in the campaign repo (`art/headtest/pcs.json` with the crops).
+
+**The first headtest run (2026-10-17, 01:59; 26 renders, $1.22, under the $1.53 estimate;
+`headtest/2026-10-17-01-59/` in the output folder, the sheet copied to the Desktop as `PC
+Tokens/headtest-1-sheet.png`).** PCs on their token heads: 7 of 8 first renders in the band
+(Tychon's stand `down`, Lysandra's stand `up`, the other five `right`), 8 of 8 after steering:
+Lysandra's combat came back `far-down` on her token head alone and landed `up` with bust-3 added
+beside it. NPCs on bust-2: 17 of 18 first renders in the band, 18 of 18 after steering: one goblin
+`far-down`, landed `right` on bust-3; the knight's three, a guard, a dwarf woman and a goblin read
+`down`, the orcs, the bugbears and the rest `right`. No dropped camera, no clip, no refusal; two
+retries in 26 renders against the old judge's coin flips. Cecil, words-only on bust-2, landed
+`right` on both captures; his approved head for the `character` slot is the owner's to pick from
+this sheet.

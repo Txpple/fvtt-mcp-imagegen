@@ -351,8 +351,9 @@ prompt can simply say the character's name and be understood:
   Attach the standing style shelf (from `art/SHELF.md`) on every portrait and illustration
   call unless the owner asks for something deliberately different.
 - **Tokens take the world's own tokens as the style reference** (words-only and restyle routes
-  only; the mannequin route in Step 4 takes a crop of the character's approved portrait as
-  `character` and crops of signature gear as `object`, never a style image). They are top-down full-body
+  only; the mannequin route in Step 4 takes the character's approved token head as
+  `character`, the portrait's head-to-waist crop as `object` for the outfit, and crops of
+  signature gear as `object`, never a style image). They are top-down full-body
   figures on transparency (`assets/tokens/<name>.png` in the world data). Attach one as
   `role: "style"` and the new token comes out at the same angle and in the same look.
   The tool appends the framing and the chroma plate sentence itself, picks a plate colour the
@@ -498,12 +499,13 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    the shot list; `npm run mannequin -- grid` lists it from the files). One `edit-image` call,
    kind `token`, `source: "mannequin"`, flash, the capture as `sourceImage`, turns a capture
    into a finished token at about 3 cents: the tool binds pose, proportions and grip to the
-   capture and sets the camera itself, the owner's standard (2026-10-16): a 90-degree
-   orthographic top-down body with the head tilted up so the brow, eyes and nose show in front
-   of the crown; the words supply race, sex, age, face, kit, colours and finish. **A known
-   character also gets references: a head-to-waist crop of the approved portrait as
-   `character`, and crops of its signature gear as `object`** (below). A new NPC with no
-   portrait is words alone. About 120 test renders
+   capture, sets the camera itself, the owner's standard (2026-10-16): a 90-degree
+   orthographic top-down body, and carries the head by an image it attaches (a grey bust at
+   the wanted tilt) or by the approved token head; the words supply race, sex, age, face,
+   kit, colours and finish, and never a word about the head. **A known character also gets
+   references: the approved token head as `character`, the portrait's head-to-waist crop as
+   `object` for the outfit, and crops of its signature gear as `object`** (below). A new NPC
+   with no portrait is words alone, and the tool's bust carries its head. About 120 test renders
    (2026-10-15) and the first real run on the four PCs (about 50 renders, 2026-10-16; the record
    is `notes/mannequin-tokens/PLAN.md`) came out usable on the first pass almost every time;
    the PC run is what added the reference and the guide sentence. The
@@ -536,15 +538,21 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    the actor's token size.
    *The recipe.* One instruction, in this shape, with the campaign's finish line from its
    `art/SHELF.md` at the end, and `source: "mannequin"` on the call: the tool then carries the
-   mannequin guide, the head and the no-grey rule, so the instruction says none of that. For a
-   known character, attach the portrait crop as `references: [{ role: "character", label:
-   "<Name>" }]` and each signature piece of gear as `{ role: "object", label: "<the axe>" }`,
-   cropped from the approved art; the tool binds each by its image number, so the instruction
-   only names them. For a new NPC, describe the face in full instead.
-   `<Name> is Image 2. <He|She> is <race, sex, age, build, skin, hair, eyes; horn shape if
-   any>, <anything the mannequin lacks: ONE tail curving out behind to the lower left only,
-   wings folded, a hood>. <He|She> wears <clothing and armour, materials and colours, always
-   the footwear>. Replace
+   mannequin guide, the camera, the head anchor and the no-grey rule, so the instruction says
+   none of that, and nothing about the head, the angle or the camera, ever. For a known
+   character, attach the approved token head (a head-and-shoulders crop of the live token,
+   about 190 px of the 512, upscaled to 512; the campaign shelf files them) as `references:
+   [{ role: "character", label: "<Name>'s head" }]`, the portrait's head-to-waist crop as
+   `{ role: "object", label: "<Name>'s outfit" }`, and each signature piece of gear as
+   `{ role: "object", label: "<the axe>" }`, cropped from the approved art; the tool binds each
+   by its image number, so the instruction only names them. For a new NPC, describe the face
+   in full instead and attach nothing: the tool attaches a grey bust (bust-2) after your
+   references as the head anchor.
+   `Paint it as <Name>, <race, sex, age, build, skin, hair, eyes; horn shape if any>,
+   <anything the mannequin lacks: ONE tail curving out behind to the lower left only, wings
+   folded, a hood>. Image 3 shows <his|her> outfit and gear only: <clothing and armour,
+   materials and colours>; take nothing of its head, face, lighting, background or camera.
+   <Always the footwear>. Replace
    the entire <weapon> in <his|her> fist at the <lower left>, keeping only the fist's grip and
    the line it points along: none of the old <blade, crossguard, pommel> remain. The new weapon
    is <each part, grip to tip>. Replace the entire shield, keeping its exact position and angle
@@ -552,16 +560,19 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    remain, and nothing round is left. The new shield is <shape, material, emblem>. <Any held
    light or magic, named as the key light>. <The finish line>; nothing left grey clay.`
    The rules behind it, each one paid for:
-   - **A known character takes a crop of the approved portrait as `character` (owner,
-     2026-10-16).** Sixteen words-only PC tokens came out 15 of 16 usable, and the owner rejected
-     them: the likeness drifted. A tight face crop (centred on the pupils, about four
-     interpupillary distances wide) bound "use it for the face only" fixed all sixteen faces with
-     the mannequin's pose and camera held; a head-to-waist crop bound as in the recipe did the
-     same and pulled the kit toward the portrait too (plate, shield boss, leather, scarf, robe),
-     so it is the one to use. No render copied the portrait's angle. Horns follow the crop rather
-     than the words, so restate the horn shape when it matters. Since 2026-10-16 the tool binds
-     a `character` reference to features, hair, skin, build and kit only, so the recipe carries
-     no binding sentence of its own.
+   - **A known character takes the approved token head as `character` and the portrait's
+     head-to-waist crop as `object` (owner, 2026-10-16, revised the same evening).** Sixteen
+     words-only PC tokens came out 15 of 16 usable, and the owner rejected them: the likeness
+     drifted. A head-to-waist crop of the portrait as `character` fixed every face and pulled
+     the kit toward the portrait too (plate, shield boss, leather, scarf, robe), and then the
+     head review showed it was also the strongest pull on the head: a render leans toward the
+     head tilt of whatever reference carries a head, and a frontal portrait crop bound as the
+     character lifted faces to the camera. So the portrait crop goes in as `object` for the
+     outfit only (the instruction says "Image 3 shows the outfit and gear only ... take nothing
+     of its head"), and the `character` slot carries a head-and-shoulders crop of the approved
+     token, already at the token camera, which held the band four of four and carries its own
+     tilt. The tool binds that reference as the token head (face, hair, skin, eyes and tilt).
+     Horns follow the crop rather than the words, so restate the horn shape when it matters.
    - **Never attach a whole image beside the mannequin.** A full style token or a full portrait
      gets its subject copied in (a wizard and a harpy came back as the attached drow). The crop
      rule above is the only exception: a crop, bound to the face and kit, nothing else.
@@ -572,32 +583,47 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
      instruction no longer says any of it.
    - **The camera is the owner's standard, set by the tool (2026-10-16).** Tokens are seen
      from straight above at the table, so the standard is a 90-degree orthographic body (the
-     shoulders and crown the largest shapes, feet beneath the body) with the head tilted up so
-     the brow, both eyes and the nose show in front of the crown. In the ortho test (Kartor and
-     Cecil, stand and combat, sixteen renders) that wording landed eight of eight and the owner
-     called it perfect; a plain 90 or 85 gives the same body with no face, and the old
+     shoulders and crown the largest shapes, feet beneath the body). In the ortho test (Kartor
+     and Cecil, stand and combat, sixteen renders) that wording landed eight of eight and the
+     owner called it perfect; a plain 90 or 85 gives the same body with no face, and the old
      fifteen-degree pitch is retired. The tool's `source: "mannequin"` lead sentence and the
-     words-only token framing both carry it, so the instruction says nothing about camera or
-     head; the character preamble binds identity only. The library's captures are shot at about
-     fifteen degrees, and the words override that: the capture gives pose, proportions and
-     grip only. A frontal token head as a `pose` reference pulls the camera frontal: never
-     attach one. Compare every render to the target in the flaw pass anyway, and name the
-     footwear: the mannequin is barefoot, and a figure described without boots came back
-     barefoot. On `prone` and `dead` the pose words win ("knocked down onto the knees", "lying
-     dead, eyes closed") and the camera line does no harm.
-   - **The tool checks the head and says so (2026-10-16).** After a mannequin render the tool
-     shows the plate to a cheap vision model and asks one word: `ahead` (overhead body, face
-     showing), `bowed` (overhead body, head down), `up` (the camera dropped: chest and face
-     head-on) or `unclear`. A bowed or up first render is rendered once more (both billed, the first plate
-     kept as `-head-<verdict>.png`), and the result's `head` reports the verdict, the first
-     verdict and whether it retried. Two bad verdicts still deliver, flagged, because the judge
-     can be wrong: read `head` before the flaw pass, and treat `bowed` or `up` on a delivered
-     token as a re-render, not an edit. When the same capture comes back `up` twice, change the
-     capture rather than the words (Cecil's combat dropped the camera three times on
-     `combat-empty` and landed first time on `combat-dagger-shield` with the shield removed,
-     2026-10-16). `unclear` with an `error` means the judge was not
-     reached and the token went through unchecked; `unclear` without one is a lying, hooded, helmeted
-     or lying figure, which is fine.
+     words-only token framing both carry it, so the instruction says nothing about the camera.
+     The library's captures are shot at about fifteen degrees, and the words override that:
+     the capture gives pose, proportions and grip only. Compare every render to the target in
+     the flaw pass anyway, and name the footwear: the mannequin is barefoot, and a figure
+     described without boots came back barefoot. On `prone` and `dead` the pose words win
+     ("knocked down onto the knees", "lying dead, eyes closed") and the camera line does no
+     harm.
+   - **The server carries the head; the recipe never mentions it (owner rule, 2026-10-16).**
+     The owner's standard for every standing or combat token: the head faces the way the body
+     faces, tipped just enough toward the camera that brow, eyes, nose and mouth read, hair
+     over the top half of the head, never the face lifted to the camera (chin underside,
+     throat), which the owner dislikes most. About 95 renders that day showed that words about
+     the angle (absolute lines, degrees, gaze targets, edits, "exactly as the mannequin's head")
+     fail, and that a render leans toward the head tilt of any reference that has a head. So
+     the head is an image: with no `character` reference the tool attaches a grey HeroForge
+     bust at the wanted tilt (`mannequins/heads/bust-2.png`, the middle of the owner's band)
+     after your references and binds it as a dial; with one, the reference is the approved
+     token head and carries the tilt itself. Then a judge model grades the plate beside four
+     crops the owner ruled on (`mannequins/heads/band/`) on five steps, `far-down`, `down`,
+     `right`, `up`, `far-up`, plus `camera-dropped` and `unclear`; `down`, `right` and `up` are
+     the band and deliver. `far-down` is rendered again with the next bust up (bust-3 at
+     least), `far-up` with bust-1, a dropped camera once unchanged, at most two retries, every
+     kept plate named `-head<n>-<verdict>.png`, and the result's `head` reports `verdict`,
+     `inBand`, `anchorUsed`, `first`, every verdict and the kept plates. Two bad verdicts still
+     deliver, flagged, because the judge can be wrong (19 of 21 on the owner's ruled heads):
+     read `head` before the flaw pass; a delivered `far-up` or `far-down` is a re-render, not
+     an edit. `camera-dropped` twice comes with `advice`: change the capture, not the words
+     (Cecil's combat dropped the camera three times on `combat-empty` and landed first time on
+     `combat-dagger-shield` with the shield removed). `unclear` with an `error` means the judge
+     was not reached and the token went through unchecked; `unclear` without one is a lying,
+     hooded or helmeted figure, which is fine. `headAnchor` picks another bust ("bust-1" to
+     "bust-4", or "none") and `headRetries` caps the retries; neither is needed in the ordinary
+     run. **Never put head wording in the instruction, and never attach a frontal head (a
+     portrait crop as `character`, a frontal token head as `pose`)**: both pull the face to the
+     camera. Every change to the head path runs through `npm run headtest` in the server repo
+     (a fixed set, a contact sheet with every verdict, the hit rate inside the band), never one
+     render at a time.
    - **The dwarf `dead` capture loses the dwarf build**: twice it came back lean, older and grey,
      with and without the crop. One flaw pass naming build, age and hair fixed it both times;
      expect it.
