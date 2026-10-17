@@ -1112,6 +1112,32 @@ crown-only head is what the owner wants at the table is the owner's call from th
 the route is one call per token with no bust, no green marks and no head check in the loop, and
 the eyes question dissolves.
 
+**The no-green control (2026-10-17, 18:15, on the owner's word: "paint out the green eye, make a
+new graphics document and run the test", then "do the elders and pcs in that test too"; 18
+renders, $0.85; `headtest/2026-10-17-18-15-nogreen/`, filed as `EyeColorTests\06-no-green-control`
+with each control beside its green twin on one sheet).** The owner read the day's 27 of 30 as "the
+green eye is the fix"; the confound was that the green marks and the 90-degree capture arrived
+together. So the same capture with the green painted out by script (`Mann 15 Stand
+3-Portrait-nogreen.png`, the 67 green pixels and a one-pixel fringe filled from the grey around
+them), the same words with the eyes line kept but naming the mannequin's eyes and no green, the
+same bust-2, the four PCs and four Elders on their crops and ten species words-only, checks
+report-only (`scripts/research/nogreen.mjs`). *Result, the control against its green twin:*
+
+| | eyes reading, by my eye | by the eyes check |
+| --- | --- | --- |
+| green marks (the twins) | 17 of 18 | 16 of 18 |
+| no green, same capture | 12 of 18 | 11 of 18 |
+
+The six the green had and the control lost: Cecil, Tobin, Cassia, the dwarf man, the gnome man and
+the goliath woman, every one a head bowed a step with the eyes under the brow; Brom failed both
+ways. The heads sit lower without the marks on most of the eighteen, so the green is doing two
+things: placing the eyes and, it seems, holding the tilt. What it says: **both halves are real.**
+The capture alone, shot at 90 with the head tipped up and bust-2 beside it, lands eyes on about
+two in three, against about half on the grey library; the green marks on top take it to about
+nineteen in twenty. So the recapture carries most of the gain, and the green marks are worth
+painting on every capture (two slivers, by script or in HeroForge) for the rest. At eighteen a side
+this is one run, not a rate to three places; the owner's eye on the sheet.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
