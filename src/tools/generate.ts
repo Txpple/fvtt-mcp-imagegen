@@ -3,8 +3,10 @@
 
 import { z } from 'zod';
 import { toInputSchema } from '../utils/schema.js';
+import { isAnatomyKind } from '../anatomy.js';
 import { nearestAspect, PRESETS, PROP_CELL_PX, parseFootprint } from '../presets.js';
 import {
+  anatomySchema,
   confirmProSchema,
   creatureSizeSchema,
   kindSchema,
@@ -49,6 +51,7 @@ const generateImageSchema = z.object({
         'rendered at the nearest API aspect and delivered at 300 px per cell (600x300 here). ' +
         'Library files carry it in their name: "TC_Anvil 02_2x1.png".'
     ),
+  anatomy: anatomySchema,
 });
 
 export class GenerateImageTool {
@@ -63,7 +66,10 @@ export class GenerateImageTool {
           'the model tier, aspect, size, framing text, and post-processing; the result is a ' +
           'finished PNG on disk. READ IT before showing anyone: count limbs per creature, ' +
           'check for duplicated spell effects or props, stray signatures, and reference faces ' +
-          'on the wrong figure; obvious flaws are one edit-image call away. Every kind runs ' +
+          'on the wrong figure; obvious flaws are one edit-image call away. Every token and ' +
+          'portrait render is also counted by a judge model (heads, eyes, limbs, hands and ' +
+          "fingers, tails, tendrils, held objects, and a token's facing) against an optional " +
+          '`anatomy` line from the book; the result reports `anatomy`. Every kind runs ' +
           'on flash by default; tier: "pro" refuses without confirmPro: true and states the cost. ' +
           'Returns the file path, dimensions, and estimated spend.',
         inputSchema: toInputSchema(generateImageSchema),
@@ -79,6 +85,12 @@ export class GenerateImageTool {
       throw new Error(
         `${p.kind} is a repaint of an existing map: call edit-image with the map file as ` +
           'sourceImage. This server does not paint maps from scratch.'
+      );
+    }
+    if (p.anatomy && !isAnatomyKind(p.kind)) {
+      throw new Error(
+        'anatomy is for kind "token" or "portrait" only: one creature counted against its ' +
+          `description. Omit anatomy for a ${p.kind}.`
       );
     }
     const tier = resolveTier(p.kind, p.tier, p.confirmPro);
@@ -99,6 +111,7 @@ export class GenerateImageTool {
       slug: p.slug,
       ...(p.creatureSize ? { creatureSize: p.creatureSize } : {}),
       ...(p.thinking ? { thinking: p.thinking } : {}),
+      ...(p.anatomy ? { anatomy: p.anatomy } : {}),
       ...(fp
         ? {
             aspect: nearestAspect(fp.w / fp.h),

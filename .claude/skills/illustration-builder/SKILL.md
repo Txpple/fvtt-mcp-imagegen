@@ -448,6 +448,14 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    - **Signatures and text**: scribbles in a corner, lettering on banners, watermark-like marks.
    - **Objects that make no sense**: a shield strap to nothing, a staff passing through a body,
      a reflection that does not match.
+   **The server counts tokens and portraits for you, against the book** (owner rule
+   2026-10-16): pass `anatomy` on every token and portrait call, one line from the Monster
+   Manual ("two arms, two legs, one large eye, no tail"; "a mushroom with exactly four tendrils
+   and no limbs"), and the result's `anatomy` reports the judge's count, each flaw placed in the
+   picture, and for a token which edge the head points to with the rotation that fixes it
+   (Foundry's front is the top). Read that report before the flaw pass and count anyway: the
+   judge can be wrong, and it never fixes or refuses. A `rotate` on a token is a Pillow turn of
+   the PNG, never a re-render.
    If any of these is **obvious**, it goes through `edit-image` in one instruction that names
    every flaw precisely and ends with "keep everything else identical", then gets Read again.
    Two edit passes at most; if the third read still shows it, re-generate instead. **Name the

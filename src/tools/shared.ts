@@ -7,6 +7,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import sharp from 'sharp';
 import { z } from 'zod';
+import { type AnatomyKind, type AnatomyReport, isAnatomyKind, judgeAnatomy } from '../anatomy.js';
 import { encodeMap, mapBack, mapFormat, type PadPlan } from '../battlemap.js';
 import { type ChromaKey, chromaSuffix, pickChromaKey } from '../chroma.js';
 import type { CutoutFn, CutoutResult } from '../cutout.js';
@@ -117,6 +118,22 @@ export const thinkingSchema = z
       'default is medium). Thinking is billed at the text rate, from a fraction of a cent to a ' +
       'few cents a render; the result reports thinkingTokens. Try "high" on a prompt that ' +
       'carries many constraints at once (a mannequin token with a face and gear to match).'
+  );
+
+export const anatomySchema = z
+  .string()
+  .min(1)
+  .max(400)
+  .optional()
+  .describe(
+    'Tokens and portraits only: what the creature should have, in one line from the Monster ' +
+      'Manual ("two arms, two legs, one large eye, no tail"; "a mushroom with exactly four ' +
+      'tendrils and no limbs"). Every token and portrait render is shown to the judge model, ' +
+      'which counts heads, eyes, limbs, hands and fingers, tails, tendrils and held objects, ' +
+      'flags what differs from this line (with no line, only what is wrong on any creature), ' +
+      "and for a token says which edge the head points to (Foundry's front is the top; the " +
+      'report gives the rotation that fixes it); the result reports `anatomy`. Read it, then ' +
+      'look anyway: the judge can be wrong, and a flaw is one edit-image call away.'
   );
 
 /** Resolve the tier and enforce the Pro gate. Throws the owner-facing refusal. */
@@ -237,6 +254,11 @@ export interface RenderInput {
    * bound to identity only.
    */
   head?: { anchor: HeadAnchor; retries: number; identity?: boolean };
+  /**
+   * Tokens and portraits: what the creature should have, for the anatomy check. The check runs
+   * on every token and portrait render, with or without a line (anatomy.ts).
+   */
+  anatomy?: string;
 }
 
 /** Kinds rendered on a chroma plate, edge-checked, and cut to alpha. */
@@ -261,6 +283,8 @@ export interface RenderOutput {
   edgeRetried?: boolean;
   /** Mannequin tokens: the judge's word on the head, the anchor used, and any steered retries. */
   head?: HeadReport;
+  /** Tokens and portraits: the judge's count, each flaw placed, and a token's facing. */
+  anatomy?: AnatomyReport;
   /** Battlemaps: the source's pixel size and the whole-number scale the map was delivered at. */
   source?: { width: number; height: number };
   scale?: number;
@@ -411,6 +435,14 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       ...(checked.error ? { error: checked.error } : {}),
     };
   }
+  // The anatomy check (owner rule 2026-10-16): every token and portrait is counted by the judge
+  // on the plate it delivers, after the head is settled, against the caller's line from the
+  // book when there is one (anatomy.ts). Reported, never refused and never re-rendered: a flaw
+  // is one edit away and the owner approves the fix; a mis-facing token is a rotation.
+  let anatomy: AnatomyReport | undefined;
+  if (isAnatomyKind(input.kind)) {
+    anatomy = await checkAnatomy(deps, png, input.kind, input.anatomy);
+  }
   const base = {
     kind: input.kind,
     tier: input.tier,
@@ -420,6 +452,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     ...(thinkingTokens !== undefined ? { thinkingTokens } : {}),
     ...(edgeRetried ? { edgeRetried } : {}),
     ...(head ? { head } : {}),
+    ...(anatomy ? { anatomy } : {}),
   };
 
   if (cut && chromaKey) {
@@ -465,6 +498,27 @@ async function checkHead(
     return { verdict };
   } catch (e) {
     return { verdict: 'unclear', error: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+/** Count a render's anatomy; a judge that cannot be reached never blocks the render. */
+async function checkAnatomy(
+  deps: ToolDeps,
+  image: Buffer,
+  kind: AnatomyKind,
+  expected?: string
+): Promise<AnatomyReport> {
+  try {
+    const report = await judgeAnatomy(deps.gemini, image, kind, expected);
+    deps.spend.recordJudge(JUDGE_USD);
+    return report;
+  } catch (e) {
+    return {
+      verdict: 'unclear',
+      found: '',
+      flaws: [],
+      error: e instanceof Error ? e.message : String(e),
+    };
   }
 }
 

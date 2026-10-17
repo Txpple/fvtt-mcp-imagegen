@@ -28,26 +28,42 @@ let propSrc: string;
 let mapSrc: string;
 let sent: Array<{ url: string; body: any }>;
 let cuts: CutoutOptions[];
-/** The judge's answers, in order; 'ERROR' makes the judge call fail; empty answers RIGHT. */
+/** The head judge's answers, in order; 'ERROR' makes the judge call fail; empty answers RIGHT. */
 let verdicts: string[] = [];
 let judged: Array<{ url: string; body: any }> = [];
+/** The anatomy judge's answers, in order; 'ERROR' fails the call; empty answers a clean count. */
+let counts: string[] = [];
+let counted: Array<{ url: string; body: any }> = [];
+const CLEAN_COUNT =
+  'COUNTS: heads 1, eyes 2, arms 2, legs 2, hands 2 (5 fingers each), tails 0, held objects 1\n' +
+  'FACING: TOP\nFLAWS: none\nVERDICT: OK';
+
+/** Answer a judge call: the anatomy count (its prompt asks for COUNTS) or the head grade. */
+function judgeResponse(url: string, body: any): Response {
+  const anatomy = /COUNTS:/.test(body.contents[0].parts.at(-1).text);
+  (anatomy ? counted : judged).push({ url, body });
+  const answer = anatomy ? (counts.shift() ?? CLEAN_COUNT) : (verdicts.shift() ?? 'RIGHT');
+  if (answer === 'ERROR')
+    return new Response('{"error":{"message":"judge down"}}', { status: 500 });
+  return new Response(
+    JSON.stringify({ candidates: [{ content: { parts: [{ text: answer }] } }] }),
+    { status: 200 }
+  );
+}
+
+function resetJudges() {
+  judged = [];
+  verdicts = [];
+  counted = [];
+  counts = [];
+}
 
 function fakeGemini(width = 1024, height = 1024, usage?: Record<string, number>): Gemini {
   sent = [];
-  judged = [];
-  verdicts = [];
+  resetJudges();
   const fakeFetch = (async (url: any, init: any) => {
     const body = JSON.parse(init.body);
-    if (String(url).includes(`/models/${JUDGE_MODEL}:`)) {
-      judged.push({ url: String(url), body });
-      const word = verdicts.shift() ?? 'RIGHT';
-      if (word === 'ERROR')
-        return new Response('{"error":{"message":"judge down"}}', { status: 500 });
-      return new Response(
-        JSON.stringify({ candidates: [{ content: { parts: [{ text: word }] } }] }),
-        { status: 200 }
-      );
-    }
+    if (String(url).includes(`/models/${JUDGE_MODEL}:`)) return judgeResponse(String(url), body);
     sent.push({ url: String(url), body });
     // Answer on the plate colour the prompt asked for, as the real model does.
     const asked = /chroma-key \w+ \((#[0-9A-F]{6})\)/.exec(body.contents[0].parts.at(-1).text)?.[1];
@@ -107,8 +123,10 @@ const fakeCutout: CutoutFn = async opts => {
 /** A Gemini that answers with these plates in turn: 'clean' (flat plate) or 'clipped'. */
 function sequenceGemini(plates: Array<'clean' | 'clipped'>): Gemini {
   sent = [];
+  resetJudges();
   const fakeFetch = (async (url: any, init: any) => {
     const body = JSON.parse(init.body);
+    if (String(url).includes(`/models/${JUDGE_MODEL}:`)) return judgeResponse(String(url), body);
     sent.push({ url: String(url), body });
     const kind = plates[Math.min(sent.length - 1, plates.length - 1)];
     const bg =
@@ -862,7 +880,7 @@ describe('edit-image', () => {
     expect(fs.existsSync(r.file)).toBe(true);
   });
 
-  it('a plain token edit asks no judge', async () => {
+  it('a plain token edit asks no head judge; the anatomy count still runs', async () => {
     const { dispatch } = build();
     const r: any = await dispatch('edit-image', {
       sourceImage: refPng,
@@ -872,6 +890,8 @@ describe('edit-image', () => {
     });
     expect(judged).toHaveLength(0);
     expect(r.head).toBeUndefined();
+    expect(counted).toHaveLength(1);
+    expect(r.anatomy.verdict).toBe('ok');
   });
 
   it('mannequin source: refused on any kind but token, before any network call', async () => {
@@ -1122,6 +1142,151 @@ describe('battlemaps', () => {
     expect(BATTLEMAP_EDIT_KEEP).toMatch(/never what is in it/);
     expect(BATTLEMAP_EDIT_KEEP).toMatch(/cutaway floor plan/);
     expect(BATTLEMAP_EDIT_KEEP).not.toMatch(/same colou?rs/);
+  });
+});
+
+describe('the anatomy check', () => {
+  it('tokens: every token render is counted on its plate, and the report carries the facing', async () => {
+    const { dispatch, spend } = build();
+    const r: any = await dispatch('generate-image', {
+      kind: 'token',
+      prompt: 'a knight',
+      slug: 'knight',
+    });
+    expect(sent).toHaveLength(1);
+    expect(judged).toHaveLength(0);
+    expect(counted).toHaveLength(1);
+    const parts = counted[0].body.contents[0].parts;
+    expect(parts).toHaveLength(2);
+    expect(parts[1].text).toMatch(/^This is a virtual tabletop token/);
+    expect(parts[1].text).toMatch(/No description of the creature was given/);
+    expect(parts[1].text).toMatch(/FACING: TOP, BOTTOM, LEFT or RIGHT/);
+    const m = await sharp(Buffer.from(parts[0].inline_data.data, 'base64')).metadata();
+    expect(Math.max(m.width ?? 0, m.height ?? 0)).toBeLessThanOrEqual(1024);
+    expect(r.anatomy).toEqual({
+      verdict: 'ok',
+      found: 'heads 1, eyes 2, arms 2, legs 2, hands 2 (5 fingers each), tails 0, held objects 1',
+      flaws: [],
+      facing: 'top',
+    });
+    // One 1K render plus one judge call, in the session total only.
+    expect(r.estimatedUsd).toBe(0.0336);
+    expect(spend.totalUsd).toBe(0.036);
+  });
+
+  it('portraits: the anatomy line goes to the judge, no facing is asked, and the flaws come back placed', async () => {
+    const { dispatch } = build();
+    counts = [
+      'COUNTS: heads 1, eyes 2, arms 3, legs 2\nFLAWS:\n- a third arm rises behind the left shoulder\n- two eyes where one is expected\nVERDICT: FLAWED',
+    ];
+    const r: any = await dispatch('generate-image', {
+      kind: 'portrait',
+      prompt: 'a gaunt one-eyed aberration',
+      slug: 'nothic',
+      anatomy: 'two arms, two legs, one large eye, no tail',
+    });
+    expect(counted).toHaveLength(1);
+    const text = counted[0].body.contents[0].parts[1].text;
+    expect(text).toMatch(/^This is a character portrait/);
+    expect(text).toContain('The creature should have: two arms, two legs, one large eye, no tail.');
+    expect(text).not.toMatch(/FACING/);
+    expect(r.anatomy).toEqual({
+      verdict: 'flawed',
+      found: 'heads 1, eyes 2, arms 3, legs 2',
+      flaws: ['a third arm rises behind the left shoulder', 'two eyes where one is expected'],
+    });
+    expect(fs.existsSync(r.file)).toBe(true);
+  });
+
+  it('tokens: a front that is not at the top is a flaw with the rotation that fixes it', async () => {
+    const { dispatch } = build();
+    counts = ['COUNTS: heads 1, arms 2, legs 2\nFACING: BOTTOM\nFLAWS: none\nVERDICT: OK'];
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a rusted blade',
+      kind: 'token',
+      slug: 'guard',
+      anatomy: 'two arms, two legs',
+    });
+    expect(counted[0].body.contents[0].parts[1].text).toContain(
+      'The creature should have: two arms, two legs.'
+    );
+    expect(r.anatomy).toMatchObject({ verdict: 'flawed', facing: 'bottom', rotate: 180 });
+    expect(r.anatomy.flaws).toHaveLength(1);
+    expect(r.anatomy.flaws[0]).toMatch(/rotate the PNG 180 degrees clockwise/);
+  });
+
+  it('mannequin tokens are counted once, after the head is settled, on the delivered plate', async () => {
+    const { dispatch } = build();
+    verdicts = ['FAR-DOWN', 'RIGHT'];
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+    });
+    expect(sent).toHaveLength(2);
+    expect(judged).toHaveLength(2);
+    expect(counted).toHaveLength(1);
+    expect(r.head.verdict).toBe('right');
+    expect(r.anatomy.verdict).toBe('ok');
+  });
+
+  it('a clipped first render is counted only once, on the clean one', async () => {
+    const { dispatch } = build(sequenceGemini(['clipped', 'clean']));
+    const r: any = await dispatch('generate-image', {
+      kind: 'token',
+      prompt: 'a knight',
+      slug: 'k',
+    });
+    expect(sent).toHaveLength(2);
+    expect(counted).toHaveLength(1);
+    expect(r.anatomy.verdict).toBe('ok');
+  });
+
+  it('icons, props and illustrations are not counted; an anatomy line on them is refused before any network call', async () => {
+    const { dispatch } = build();
+    const r: any = await dispatch('generate-image', { kind: 'icon', prompt: 'a key', slug: 'k' });
+    expect(counted).toHaveLength(0);
+    expect(r.anatomy).toBeUndefined();
+    await expect(
+      dispatch('generate-image', { kind: 'icon', prompt: 'a key', slug: 'k', anatomy: 'one key' })
+    ).rejects.toThrow(/anatomy.*"token" or "portrait"/);
+    await expect(
+      dispatch('edit-image', {
+        sourceImage: propSrc,
+        instruction: 'rust it',
+        kind: 'prop',
+        slug: 'anvil',
+        anatomy: 'no limbs',
+      })
+    ).rejects.toThrow(/anatomy.*"token" or "portrait"/);
+    expect(sent).toHaveLength(1);
+  });
+
+  it('a judge that cannot be reached leaves the count unclear and never blocks the render', async () => {
+    const { dispatch } = build();
+    counts = ['ERROR'];
+    const r: any = await dispatch('generate-image', {
+      kind: 'portrait',
+      prompt: 'a knight',
+      slug: 'knight',
+    });
+    expect(r.anatomy.verdict).toBe('unclear');
+    expect(r.anatomy.error).toMatch(/judge down/);
+    expect(fs.existsSync(r.file)).toBe(true);
+  });
+
+  it("an answer the parser cannot read is unclear, with the judge's words kept", async () => {
+    const { dispatch } = build();
+    counts = ['Looks fine to me.'];
+    const r: any = await dispatch('generate-image', {
+      kind: 'token',
+      prompt: 'a knight',
+      slug: 'knight',
+    });
+    expect(r.anatomy).toEqual({ verdict: 'unclear', found: 'Looks fine to me.', flaws: [] });
   });
 });
 

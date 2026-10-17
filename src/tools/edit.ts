@@ -4,11 +4,13 @@
 import { z } from 'zod';
 import { toInputSchema } from '../utils/schema.js';
 import sharp from 'sharp';
+import { isAnatomyKind } from '../anatomy.js';
 import { padPlan, padSource } from '../battlemap.js';
 import { DEFAULT_BUST, HEAD_ANCHOR_CHOICES, type HeadAnchor } from '../heads.js';
 import { alphaBox } from '../post.js';
 import { type Kind, nearestAspect, PRESETS } from '../presets.js';
 import {
+  anatomySchema,
   confirmProSchema,
   creatureSizeSchema,
   kindSchema,
@@ -86,6 +88,7 @@ const editImageSchema = z.object({
       'Mannequin tokens only. How many steered re-renders a head verdict outside the band may ' +
         'buy (default 2; 0 for a calibration run that wants first-render verdicts only).'
     ),
+  anatomy: anatomySchema,
 });
 
 export const EDIT_PREAMBLE =
@@ -254,7 +257,11 @@ export class EditImageTool {
           "unclear; down, right and up are inside the owner's band and deliver. far-down is " +
           're-rendered with the next bust up, far-up with bust-1, a dropped camera once ' +
           'unchanged (twice means change the capture), at most two retries (headRetries), then ' +
-          'delivered flagged; every kept plate and verdict is in `head` (read it). ' +
+          'delivered flagged; every kept plate and verdict is in `head` (read it). Every token ' +
+          'and portrait edit is counted by the judge as well (heads, eyes, limbs, hands and ' +
+          "fingers, tails, tendrils, held objects, and a token's facing) against an optional " +
+          '`anatomy` line from the book; the result reports `anatomy`: what it found, each flaw ' +
+          'placed in the picture, and for a token the rotation that brings its front to the top. ' +
           'Props (kind "prop") get object-only wording (no figures added) and come back cut at ' +
           "the source file's exact pixel size, ready for the same tile slot. Battlemaps " +
           '(kind "battlemap") restyle a bought map with the layout locked: the result lands on ' +
@@ -276,6 +283,12 @@ export class EditImageTool {
       throw new Error(
         `source: "${p.source}" is for kind "token" only: a mannequin is painted into a token. ` +
           `Omit source for a ${p.kind} edit.`
+      );
+    }
+    if (p.anatomy && !isAnatomyKind(p.kind)) {
+      throw new Error(
+        'anatomy is for kind "token" or "portrait" only: one creature counted against its ' +
+          `description. Omit anatomy for a ${p.kind} edit.`
       );
     }
     // Edits default to flash regardless of kind; the spike showed no gain from pro here.
@@ -350,6 +363,7 @@ export class EditImageTool {
       slug: p.slug,
       ...(p.creatureSize ? { creatureSize: p.creatureSize } : {}),
       ...(p.thinking ? { thinking: p.thinking } : {}),
+      ...(p.anatomy ? { anatomy: p.anatomy } : {}),
       ...(headAnchor
         ? {
             head: {

@@ -26,6 +26,12 @@ Tools used: `imagegen-status`, `edit-image` (imagegen); the Read tool on every i
 through the shell for crops, rotations and the pixel diff; `asset-info`, `upload-asset`,
 `find-asset-references` (the dnd5e MCP); `SendUserFile` for the owner's approval.
 
+The server does the first count itself: every token and portrait render reports `anatomy` (the
+judge's count against the call's `anatomy` line, each flaw placed, and for a token which edge the
+head points to with the rotation that fixes it). A batch made since that check landed starts from
+those reports, kept in the render results or the batch's notes; this audit still reads every image,
+because the judge can be wrong and the reports do not survive an install.
+
 ## Step 0 — Scope and ground
 
 - **The batch** is what the user names: a section of the campaign's `art/SHELF.md` (one table of
@@ -86,7 +92,9 @@ through the shell for crops, rotations and the pixel diff; `asset-info`, `upload
   rises behind its left shoulder … keep everything else identical" removed a spare arm cleanly on
   the first try with the rest of the picture unchanged. **Never regenerate**: a new render loses
   the look the owner approved, and the whole point is that nothing but the flaw moves. A token's
-  source is its cut PNG as it is; the tool re-plates and re-cuts it in the same call.
+  source is its cut PNG as it is; the tool re-plates and re-cuts it in the same call. Pass the
+  book's line as `anatomy` on the fix, so the result's `anatomy` report counts the fix for you
+  before you crop and count it yourself.
 - **Prove the edit was an edit.** Diff the result against the source with Pillow (the share of
   pixels that moved by more than a little). An honest one-spot fix moves under about four percent
   of the picture (1.2, 2.4 and 3.5 on the three fixes of 2026-10-16). A result that moved most

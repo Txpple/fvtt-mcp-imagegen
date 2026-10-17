@@ -23,7 +23,9 @@ camera, a 90-degree orthographic body (the fifteen-degree pitch is retired), and
 mannequin token is carried by an image, never words: a bust the server attaches
 (`mannequins/heads/`, `src/heads.ts`, `headAnchor`) or the approved token head as `character`, a
 five-step judge on flash against the owner's ruled crops (`src/head.ts`), steered retries, and
-`npm run headtest` (`scripts/headtest.mjs`) as the measurement. Release
+`npm run headtest` (`scripts/headtest.mjs`) as the measurement; and the anatomy check
+(`src/anatomy.ts`): every token and portrait render counted by the judge against an optional
+`anatomy` line, a token's facing included, reported as `anatomy`. Release
 detail is the GitHub release notes; the dated journal is `docs/log/YYYY-MM.md`.
 
 The server runs on the Gemini API. The first version of this server wrapped
@@ -87,6 +89,19 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
   result reports `head`. A judge that cannot be reached never blocks a render. Tests mock the
   judge like every other call; `npm run headtest` is the live measurement, run only on the
   owner's word (about $1.50 a run), and every change to the head path goes through it.
+- **The anatomy** (`src/anatomy.ts`, owner rule): every token and portrait render is
+  shown to `JUDGE_MODEL` (the image at 1024 on its long side, one `JUDGE_USD` in the session
+  total) after the head is settled, and counted: heads, eyes, arms, legs, hands and fingers,
+  tails, tendrils, wings, held objects. With an `anatomy` line from the caller (the Monster
+  Manual's: "two arms, two legs, one large eye") the judge flags every difference; without one,
+  only what is wrong on any creature (a limb belonging to no body, six fingers, a weapon painted
+  twice, a second head). A token's answer also says which edge its head points to, and a front
+  not at the top is a flaw with the clockwise rotation that fixes it (Foundry's front is the top).
+  The result reports `anatomy` (`verdict`, `found`, `flaws`, `facing`, `rotate`); it never
+  refuses and never re-renders, since a flaw is one `edit-image` away and the owner approves the
+  fix, and the judge can be wrong. Born of a batch of eleven approved actors that went to the
+  table with three arms, five tendrils and a second eye on a one-eyed creature, uncounted.
+  `anatomy` on any other kind is refused before any network call.
 
 ## Models and tiers
 
