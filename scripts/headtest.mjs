@@ -7,7 +7,7 @@
 // built server exactly as the MCP does (dist/), so build first.
 //
 //   node scripts/headtest.mjs [--pcs <pcs.json>] [--npcs-only | --pcs-only] [--repeat <n>]
-//                             [--bust <1-4>] [--universal] [--yes]
+//                             [--bust <1-4>] [--universal] [--only <id,id>] [--yes]
 //   node scripts/headtest.mjs --rejudge <run dir>          re-judge a run's plates, no renders
 //   node scripts/headtest.mjs --judge <image> [<image>...]  judge any plates or tokens, no renders
 //
@@ -19,7 +19,8 @@
 // approved token head (mannequins/heads/band/ or the campaign shelf), the object one the
 // portrait's head-to-waist crop for the outfit. --universal renders each PC's "universal" entry
 // instead (the portrait crop as character, bound to identity only, with the bust carrying the
-// head, bust-2 or --bust N): the route that needs no approved token head.
+// head, bust-2 or --bust N): the route that needs no approved token head. An entry's own
+// "headAnchor" wins over the default. --only keeps the items whose id contains one of the names.
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -123,6 +124,7 @@ const rejudgeDir = opt('--rejudge');
 const judgeAt = args.indexOf('--judge');
 const yes = flag('--yes');
 const universal = flag('--universal');
+const only = (opt('--only') ?? '').split(',').filter(Boolean);
 if (bust && !/^[1-4]$/.test(bust)) {
   console.error('--bust takes 1, 2, 3 or 4');
   process.exit(2);
@@ -304,7 +306,10 @@ if (!npcsOnly) {
               }
             : {}),
           ...(universal
-            ? { headAnchor: `bust-${bust ?? '2'}`, ...(bust ? { headRetries: 0 } : {}) }
+            ? {
+                headAnchor: entry.headAnchor ?? `bust-${bust ?? '2'}`,
+                ...(bust ? { headRetries: 0 } : {}),
+              }
             : pc.headAnchor
               ? { headAnchor: pc.headAnchor }
               : {}),
@@ -330,6 +335,11 @@ if (!pcsOnly) {
         },
       });
     }
+  }
+}
+if (only.length) {
+  for (let i = items.length - 1; i >= 0; i--) {
+    if (!only.some(n => items[i].id.includes(n))) items.splice(i, 1);
   }
 }
 if (!items.length) {
