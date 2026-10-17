@@ -843,6 +843,21 @@ judged here:
 Spend waits on the owner's word in this session; this is a plan entry. It runs only if the edit
 pass does not deliver eyes on most of the fourteen.
 
+**The eyes-open edit pass ran (2026-10-17, on the owner's word here; 14 edits, $0.60;
+`headtest/*-eyes-edit/` in the output folder, filed blind as `12-eyes-open-edit-pass` with a
+before/after pairs sheet; awaiting the owner's ruling).** One `edit-image`, kind token, on each of
+the fourteen eyeless delivered tokens (stage 2b's three, stage 3's eleven), the line a face change
+only ("open both of the figure's eyes fully beneath the brow so that the whites and the irises of
+both eyes show clearly ... keep everything else identical: the same head and its tilt, the same
+hair, face, expression, pose, gear, colours, lighting and camera"), then the two check words on the
+result. By the checks: eyes on 14 of 14, in band on 13 of 14 at about 4.3 cents each, no retries.
+The one out is Cecil's stand, lifted to `far-up`; three others came back `up` where the originals
+read `down` or `right` (Kartor combat, knight-1, dwarf-woman-3), so the edit may raise the head as
+it opens the eyes, which is the owner's call from the pairs. If the owner passes most of the
+fourteen, the no-eyes remedy in the server becomes one edit on the delivered plate (pose kept, one
+call) instead of a re-render on the next bust, and the painted-eyes bust stays a lever for the
+first render rather than a remedy.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
