@@ -114,8 +114,12 @@ export const TOKEN_EDIT_KEEP =
  * an image (a bust the tool attaches, or the approved token head as `character`), never by
  * words: about 95 renders on 2026-10-16 showed a render leans toward the head tilt of whatever
  * reference carries a head and that every head sentence tried failed. Said as presence
- * throughout: a negation draws the thing. The instruction supplies everything else, and no grey
- * may remain.
+ * throughout: a negation draws the thing. The hair sentence is universal (2026-10-17): a
+ * portrait whose hair frames the face from the front came back with the hair over the eyes on
+ * nine top-down renders in a row, which no bust could lift, and the route must hold for hundreds
+ * of tokens with nobody tuning an instruction; it is a description of the figure, not of the
+ * head's angle, and a no-op for short or swept-back hair. The instruction supplies everything
+ * else, and no grey may remain.
  */
 export const MANNEQUIN_EDIT_SOURCE =
   'Image 1 is a grey mannequin: the guide for the pose, the body proportions and the grip. ' +
@@ -124,7 +128,8 @@ export const MANNEQUIN_EDIT_SOURCE =
   'directly beneath the body. ';
 export const MANNEQUIN_EDIT_KEEP =
   'Paint the figure in exactly this stance, every limb and weapon where the mannequin has them, ' +
-  'the camera straight down. The grey clay is replaced entirely by the described figure, with ' +
+  'the camera straight down. Any hair lies back over the top of the head, leaving the brow and ' +
+  'both eyes clear of it. The grey clay is replaced entirely by the described figure, with ' +
   'nothing left grey. Remove any cast shadow. Keep the whole figure, weapons included, inside ' +
   'the frame with a margin on every side; nothing crosses the edge.';
 

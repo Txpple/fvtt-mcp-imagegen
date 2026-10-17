@@ -646,6 +646,10 @@ describe('edit-image', () => {
     expect(MANNEQUIN_EDIT_SOURCE).toMatch(/90-degree orthographic top-down view/);
     expect(MANNEQUIN_EDIT_SOURCE).not.toMatch(/eyes/);
     expect(MANNEQUIN_EDIT_KEEP).toMatch(/the camera straight down\./);
+    // Universal, never per character: hair off the brow is a description, not an angle.
+    expect(MANNEQUIN_EDIT_KEEP).toMatch(
+      /hair lies back over the top of the head, leaving the brow/
+    );
     expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/head/);
     expect(MANNEQUIN_EDIT_KEEP).toMatch(/nothing left grey/);
     expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/face, hair/);
