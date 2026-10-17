@@ -711,6 +711,31 @@ back, Kartor's stand in band, and the orc's cell 16, "no eyes" on both calibrati
 "eyes yes" live: the wobble at the boundary reaches the eyes word too, and the majority-of-three
 remedy (three times a fifth of a cent per word) is still the open item for it.
 
+**The eight PCs with the gate live (2026-10-17, 15:15; 8 renders, $0.85 with retries;
+`headtest/2026-10-17-15-15-universal/`, filed blind as `09-stage-2b-eyes-gate-live-universal-pcs`
+with a before/after pairs sheet against stage 2; awaiting the owner's ruling).** Stage 2 repeated,
+the same captures, words and bust-2 beside the portrait, now with the eyes gate steering. The
+question was whether steering up the dial delivers eyes. First renders: 2 of 8 with eyes (Kartor
+stand, Lysandra stand), against 5 of 8 on stage 2's first renders by the same gate in calibration,
+which is the render-to-render variance of this route, since nothing in the first render changed.
+Of the six eyeless first renders, steering delivered eyes on three (Tychon combat on bust-3,
+Lysandra combat on bust-3, Tychon stand on bust-4) and not on three within two retries (Kartor
+combat `no-eyes` on bust-2, 3 and 4; Cecil's combat `far-down·no-eyes` three times; Cecil's stand
+`far-down` three times, the gate saying eyes on the last two, the tilt still below the band). 5 of
+8 delivered in band at about 10.6 cents a token. The anatomy check made its first catch in the
+field: six fingers on Lysandra's flame hand (stand), reported, not re-rendered.
+
+What it says: the dial is a weak lever for eyes, about one in two within two retries, and the
+first render of this route (the portrait crop beside bust-2) comes back eyeless somewhere
+between three and six times in eight. The root cause is upstream of the checks. Candidates for
+the next measured A/B, each on these eight (about $0.50 a run): bust-3 as the default for the
+universal route (the open stage-5 item, now directly motivated: every steered success landed on
+bust-3 or bust-4); a universal sentence in the keep line describing open eyes ("both eyes open and
+showing beneath the brow", a description of the figure like the hair sentence, not an angle or a
+gaze word, which failed before); a tight face crop in place of the head-to-waist crop; and no
+portrait at all beside the bust for the eyes' sake (the words-only NPC route gave eyes on 7 of 19
+by the gate, so that is no cure either). None chosen; the owner picks.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
