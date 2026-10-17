@@ -548,6 +548,17 @@ after, so a change in the head rate can be read as the body's. Stage 5 takes its
 to 3 (the owner had no tweaks in mind as of the morning of 2026-10-17; the candidates are the
 record's). About $3.50 for stages 1 to 4; 5 and 6 as picked.
 
+**Stage 1 result (2026-10-17, no renders).** The owner ruled blind on run 1's 18 delivered NPC
+heads and the one first render the judge sent back (a numbered sheet, no verdicts on it; the
+rulings and the score are `stage1-rulings.json` beside the run's manifest and in the Desktop
+review folder): the 18 are right ("what I expect"), and the rejected goblin render is bowed ("I
+prefer 14 over 19 because I can see its eyes"). The judge had called the 18 `right` (11) or
+`down` (7) and the rejected one `far-down`, so it agrees with the owner 19 of 19 on in-band
+against out, across a human man and woman, an orc, a dwarf woman, a goblin and a bugbear; its
+`down` against `right` is unscored, since the owner accepts both. The set holds one rejected
+head and no hoods or helmets, so this scores the judge's acceptances and barely its rejections;
+those get scored as stages 2 and 3 produce them. Nothing in the head path changes on it.
+
 ### Scoring the judges
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
