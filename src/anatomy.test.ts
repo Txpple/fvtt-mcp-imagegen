@@ -22,9 +22,13 @@ describe('anatomyPrompt', () => {
     expect(p).toMatch(/^This is a virtual tabletop token.*seen from directly above/);
     expect(p).toMatch(/heads, eyes, arms, legs, hands and the fingers/);
     expect(p).toMatch(/No description of the creature was given/);
-    expect(p).toMatch(/which edge of the image the creature's head or front points to/);
+    expect(p).toMatch(/which edge of the image the creature's head is nearest to/);
+    // Calibrated 2026-10-17: "points to" read as where the eyes look (bottom on 30 of 34 top-down
+    // tokens); "nearest to", eyes expressly ignored, read as the head's edge on 34 of 34.
+    expect(p).toMatch(/whatever direction the eyes look/);
+    expect(p).not.toMatch(/points to/);
     expect(p).toMatch(
-      /COUNTS: .*\nFACING: TOP, BOTTOM, LEFT or RIGHT.*\nFLAWS: .*\nVERDICT: OK, FLAWED or UNCLEAR$/
+      /COUNTS: .*\nFACING: the edge the head is nearest, TOP, BOTTOM, LEFT or RIGHT.*\nFLAWS: .*\nVERDICT: OK, FLAWED or UNCLEAR$/
     );
   });
 
@@ -79,7 +83,7 @@ describe('parseAnatomy', () => {
     const bottom = parseAnatomy(OK_TOKEN.replace('FACING: TOP', 'FACING: BOTTOM'), 'token');
     expect(bottom).toMatchObject({ verdict: 'flawed', facing: 'bottom', rotate: 180 });
     expect(bottom.flaws).toEqual([
-      "the head or front points to the bottom of the image; Foundry's front is the top, so rotate the PNG 180 degrees clockwise",
+      "the head is nearest the bottom edge of the image; Foundry's front is the top, so rotate the PNG 180 degrees clockwise",
     ]);
     expect(parseAnatomy(OK_TOKEN.replace('FACING: TOP', 'FACING: Left.'), 'token')).toMatchObject({
       facing: 'left',

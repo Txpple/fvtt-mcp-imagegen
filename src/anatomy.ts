@@ -9,6 +9,12 @@
 // never refuses and never re-renders: a flaw is one edit-image away and the owner approves the
 // fix, a mis-facing token is a rotation of the PNG, and the judge can be wrong, so the flaw pass
 // still reads every render.
+//
+// The facing question asks which edge the head is NEAREST (calibrated 2026-10-17): asked which
+// edge the head "points to", the check model read that as where the eyes look and answered
+// bottom on 30 of 34 top-down tokens whose heads sat at the top; asked which edge the head is
+// nearest, with the eyes expressly ignored, it answered top on 34 of 34 (the plates of the
+// 2026-10-17 headtest runs, scored in notes/mannequin-tokens/PLAN.md).
 
 import sharp from 'sharp';
 import type { Gemini } from './gemini.js';
@@ -24,7 +30,7 @@ export function isAnatomyKind(kind: string): kind is AnatomyKind {
 export const ANATOMY_VERDICTS = ['ok', 'flawed', 'unclear'] as const;
 export type AnatomyVerdict = (typeof ANATOMY_VERDICTS)[number];
 
-/** Where a token's head or front points. Foundry's front is the top; none is a creature with no front. */
+/** The edge a token's head is nearest. Foundry's front is the top; none is a creature with no head end. */
 export const FACINGS = ['top', 'bottom', 'left', 'right', 'none', 'unclear'] as const;
 export type Facing = (typeof FACINGS)[number];
 
@@ -44,7 +50,7 @@ export interface AnatomyReport {
   found: string;
   /** Each flaw in one line, placed in the picture, ready for an edit-image instruction. */
   flaws: string[];
-  /** Tokens: the edge of the image the head or front points to. */
+  /** Tokens: the edge of the image the head is nearest to. */
   facing?: Facing;
   /** Tokens whose front is not at the top: the clockwise rotation of the PNG that fixes it. */
   rotate?: 90 | 180 | 270;
@@ -75,14 +81,18 @@ export function anatomyPrompt(kind: AnatomyKind, expected?: string): string {
     : NO_EXPECTATION;
   const facing =
     kind === 'token'
-      ? "Then say which edge of the image the creature's head or front points to. "
+      ? "Then say which edge of the image the creature's head is nearest to. The token is seen " +
+        'from above, so the head sits toward one edge of the image and the feet or the tail ' +
+        'toward the opposite edge; answer with the edge the head is at, whatever direction the ' +
+        'eyes look. '
       : '';
   const form =
     'Answer in exactly this form and nothing else:\n' +
     'COUNTS: the counts in one line\n' +
     (kind === 'token'
-      ? 'FACING: TOP, BOTTOM, LEFT or RIGHT; NONE for a creature with no front (a mushroom, a ' +
-        'radial creature, a hanging stalactite); UNCLEAR when you cannot tell\n'
+      ? 'FACING: the edge the head is nearest, TOP, BOTTOM, LEFT or RIGHT; NONE for a creature ' +
+        'with no head end (a mushroom, a radial creature, a hanging stalactite); UNCLEAR when ' +
+        'you cannot tell\n'
       : '') +
     'FLAWS: none, or one flaw per line beginning with "- ", each naming the flaw and where it ' +
     'sits in the picture\n' +
@@ -139,7 +149,7 @@ export function parseAnatomy(text: string, kind: AnatomyKind): AnatomyReport {
     if (rotate) {
       report.rotate = rotate;
       report.flaws.push(
-        `the head or front points to the ${facing} of the image; Foundry's front is the top, ` +
+        `the head is nearest the ${facing} edge of the image; Foundry's front is the top, ` +
           `so rotate the PNG ${rotate} degrees clockwise`
       );
       report.verdict = 'flawed';
