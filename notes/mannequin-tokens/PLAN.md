@@ -706,6 +706,10 @@ and the eyes not NO, the headtest sheet shows `down·no-eyes`, and a render cost
 On stage 1's 19 originals the gate would send 11 back: the eye flaw was there all along, on the
 matched bodies too, unseen by the blanket ruling. The cost in retries: about one in six accepted
 heads re-rendered for nothing (3 of 17), against ten of eleven eyeless heads shipped before.
+The live sanity after the build (three plates through `--judge`): the knight's eyeless head sent
+back, Kartor's stand in band, and the orc's cell 16, "no eyes" on both calibration passes, answered
+"eyes yes" live: the wobble at the boundary reaches the eyes word too, and the majority-of-three
+remedy (three times a fifth of a cent per word) is still the open item for it.
 
 ### Scoring the checks
 
