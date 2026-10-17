@@ -27,7 +27,9 @@ import sharp from 'sharp';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 if (!fs.existsSync(path.join(dist, 'heads.js'))) {
-  console.error('✗ build  dist/ is missing or older than the head anchors. Run `npm run build` first.');
+  console.error(
+    '✗ build  dist/ is missing or older than the head anchors. Run `npm run build` first.'
+  );
   process.exit(1);
 }
 const load = file => import(pathToFileURL(path.join(dist, file)).href);
@@ -150,8 +152,7 @@ async function writeSheet(items, title, out) {
   const rows = Math.ceil(items.length / cols);
   const W = cols * cell;
   const H = header + rows * (cell + labelH);
-  const esc = s =>
-    String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const layers = [
     {
       input: Buffer.from(
@@ -204,7 +205,9 @@ async function writeSheet(items, title, out) {
 /** Hit rates for one group: first-render and final verdicts inside the band. */
 function rate(items) {
   const n = items.length;
-  const first = items.filter(it => it.head && inBand((it.head.verdicts ?? [it.head.verdict])[0])).length;
+  const first = items.filter(
+    it => it.head && inBand((it.head.verdicts ?? [it.head.verdict])[0])
+  ).length;
   const final = items.filter(it => it.head?.inBand).length;
   return { n, first, final };
 }
@@ -233,7 +236,8 @@ if (rejudgeDir) {
     }
     const verdict = await judgeHead(gemini, fs.readFileSync(it.plate));
     const keptVerdicts = [];
-    for (const k of it.head?.kept ?? []) keptVerdicts.push(await judgeHead(gemini, fs.readFileSync(k)));
+    for (const k of it.head?.kept ?? [])
+      keptVerdicts.push(await judgeHead(gemini, fs.readFileSync(k)));
     const head = {
       ...it.head,
       verdict,
@@ -242,11 +246,20 @@ if (rejudgeDir) {
       previous: it.head?.verdicts ?? [it.head?.verdict],
     };
     items.push({ ...it, head });
-    console.log(`${it.id.padEnd(16)} was ${(it.head?.verdicts ?? [it.head?.verdict]).join(' → ')}  now ${head.verdicts.join(' → ')}`);
+    console.log(
+      `${it.id.padEnd(16)} was ${(it.head?.verdicts ?? [it.head?.verdict]).join(' → ')}  now ${head.verdicts.join(' → ')}`
+    );
   }
   const lines = report(items);
-  fs.writeFileSync(path.join(rejudgeDir, 'manifest-rejudge.json'), JSON.stringify({ ...manifest, items }, null, 2));
-  await writeSheet(items, `headtest re-judged: ${lines.join('; ')}`, path.join(rejudgeDir, 'sheet-rejudge.png'));
+  fs.writeFileSync(
+    path.join(rejudgeDir, 'manifest-rejudge.json'),
+    JSON.stringify({ ...manifest, items }, null, 2)
+  );
+  await writeSheet(
+    items,
+    `headtest re-judged: ${lines.join('; ')}`,
+    path.join(rejudgeDir, 'sheet-rejudge.png')
+  );
   console.log(lines.join('\n'));
   console.log(`sheet: ${path.join(rejudgeDir, 'sheet-rejudge.png')}`);
   process.exit(0);
@@ -258,7 +271,9 @@ const pcsOnly = flag('--pcs-only');
 const npcsOnly = flag('--npcs-only') || Boolean(bust);
 if (!npcsOnly) {
   if (!pcsFile) {
-    console.log('No --pcs file given: the PC set is skipped (it is campaign content; see the header).');
+    console.log(
+      'No --pcs file given: the PC set is skipped (it is campaign content; see the header).'
+    );
   } else {
     const dir = path.dirname(path.resolve(pcsFile));
     const pcs = JSON.parse(fs.readFileSync(pcsFile, 'utf8'));
@@ -316,9 +331,15 @@ const perRender = PRICE.flash['1K'] + 0.01;
 const retriesOn = !bust;
 const expected = items.length * perRender * (retriesOn ? 1.35 : 1);
 const worst = items.length * perRender * (retriesOn ? 3 : 1);
-console.log(`headtest: ${items.length} renders (${items.filter(i => i.group === 'pc').length} PC, ${items.filter(i => i.group !== 'pc').length} NPC)` +
-  (bust ? ` on bust-${bust}, no retries (calibration)` : ` on the server's ${DEFAULT_BUST} anchor, steering on`));
-console.log(`estimate: about $${expected.toFixed(2)} (at most $${worst.toFixed(2)} if every render needed two retries); the judge adds under a cent`);
+console.log(
+  `headtest: ${items.length} renders (${items.filter(i => i.group === 'pc').length} PC, ${items.filter(i => i.group !== 'pc').length} NPC)` +
+    (bust
+      ? ` on bust-${bust}, no retries (calibration)`
+      : ` on the server's ${DEFAULT_BUST} anchor, steering on`)
+);
+console.log(
+  `estimate: about $${expected.toFixed(2)} (at most $${worst.toFixed(2)} if every render needed two retries); the judge adds under a cent`
+);
 if (!yes) {
   console.log('Add --yes to run.');
   process.exit(0);
@@ -362,7 +383,9 @@ async function worker() {
         seconds: Math.round((Date.now() - t0) / 1000),
       });
       const v = (r.head.verdicts ?? [r.head.verdict]).join(' → ');
-      console.log(`${it.id.padEnd(16)} ${r.head.inBand ? 'in band ' : 'OUT     '} ${v.padEnd(36)} ${r.head.anchorUsed}  $${r.estimatedUsd.toFixed(3)}`);
+      console.log(
+        `${it.id.padEnd(16)} ${r.head.inBand ? 'in band ' : 'OUT     '} ${v.padEnd(36)} ${r.head.anchorUsed}  $${r.estimatedUsd.toFixed(3)}`
+      );
     } catch (e) {
       it.error = e instanceof Error ? e.message : String(e);
       console.log(`${it.id.padEnd(16)} ERROR    ${it.error.slice(0, 120)}`);
@@ -374,7 +397,11 @@ await Promise.all([worker(), worker(), worker()]);
 
 const lines = report(items, spend.totalUsd);
 const sheetPath = path.join(runDir, 'sheet.png');
-await writeSheet(items, `headtest ${stamp}${bust ? ` on bust-${bust}` : ''}: ${lines.join('; ')}`, sheetPath);
+await writeSheet(
+  items,
+  `headtest ${stamp}${bust ? ` on bust-${bust}` : ''}: ${lines.join('; ')}`,
+  sheetPath
+);
 save();
 console.log(lines.join('\n'));
 console.log(`sheet: ${sheetPath}`);
