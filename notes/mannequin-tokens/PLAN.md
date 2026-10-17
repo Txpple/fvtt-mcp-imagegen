@@ -808,6 +808,13 @@ and 250 px), copied to `11-table-zoom-sheet-from-the-review`: at 100 and 150 px 
 and "ok" cells are not distinguishable; at 250 px they begin to be. Whether the eyes criterion stands
 at table scale is the owner's first question now.
 
+**The table-zoom ruling (the owner, 2026-10-17, relayed by the review session in its own words):**
+"this doesnt out, half them have no eyes", read as: the table-scale argument does not hold, half the
+tokens have no eyes at that size too. **The eyes criterion stands for tokens**, the gate keeps
+re-rendering, and the review's point 8 is overruled. Step 1 of the revised order is answered; step 2,
+the eyes-open edit pass on the eyeless delivered plates, is next and waits on the owner's word in
+this session (it costs credit).
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
