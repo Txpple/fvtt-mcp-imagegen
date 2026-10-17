@@ -108,9 +108,10 @@ export const TOKEN_EDIT_KEEP =
 
 /**
  * Mannequin edits (owner rule 2026-10-16). The source is a grey HeroForge capture, so "keep the
- * face, hair" is noise. The capture binds pose, proportions and grip; the camera does NOT come
- * from the capture (the library is shot at about fifteen degrees off vertical) but from these
- * words: the owner's standard is a 90-degree orthographic top-down body. The head is carried by
+ * face, hair" is noise. The capture binds pose, camera, proportions and grip: every capture is
+ * shot straight down, a 90-degree orthographic top-down camera, the owner's standard, and the
+ * words bind the body to that camera strictly (the owner's rule of 2026-10-17; a capture shot
+ * from any other angle is re-shot, never corrected by words). The head is carried by
  * an image (a bust the tool attaches, or the approved token head as `character`), never by
  * words: about 95 renders on 2026-10-16 showed a render leans toward the head tilt of whatever
  * reference carries a head and that every head sentence tried failed. Said as presence
@@ -122,13 +123,14 @@ export const TOKEN_EDIT_KEEP =
  * else, and no grey may remain.
  */
 export const MANNEQUIN_EDIT_SOURCE =
-  'Image 1 is a grey mannequin: the guide for the pose, the body proportions and the grip. ' +
-  'Re-render it in the same stance but seen from directly above: a 90-degree orthographic ' +
-  'top-down view, the camera looking straight down onto the tops of the shoulders, the feet ' +
-  'directly beneath the body. ';
+  'Image 1 is a grey mannequin captured from directly above in a 90-degree orthographic ' +
+  'top-down view: the guide for the pose, the camera, the body proportions and the grip. ' +
+  'Paint it under exactly that camera, looking straight down onto the tops of the shoulders, ' +
+  'the feet directly beneath the body, the body never leaning or turned toward the viewer. ';
 export const MANNEQUIN_EDIT_KEEP =
   'Paint the figure in exactly this stance, every limb and weapon where the mannequin has them, ' +
-  'the camera straight down. Any hair lies back over the top of the head, leaving the brow and ' +
+  "under the mannequin's own 90-degree top-down camera, the camera straight down. Any hair lies " +
+  'back over the top of the head, leaving the brow and ' +
   'both eyes clear of it. The grey clay is replaced entirely by the described figure, with ' +
   'nothing left grey. Remove any cast shadow. Keep the whole figure, weapons included, inside ' +
   'the frame with a margin on every side; nothing crosses the edge.';

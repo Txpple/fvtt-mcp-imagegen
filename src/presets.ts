@@ -38,8 +38,8 @@ export interface Preset {
 
 // Two body plans, one sentence each (2026-09-24): an upright figure is seen from straight above
 // with its head tilted up (the owner's standard, 2026-10-16: a 90-degree orthographic body, the
-// brow, eyes and nose showing in front of the crown; it landed eight of eight in the ortho test
-// and replaced the fifteen-degree pitch); a four-legged or crawling creature is seen along its
+// brow, eyes and nose showing in front of the crown; it landed eight of eight in the ortho
+// test); a four-legged or crawling creature is seen along its
 // back. The single humanoid wording turned a bear, a hound, and a troll to look up at the camera.
 export const TOKEN_FRAMING =
   'Virtual tabletop token, top-down. An upright figure: seen from directly above, a 90-degree ' +

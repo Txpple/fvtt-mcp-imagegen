@@ -601,15 +601,15 @@ is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
      left grey. "Keep the mannequin's exact pose" and the softer guide sentence bought the same
      pose side by side in the first real run; the tool's line is the firmer of the two, and the
      instruction no longer says any of it.
-   - **The camera is the owner's standard, set by the tool (2026-10-16).** Tokens are seen
-     from straight above at the table, so the standard is a 90-degree orthographic body (the
-     shoulders and crown the largest shapes, feet beneath the body). In the ortho test (Kartor
-     and Cecil, stand and combat, sixteen renders) that wording landed eight of eight and the
-     owner called it perfect; a plain 90 or 85 gives the same body with no face, and the old
-     fifteen-degree pitch is retired. The tool's `source: "mannequin"` lead sentence and the
-     words-only token framing both carry it, so the instruction says nothing about the camera.
-     The library's captures are shot at about fifteen degrees, and the words override that:
-     the capture gives pose, proportions and grip only. Compare every render to the target in
+   - **The camera is the owner's standard, set by the tool and the capture (2026-10-16,
+     2026-10-17).** Tokens are seen from straight above at the table, so the standard is a
+     90-degree orthographic body (the shoulders and crown the largest shapes, feet beneath the
+     body). In the ortho test (Kartor and Cecil, stand and combat, sixteen renders) that wording
+     landed eight of eight and the owner called it perfect. Every mannequin capture is shot
+     straight down at that same camera, and the tool's `source: "mannequin"` lead sentence
+     binds the body to the capture's camera strictly; the words-only token framing carries the
+     same camera. The instruction says nothing about the camera, and a capture shot from any
+     other angle is re-shot, never corrected by words. Compare every render to the target in
      the flaw pass anyway, and name the footwear: the mannequin is barefoot, and a figure
      described without boots came back barefoot. On `prone` and `dead` the pose words win
      ("knocked down onto the knees", "lying dead, eyes closed") and the camera line does no

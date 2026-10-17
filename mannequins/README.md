@@ -1,10 +1,12 @@
 # Mannequins
 
 Grey HeroForge captures that `fvtt-mcp-imagegen`'s `edit-image` (kind `token`, flash, no
-references) turns into any humanoid token: the mannequin fixes pose, proportions and grip (the
-camera comes from the tool's words: a 90-degree orthographic body, head tilted up, the owner's
-standard since 2026-10-16; the captures' own fifteen-degree pitch is overridden) and
-grip; the words supply the rest. The plan, the lessons and the render recipe are in that repo's
+references) turns into any humanoid token: the mannequin fixes pose, camera, proportions and grip. Every
+capture is shot straight down, a 90-degree orthographic top-down camera (the owner's standard
+for the body since 2026-10-16 and for the capture since 2026-10-17: the tool's words bind the
+body to the capture's camera, so a capture shot from any other angle is re-shot, never
+corrected by words; the 312 captures of 2026-10-15 predate the rule and are being re-shot). The
+words supply the rest. The plan, the lessons and the render recipe are in that repo's
 `notes/mannequin-tokens/PLAN.md`; this folder is only the library and its shot list.
 
 **Public since 2026-10-16 (the owner's ruling):** the captures are unpainted grey poses with no
@@ -47,8 +49,8 @@ here. `npm run mannequin -- list` re-checks the whole library. Commit after each
 
 ## Shot list
 
-One saved top-down camera (Share › Booth, about fifteen degrees off vertical; straight down for
-`down`) for every capture. Weapon in a closed fist, plain rather than ornate, wholly inside the
+One saved camera (Share › Booth) for every capture, the `down` pose included: straight down, a
+90-degree orthographic top-down view, the tops of the shoulders and the crown to the lens. Weapon in a closed fist, plain rather than ornate, wholly inside the
 frame; arms held off the torso. After every body or weapon swap, check the weapon is still inside
 the frame and the grip and shield strap still line up.
 

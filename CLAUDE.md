@@ -18,8 +18,9 @@ skill's newer owner rules for maps, tiles and tokens, the `art-audit` skill (the
 second count of limbs, eyes, tendrils and token facing over an installed set, fixed in place), and
 the token changes of 2026-10-16:
 `edit-image` takes `source: "mannequin"`, references take role `object`, both render tools take
-`thinking` and report `thinkingTokens`, the token framing and the mannequin line set the owner's
-camera, a 90-degree orthographic body (the fifteen-degree pitch is retired), and the head of a
+`thinking` and report `thinkingTokens`, the token framing and the mannequin line bind the body to
+the owner's camera, a 90-degree orthographic top-down body, which every capture is shot at
+(the owner's rule of 2026-10-17; the library of 2026-10-15 is being re-shot), and the head of a
 mannequin token is carried by an image, never words: a bust the server attaches
 (`mannequins/heads/`, `src/heads.ts`, `headAnchor`) or the approved token head as `character`, a
 five-step head check on flash against the owner's ruled crops and an eyes gate (`src/head.ts`),

@@ -168,8 +168,9 @@ shields).
 ## Capture rules (HeroForge)
 
 1. Unpainted grey body, no clothing, no base, no rim (Stage tab: base and rim off).
-2. **One saved top-down camera for every capture** (Share › Booth): about fifteen degrees off
-   vertical for standing figures, straight down for the down pose.
+2. **One saved camera for every capture** (Share › Booth): straight down, a 90-degree
+   orthographic top-down view, the down pose included (the owner's rule of 2026-10-17; the
+   library of 2026-10-15 was shot about fifteen degrees off vertical and is being re-shot).
 3. Export with alpha (the PNG comes out already cut) at 1024 square.
 4. Weapon in a **closed fist** and **wholly inside the frame**. Plain weapons are better than
    ornate ones: there is less to replace.
@@ -1009,6 +1010,27 @@ nothing about a rate; the owner's eye on the six, then the question is whether t
 capture replaces the grey ones (one HeroForge export per capture, the eyes painted, the library
 re-shot) or the eyes are painted onto the existing captures by script, which the drawn busts
 in folder 03 suggest is a few lines of sharp.
+
+**The capture's camera is 90 degrees, and every capture will be (the owner, 2026-10-17, evening,
+after the bust pair).** On the big head: the owner read it as a scale mismatch between the
+mannequin and the bust; measured, the delivered figure box is the same with and without the bust
+(470 by 390 for Tychon), so the head's share of the figure changed, not the figure's size, and I
+ranked the causes as the bust pulling the camera, the capture's own close head, the bust's pixel
+scale (low: the library captures frame the figure the same and bust-2 sat beside them through
+about a hundred renders unflagged) and variance at n=1. I had also called the new capture an
+80-degree shot, which was wrong: **the owner's word is that it is at 90 degrees, the standard
+from here, and the whole library will be recaptured at it.** The rule: no reference to the
+fifteen-degree pitch anywhere, and the words bind the body strictly to a 90-degree top-down
+camera. Done: `MANNEQUIN_EDIT_SOURCE` now names the capture as shot from directly above in a
+90-degree orthographic top-down view and asks for the figure under exactly that camera, the body
+never leaning or turned toward the viewer; `MANNEQUIN_EDIT_KEEP` adds "under the mannequin's own
+90-degree top-down camera"; the capture rule here, the mannequins README and shot list, the heads
+README, the skill's camera bullet and CLAUDE.md's State block say the same; the prompt no longer
+re-renders the capture "seen from directly above" as if it were not. Not changed: the bust
+binding ("take nothing else from it") and the head path. Note for the next render: the MCP
+server process loaded the old `dist/` at session start, so an `edit-image` call through it sends
+the old wording until Claude Code restarts; `npm run headtest` runs from the rebuilt `dist/` at
+once.
 
 ### Scoring the checks
 

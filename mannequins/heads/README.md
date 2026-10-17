@@ -14,7 +14,7 @@ illustration-builder skill's recipe says nothing about the head.
 ## The busts (`bust-1.png` to `bust-4.png`)
 
 Four captures of the bald human HeroForge mannequin with the camera straight down (90 degrees, the
-owner's token standard; the library itself is shot at about 80) and only the head tilted, a tight
+owner's standard for every capture) and only the head tilted, a tight
 head and shoulders, 1024 square with alpha, the head tipped a step further toward the camera each
 time. None shows the throat, so none pushes toward a frontal face.
 
