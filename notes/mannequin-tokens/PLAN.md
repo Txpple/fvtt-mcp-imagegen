@@ -993,6 +993,23 @@ drawn in with sharp (a lens, a grey iris, a lid line), filed as
 `03-side-result-busts-with-drawn-eyes` with no render behind them; the `edit-image` way was
 not run.
 
+**The bust back beside the green eyes (2026-10-17, evening, on the owner's word; 2 renders,
+$0.08; tokens 5 and 6 in the same review folder).** The owner, told the head lifts without an
+anchor, asked what had locked heads before (the bust) and said run the two together: the
+green-eyed capture as the source, `bust-2` attached as the tilt anchor with the server's own
+binding ("tip the figure's head exactly like it ... take nothing else from it"), the bound eyes
+line, `headRetries: 0`. *Result, by my eye:* **both heads at the capture's tilt and both eyes
+reading**, Tychon's under heavy brows, Cecil's green under the swept hair; the figure framed
+larger (26 and 37% of the plate against about 10% without the bust) and the body more top-down,
+the crown and shoulders seen from above; outfit, build and pose held, the anatomy count clean
+(the tilt check said `right` with eyes on both, reported only). So on this pair the two halves
+add: the bust holds the tilt as it always did, and the green eyes on the capture supply what the
+bust's empty sockets never did, eyes open on the first render with no edit. Two renders say
+nothing about a rate; the owner's eye on the six, then the question is whether the green-eyed
+capture replaces the grey ones (one HeroForge export per capture, the eyes painted, the library
+re-shot) or the eyes are painted onto the existing captures by script, which the drawn busts
+in folder 03 suggest is a few lines of sharp.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
