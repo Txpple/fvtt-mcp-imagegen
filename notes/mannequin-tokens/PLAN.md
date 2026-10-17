@@ -745,6 +745,56 @@ exactly the three the gate accepted after a retry (1, 2, 6) and not on the three
 7, 8). The pose is off on 5 (a first render, "bad stand") and 8 ("combat stance off" after two
 retries). Stage 2's renders seen again beside these ruled the same as before.
 
+### A review, and what it changes (2026-10-17, afternoon)
+
+Another session read this plan adversarially for the owner and asked eight questions. The
+answers that are concessions, kept here so the programme carries them:
+
+- **No number shows the route delivers more reliably today than on the morning of 2026-10-16.**
+  What rose is the measurement's agreement with the owner (stage 2b: the gate matched 7 of 8
+  delivered tokens). The first-render eye rate on the universal route is 2 to 5 of 8 and the cost
+  per delivered token went from about 4 cents to about 10.6.
+- **The eight-render stages are underpowered.** Separating a 50% rate from 80% needs about 25 to
+  30 renders an arm. Eight was the unit the owner can rule in a sitting, not a power calculation;
+  an eight-render A/B shows only a large effect. With the gate as a proxy (7 of 8 on delivered
+  tokens, 12 of 13 on eyeless ones) an arm of 24 to 30 can be scored for eyes at about $1.50, the
+  owner ruling a sample.
+- **About 85% of the day moved the thermometer, not the render.** The only render lever touched
+  was the bust dial through steering, which delivers eyes about one time in two. No render-side
+  cause of the shut eyes has been tested.
+- **The bust is eyeless, and that is an untested root cause.** Every configuration measured under
+  the gate had a grey bust with empty sockets attached (run 1, stage 3, the PC runs); there is no
+  bust-free arm under the gate (`headAnchor: "none"` exists and was last rendered before the gate).
+  If a render leans toward the head tilt of a reference with a head, it may lean toward its eyes.
+  A bust with the eyes modelled open is one HeroForge export.
+- **A no-eyes remedy should be an edit, not a re-roll**, by this plan's own rule (a flaw pass keeps
+  the pose; a new render does not, and stage 2b lost the pose on 2 of 8). "Open both eyes beneath
+  the brow, keep everything else identical" on the delivered plate is a face change of the kind
+  that worked for Cecil's hair, about 3.5 cents, and untried. Nine eyeless delivered plates are on
+  disk to try it on.
+- **The body question is parked** until the eyes are settled; it is a library simplification, the
+  captures cost nothing to keep, and the owner's leads (fewer bodies, not one) are filed.
+- **A stopping rule, proposed:** on a mixed set of 30 renders the owner has not seen, first
+  renders the owner accepts on head, eyes, pose and build at 80% or better, delivered after retries
+  at 95% or better, at 6 cents or less per delivered token, the gate agreeing with the owner on 90%
+  of cells. A run that meets it ends the programme.
+- **The standard moved under the owner's eye** (stage 1's blanket pass against stage 3's pair
+  scrutiny) and six sheets in a day is too much ruling. The remedy: a written criterion the owner
+  signs once, a fixed reference set ruled once, no re-ruling of old sheets.
+- **The owner was never shown a token at table zoom.** At a 100 px grid cell a pair of eyes is 1 to
+  2 px; whether the eyes criterion is worth its cost at the table is unasked and costs nothing to ask.
+
+**Revised next steps, in this order, each on the owner's word:** (1) a table-zoom sheet, the same
+tokens at 100 px beside 512, for the owner to say whether eyes matter at the table (free); (2) the
+eyes-open edit pass on the nine eyeless delivered plates on disk, gate-scored, the owner rules the
+nine (about 35 cents, no renders); (3) one A/B with power on the cause: bust-2 against no bust on
+the eight PCs and six NPC captures, 24 renders an arm, gate-scored first-render eye rate, the owner
+ruling 10 a side (about $3); if the no-bust arm is no worse, the bust is the cause and an open-eyed
+bust is the lever. Stopped: majority-of-three, further ruler work, the body and library work, the
+open-eyes sentence and the face-crop A/Bs until (3) is read. The bust-3 A/B already in flight (8
+renders, on the owner's word before the review) is read as underpowered: only 7 or 8 of 8 against 2
+of 8 would mean anything.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
