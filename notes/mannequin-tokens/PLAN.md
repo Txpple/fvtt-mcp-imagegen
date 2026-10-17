@@ -639,6 +639,42 @@ bust-4, and Cecil's stand on `human-male-stand-dagger-open` swung `far-up`, `far
 as steering sent it to bust-1 and back to bust-3, a dial that overshoots on that capture. Build is
 the owner's call from the pairs sheet; nothing is concluded on it here.
 
+**Stage 3 ruled (2026-10-17; the words and the score in `stage3-rulings.json` beside the run and
+in the review folder).** The owner, blind, each one-body render beside its matched original: 14
+heads good (1 to 5, 7 to 9, 11, 15, 17, 21 to 23; 4, 5, 21 and 22 with a note on the angle), 11
+bad (6, 10, 12 to 14, 16, 18 to 20, 24, 26), and every bad one but 10 for the same reason, **the
+eyes do not read** (shut, downcast under the brow, or gone); 25 "head good, no eyes though".
+Build good or great on most, Kartor "great" on the human male (3, 4), the dwarf woman good but 20
+"bad head and neck posture", the goblin's original "overall better" on 21 and 22 (human-looking
+feet on the one-body render) and 23 "improves on the original", the bugbear "terrible" on 24 (the
+pose not copied), "improved" on 25, "clumped but reasonable" on 26. **Three renders lost the
+pose** (10, 16, 24). Likeness good or decent throughout (12 gloves became hands, 24 lost the
+shoulder spikes, 2 the staff wrong again). 7 "could be more 90 degree vertical".
+
+*The head check against the owner: 14 of 25 clear cells.* It passed ten of the eleven rejected
+heads, seven as `down` and three as `right` (16, 24, 26), and 24 is a front view it did not call
+`camera-dropped`; it sent 7 back as `far-up`, which the owner accepts. The reason is plain in the
+words: **the owner's criterion is whether the eyes read, and the check grades tilt.** A ruler re-cut
+for tilt cannot fix that; the check needs the eyes asked for by name.
+
+*The eyes are not the body's fault.* The eyeless heads cluster by capture (the knight's
+`combat-longsword-open` 3 of 3, the dwarf woman's `stand-empty` 3 of 3, the bugbear's
+`twohand-right` 3 of 3), but the human-male and matched grey captures carry the same bowed head
+(the knight's and the bugbear's pairs looked at side by side), and run 1's originals of knight-1,
+dwarf-woman-1 and bugbear-1 have the same shut or downcast eyes the owner rejected on the one-body
+renders. Stage 1's ruling was a blanket "what I expect" over the sheet, not this pair-by-pair
+scrutiny, so run 1 is an optimistic baseline for eyes and the like-for-like head comparison above
+stands only on tilt. What stage 3 does say about one body: build and likeness held on most, Kartor
+included; the goblin reads a little more human; the bugbear is mixed; three poses were lost where
+run 1 lost none the owner flagged.
+
+Next, in order and on the owner's word: (1) the head check asks about the eyes by name (a
+"both eyes read" gate beside the tilt steps), calibrated on the 53 ruled plates from stages 1 to
+3 with the eyeless cells as the test, cents, no renders; (2) run 1's 18 originals ruled for eyes
+at stage-3 scrutiny, free, so the body comparison has a fair baseline; (3) the busts and the
+captures: why the eyes close (a bowed capture head, a bust that shows the brow but not the eyes,
+the model's habit) is the next measured question, since no ruler change delivers eyes.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
