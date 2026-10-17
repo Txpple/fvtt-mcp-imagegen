@@ -36,8 +36,12 @@ export const HEAD_ANCHOR_CHOICES = [...BUSTS, ...EYED_BUSTS, ...GREEN_BUSTS, 'no
 /** What a render carries: a bust, the caller's `character` head, or nothing. */
 export type HeadAnchor = Bust | 'character' | 'none';
 
-/** bust-2 centred the heads of an orc, a goblin, a knight and a dwarf (2026-10-16). */
-export const DEFAULT_BUST: Bust = 'bust-2';
+/**
+ * The pipeline's bust (the owner, 2026-10-17): bust-2, which centred the heads of an orc, a goblin,
+ * a knight and a dwarf (2026-10-16), with the capture's green marks in its sockets. The owner's
+ * own re-shot bust replaces the file at the same name when it exists.
+ */
+export const DEFAULT_BUST: Bust = 'bust-2-green';
 
 export function isBust(anchor: string): anchor is Bust {
   return (

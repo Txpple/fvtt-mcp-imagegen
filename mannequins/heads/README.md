@@ -21,10 +21,10 @@ time. None shows the throat, so none pushes toward a frontal face.
 | File | Shows | Measured effect (2026-10-16) |
 | --- | --- | --- |
 | `bust-1` | the crown only | sent a guard eyes-down (like band 5) |
-| `bust-2` | brow and eye sockets | mid-band (like 10); the server's default |
+| `bust-2` | brow and eye sockets | mid-band (like 10); the grey original of the default |
 | `bust-3` | eyes, nose and mouth | face-forward (like 11) |
 | `bust-4` | eyes, nose, mouth and the chin edge | sent a guard eyes-down once; the top of the dial is not a lock |
-| `bust-2-green` | bust-2 with the capture's two green marks in its sockets (2026-10-17) | the owner's test beside the green-eyed capture; bound with the marks named |
+| `bust-2-green` | bust-2 with the capture's two green marks in its sockets (2026-10-17) | **the server's default since 2026-10-17** (the owner's word after ten a side beside the green-eyed capture); bound with the marks named; the owner's re-shot bust replaces this file at the same name |
 | `bust-2-eyes` | bust-2 with two open eyes drawn into the sockets by script (2026-10-17): a lens, a grey iris, a lid line | the owner's "for fun" test; a `headAnchor` choice outside the dial, bound with its eyes named |
 
 Attached as a `pose` reference they act as a dial with about one step of spread (bust-2 on an orc,

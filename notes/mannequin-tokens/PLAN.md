@@ -1306,8 +1306,11 @@ One gained, one lifted, eight the same, so on the green-eyed capture the green b
 ten a side, where on the no-green capture the eyed bust was worth three. The owner's reading
 before the sheet: "it doesn't hurt it seems, and can only help." On the evidence it neither helps
 nor hurts the count when the capture already carries marks, and the lifted aasimar is the one
-thing to watch if it goes in, since a lifted face is what the owner dislikes most. Whether
-`bust-2-green` becomes the pipeline's bust is the owner's call; the code carries both.
+thing to watch if it goes in, since a lifted face is what the owner dislikes most. The owner's word: "Make bust-2-green the pipeline's bust" (and "it doesn't hurt it seems, and
+can only help"). **`DEFAULT_BUST` is `bust-2-green`**; the skill's recipe passes it beside a portrait
+crop; the owner is re-shooting bust-2 in HeroForge and the new file replaces
+`mannequins/heads/bust-2-green.png` at the same name. The grey busts stay in the folder for the
+steering, which is off by default.
 
 ### Scoring the checks
 

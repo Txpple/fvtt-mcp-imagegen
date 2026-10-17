@@ -79,7 +79,7 @@ const editImageSchema = z.object({
     .describe(
       'Mannequin tokens only. The grey bust the tool attaches after your references as the ' +
         'head-angle anchor, bust-1 (the lowest tilt, crown only) to bust-4 (eyes, nose, mouth ' +
-        'and the chin edge); the default bust-2 centres the owner\'s band. "none" attaches no ' +
+        'and the chin edge); or bust-2-green, the default: bust-2 with the capture\'s green eye marks in its sockets, bound with the marks named; the grey bust-2 centres the owner\'s band. "none" attaches no ' +
         'bust on the first render (a steered retry still adds one). With a reference of role ' +
         'character attached: unset, the reference is taken as the approved token head and ' +
         'carries the tilt itself (no bust); a bust named here rides beside the reference, which ' +
@@ -268,7 +268,7 @@ export class EditImageTool {
           'source: "mannequin" paints a grey pose capture into a token with the pose, camera and ' +
           'grip bound to the capture, and carries the head by an image, never by words: with no ' +
           'character reference the tool attaches a grey bust at the wanted tilt (headAnchor, ' +
-          'default bust-2); a character reference is taken as the approved token head and ' +
+          'default bust-2-green); a character reference is taken as the approved token head and ' +
           'carries the tilt itself, or, with headAnchor named too, binds identity only while the ' +
           'bust carries the head. A judge model then grades the plate against four ruled head ' +
           'crops on five steps (far-down, down, right, up, far-up) plus camera-dropped and ' +

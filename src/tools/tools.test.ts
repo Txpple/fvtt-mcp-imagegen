@@ -667,7 +667,7 @@ describe('edit-image', () => {
     expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/face, hair/);
   });
 
-  it('mannequin source with no character: attaches bust-2 last, bound as the head-angle dial, and grades against the five exemplars', async () => {
+  it('mannequin source with no character: attaches bust-2-green last, bound as the head-angle dial, and grades against the five exemplars', async () => {
     const { dispatch, spend } = build();
     const r: any = await dispatch('edit-image', {
       sourceImage: refPng,
@@ -680,15 +680,15 @@ describe('edit-image', () => {
     expect(sent).toHaveLength(1);
     const parts = sent[0].body.contents[0].parts;
     expect(parts).toHaveLength(4); // source, object, bust, text
-    expect(sentBust(0)).toBe('bust-2');
+    expect(sentBust(0)).toBe('bust-2-green');
     const text = parts[3].text;
-    expect(text).toContain(`${MANNEQUIN_EDIT_KEEP} ${bustBinding(3)} The ENTIRE image background`);
+    expect(text).toContain(`${MANNEQUIN_EDIT_KEEP} ${bustBinding(3, 'bust-2-green')} The ENTIRE image background`);
     expect(text).not.toContain(MANNEQUIN_HEAD_WORDS);
     expect(judged).toHaveLength(1);
     const jp = judged[0].body.contents[0].parts;
     expect(jp).toHaveLength(7);
     expect(jp[6].text).toMatch(/Image 1 is FAR-DOWN.*Image 6 is the token to grade/);
-    expect(r.head).toEqual({ verdict: 'right', eyes: 'yes', inBand: true, anchorUsed: 'bust-2' });
+    expect(r.head).toEqual({ verdict: 'right', eyes: 'yes', inBand: true, anchorUsed: 'bust-2-green' });
     expect(eyed).toHaveLength(1);
     expect(eyed[0].body.contents[0].parts).toHaveLength(2); // the plate and the prompt, no exemplars
     expect(eyed[0].body.contents[0].parts[1].text).toMatch(/both of its eyes read/);
@@ -800,7 +800,7 @@ describe('edit-image', () => {
     });
     expect(sent).toHaveLength(2);
     expect(judged).toHaveLength(2);
-    expect(sentBust(0)).toBe('bust-2');
+    expect(sentBust(0)).toBe('bust-2-green');
     expect(sentBust(1)).toBe('bust-3');
     expect(r.head).toMatchObject({
       verdict: 'up',
@@ -828,7 +828,7 @@ describe('edit-image', () => {
       slug: 'guard',
     });
     expect(sent).toHaveLength(3);
-    expect([sentBust(0), sentBust(1), sentBust(2)]).toEqual(['bust-2', 'bust-1', 'bust-3']);
+    expect([sentBust(0), sentBust(1), sentBust(2)]).toEqual(['bust-2-green', 'bust-1', 'bust-3']);
     expect(r.head).toMatchObject({
       verdict: 'far-up',
       inBand: false,
@@ -856,12 +856,12 @@ describe('edit-image', () => {
       slug: 'guard',
     });
     expect(sent).toHaveLength(2);
-    expect([sentBust(0), sentBust(1)]).toEqual(['bust-2', 'bust-2']);
+    expect([sentBust(0), sentBust(1)]).toEqual(['bust-2-green', 'bust-2-green']);
     expect(r.head).toMatchObject({
       verdict: 'camera-dropped',
       inBand: false,
       verdicts: ['camera-dropped', 'camera-dropped'],
-      anchorUsed: 'bust-2',
+      anchorUsed: 'bust-2-green',
     });
     expect(r.head.advice).toMatch(/change the capture/);
     expect(fs.existsSync(r.file)).toBe(true);
@@ -952,7 +952,7 @@ describe('edit-image', () => {
       verdict: 'right',
       eyes: 'yes',
       inBand: true,
-      anchorUsed: 'bust-2',
+      anchorUsed: 'bust-2-green',
       first: 'right',
       verdicts: ['right', 'right'],
       eyesVerdicts: ['no', 'yes'],
@@ -996,7 +996,7 @@ describe('edit-image', () => {
       slug: 'guard',
       headRetries: 0,
     });
-    expect(r2.head).toEqual({ verdict: 'right', eyes: 'no', inBand: false, anchorUsed: 'bust-2' });
+    expect(r2.head).toEqual({ verdict: 'right', eyes: 'no', inBand: false, anchorUsed: 'bust-2-green' });
   });
 
   it('mannequin source: headRetries 0 delivers the first render flagged, and unclear never retries', async () => {
@@ -1011,7 +1011,7 @@ describe('edit-image', () => {
       headRetries: 0,
     });
     expect(sent).toHaveLength(1);
-    expect(r.head).toEqual({ verdict: 'far-up', eyes: 'yes', inBand: false, anchorUsed: 'bust-2' });
+    expect(r.head).toEqual({ verdict: 'far-up', eyes: 'yes', inBand: false, anchorUsed: 'bust-2-green' });
     verdicts = ['UNCLEAR'];
     const r2: any = await dispatch('edit-image', {
       sourceImage: refPng,
@@ -1025,7 +1025,7 @@ describe('edit-image', () => {
       verdict: 'unclear',
       eyes: 'yes',
       inBand: false,
-      anchorUsed: 'bust-2',
+      anchorUsed: 'bust-2-green',
     });
   });
 

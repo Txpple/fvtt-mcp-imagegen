@@ -352,7 +352,7 @@ prompt can simply say the character's name and be understood:
   call unless the owner asks for something deliberately different.
 - **Tokens take the world's own tokens as the style reference** (words-only and restyle routes
   only; the mannequin route in Step 4 takes the character's portrait as a head-to-waist crop
-  for `character` with `headAnchor: "bust-2"` beside it, and crops of signature gear as
+  for `character` with `headAnchor: "bust-2-green"` beside it, and crops of signature gear as
   `object`, never a style image). They are top-down full-body
   figures on transparency (`assets/tokens/<name>.png` in the world data). Attach one as
   `role: "style"` and the new token comes out at the same angle and in the same look.
@@ -511,7 +511,7 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    orthographic top-down body, and carries the head by a grey bust it attaches at the wanted
    tilt, the same universal anchor for a PC and an NPC; the words supply race, sex, age, face,
    kit, colours and finish, and never a word about the head. **A known character also gets
-   references: the portrait's head-to-waist crop as `character` with `headAnchor: "bust-2"`
+   references: the portrait's head-to-waist crop as `character` with `headAnchor: "bust-2-green"`
    on the call, and crops of its signature gear as `object`** (below). A new NPC with no
    portrait is words alone. About 120 test renders
    (2026-10-15) and the first real run on the four PCs (about 50 renders, 2026-10-16; the record
@@ -549,7 +549,7 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    mannequin guide, the camera, the head anchor and the no-grey rule, so the instruction says
    none of that, and nothing about the head, the angle or the camera, ever. For a known
    character, attach the portrait's head-to-waist crop as `references: [{ role: "character",
-   label: "<Name>" }]` **and pass `headAnchor: "bust-2"`**: the bust then carries the head and
+   label: "<Name>" }]` **and pass `headAnchor: "bust-2-green"`**: the bust then carries the head and
    the crop is bound to identity only (features, hair, skin, build and kit). Add each signature
    piece of gear as `{ role: "object", label: "<the axe>" }`, cropped from the approved art;
    the tool binds each by its image number, so the instruction only names them. For a new NPC,
@@ -573,7 +573,7 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
      pull on the head: a render leans toward the head tilt of whatever reference carries a
      head, and a frontal portrait crop bound on its own lifted faces to the camera. The fix is
      not to anchor PCs to their old token heads (the owner ruled those were luck, not a
-     standard) but to put the bust beside the portrait: with `headAnchor: "bust-2"` on the
+     standard) but to put the bust beside the portrait: with `headAnchor: "bust-2-green"` on the
      call the tool attaches the bust after the crop, binds the crop to identity only, and the
      bust wins the head. The universal run (2026-10-17, 02:16; 8 renders, $0.51; `headtest/2026-10-17-02-16-universal/`,
 the sheet on the Desktop as `PC Tokens/headtest-2-universal-sheet.png`): 6 of 8 first renders in
@@ -622,7 +622,7 @@ is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
      the angle (absolute lines, degrees, gaze targets, edits, "exactly as the mannequin's head")
      fail, and that a render leans toward the head tilt of any reference that has a head. So
      the head is an image: with no `character` reference the tool attaches a grey HeroForge
-     bust at the wanted tilt (`mannequins/heads/bust-2.png`, the middle of the owner's band)
+     bust at the wanted tilt (`mannequins/heads/bust-2-green.png`: bust-2, the middle of the owner's band, with the capture's green eye marks in its sockets; the pipeline's bust since 2026-10-17)
      after your references and binds it as a dial; with one, the reference is the approved
      token head and carries the tilt itself. Then a check model grades the plate beside five
      crops the owner ruled on (`mannequins/heads/band/`, one per step) on five steps, `far-down`, `down`,

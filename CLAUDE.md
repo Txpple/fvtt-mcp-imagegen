@@ -29,7 +29,7 @@ steered retries, and `npm run headtest` (`scripts/headtest.mjs`) as the measurem
 `anatomy` line, a token's facing included, reported as `anatomy`; and the no-eyes remedy, one edit
 on the plate (`EYES_OPEN_PROMPT`), never a re-render first. The path the owner set on 2026-10-17: the library going
 forward is the human male alone, one capture per pose and setup, shot at 90 degrees with the eyes
-painted chroma green, bust-2 beside it on the render, race and sex from the words; the recapture
+painted chroma green, bust-2-green (bust-2 with the same marks, the default) beside it on the render, race and sex from the words; the recapture
 is the owner's and nothing is cut until it exists; the pipeline is locked at one paint per token,
 `headRetries` defaulting to 0 with the steering and the eyes edit kept until the recapture holds; `headAnchor: "capture"` paints a capture's own
 head with nothing attached. The record is `notes/mannequin-tokens/PLAN.md` ("The path from here"),
