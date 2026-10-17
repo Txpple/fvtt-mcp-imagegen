@@ -1165,7 +1165,9 @@ describe('the anatomy check', () => {
     expect(parts).toHaveLength(2);
     expect(parts[1].text).toMatch(/^This is a virtual tabletop token/);
     expect(parts[1].text).toMatch(/No description of the creature was given/);
-    expect(parts[1].text).toMatch(/FACING: the edge the head is nearest, TOP, BOTTOM, LEFT or RIGHT/);
+    expect(parts[1].text).toMatch(
+      /FACING: the edge the head is nearest, TOP, BOTTOM, LEFT or RIGHT/
+    );
     const m = await sharp(Buffer.from(parts[0].inline_data.data, 'base64')).metadata();
     expect(Math.max(m.width ?? 0, m.height ?? 0)).toBeLessThanOrEqual(1024);
     expect(r.anatomy).toEqual({
