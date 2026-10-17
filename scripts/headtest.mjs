@@ -8,14 +8,15 @@
 // built server exactly as the MCP does (dist/), so build first.
 //
 //   node scripts/headtest.mjs [--pcs <pcs.json>] [--npcs-only | --pcs-only] [--repeat <n>]
-//                             [--bust <1-4>] [--universal] [--body <body>-<sex>]
+//                             [--bust <1-4>] [--steer] [--universal] [--body <body>-<sex>]
 //                             [--only <id,id>] [--yes]
 //   node scripts/headtest.mjs --rejudge <run dir>          re-judge a run's plates, no renders
 //   node scripts/headtest.mjs --judge <image> [<image>...]  judge any plates or tokens, no renders
 //
 // Without --yes it prints the plan and the estimate and stops. --bust N is the calibration
 // mode: one bust across the NPC set, three renders each, no steered retries, so the sheet shows
-// where that bust sends a first render. --pcs names a JSON file of PC items (campaign content,
+// where that bust sends a first render; --steer with it keeps the retries, an A/B of that bust as
+// the default rather than a calibration. --pcs names a JSON file of PC items (campaign content,
 // kept in the campaign repo): [{ "id", "capture", "instruction", "references": [{ "path",
 // "role", "label" }] }], paths relative to the file; the character reference is the PC's
 // approved token head (mannequins/heads/band/ or the campaign shelf), the object one the
@@ -131,6 +132,7 @@ const rejudgeDir = opt('--rejudge');
 const judgeAt = args.indexOf('--judge');
 const yes = flag('--yes');
 const universal = flag('--universal');
+const steer = flag('--steer');
 const only = (opt('--only') ?? '').split(',').filter(Boolean);
 const body = opt('--body');
 if (body && !/^(human|dwarf|small|large|orc|elf)-(male|female)$/.test(body)) {
@@ -366,7 +368,7 @@ if (!npcsOnly) {
           ...(universal
             ? {
                 headAnchor: entry.headAnchor ?? `bust-${bust ?? '2'}`,
-                ...(bust ? { headRetries: 0 } : {}),
+                ...(bust && !steer ? { headRetries: 0 } : {}),
               }
             : pc.headAnchor
               ? { headAnchor: pc.headAnchor }
@@ -390,7 +392,7 @@ if (!pcsOnly) {
           source: 'mannequin',
           slug: `headtest-${npc.id}-${k}`,
           ...(npc.creatureSize ? { creatureSize: npc.creatureSize } : {}),
-          ...(bust ? { headAnchor: `bust-${bust}`, headRetries: 0 } : {}),
+          ...(bust ? { headAnchor: `bust-${bust}`, ...(steer ? {} : { headRetries: 0 }) } : {}),
         },
       });
     }
@@ -409,7 +411,7 @@ if (!items.length) {
 // The estimate: a 1K flash render plus about a cent of default thinking; steering may add up
 // to two renders to any item, and about a third of first renders have needed one.
 const perRender = PRICE.flash['1K'] + 0.01;
-const retriesOn = !bust;
+const retriesOn = !bust || steer;
 const pcCount = items.filter(i => i.group.startsWith('pc')).length;
 const expected = items.length * perRender * (retriesOn ? 1.35 : 1);
 const worst = items.length * perRender * (retriesOn ? 3 : 1);
@@ -417,7 +419,7 @@ console.log(
   `headtest: ${items.length} renders (${pcCount} PC${universal ? ' universal' : ''}, ${items.length - pcCount} NPC)` +
     (body ? ` on the ${body} captures` : '') +
     (bust
-      ? ` on bust-${bust}, no retries (calibration)`
+      ? ` on bust-${bust}${steer ? ' as the default, steering on' : ', no retries (calibration)'}`
       : ` on the server's ${DEFAULT_BUST} anchor, steering on`)
 );
 console.log(
