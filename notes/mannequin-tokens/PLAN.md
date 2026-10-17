@@ -795,6 +795,19 @@ open-eyes sentence and the face-crop A/Bs until (3) is read. The bust-3 A/B alre
 renders, on the owner's word before the review) is read as underpowered: only 7 or 8 of 8 against 2
 of 8 would mean anything.
 
+**The bust-3 A/B (2026-10-17, 15:31; 8 renders, $0.72; `headtest/2026-10-17-15-31-bust-3-universal/`,
+filed blind as `10-stage-2c-bust-3-default-universal-pcs` with a pairs sheet against stage 2b; the
+owner has not ruled).** The same eight, bust-3 as the universal default, the gate steering to bust-4:
+first renders 4 of 8 in band with eyes (Tychon combat, Kartor stand, both Lysandras), 7 of 8 after
+steering (Cecil's combat still `far-down` on bust-4). Against bust-2 the same afternoon (2 of 8, then
+5 of 8). Read as underpowered, as promised: 4 of 8 against 2 of 8 at n=8 is within the noise, and
+nothing is concluded from it on the default bust; it joins the evidence for the bust-2-against-no-bust
+A/B at 24 an arm. No more credit is spent until the owner has read the review and picked a direction.
+The review session also built a table-zoom sheet (stage 2 and 2b, cells 1, 4, 7 and 8 at 100, 150
+and 250 px), copied to `11-table-zoom-sheet-from-the-review`: at 100 and 150 px the owner's "no eyes"
+and "ok" cells are not distinguishable; at 250 px they begin to be. Whether the eyes criterion stands
+at table scale is the owner's first question now.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
