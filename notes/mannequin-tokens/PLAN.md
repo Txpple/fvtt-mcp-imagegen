@@ -1048,6 +1048,21 @@ step lower than the capture's, both eyes present but narrow under the brow (the 
 does (Tychon's robe came back as the patched teal tunic of his portrait, Cecil's lute on his
 back). Nothing concluded from two renders; the owner's eye on the eight.
 
+**The Elders the same way (2026-10-17, evening, on the owner's word after tokens 7 and 8: "these
+are good, and have eyes. do the elders this way, too"; 4 renders, $0.17; filed as
+`Desktop\TokenImprovements2\04-the-elders-campaign-recipe`).** Ansel Lowmarrow, Tobin Hale, Brom
+Korrin and Cassia Vell, each one `edit-image` built the skill's way: the look from the world entry
+and the shelf, a head-to-waist crop of the Elder's portrait as `character` beside `bust-2`, the
+shelf's finish line with the Hearth's lights, the bound green-eyes line, all four on the one
+90-degree green-eyed human-male capture (so build is words and crop, not a body), `headRetries: 0`.
+*Result, by my eye:* **three of four with both eyes reading on the first render** (Ansel behind his
+spectacles, Tobin under a heavy brow, Cassia), every body top-down at the capture's camera, the
+held objects placed (ledger, chalk glowing blue, knife), the kit from the portraits. **Brom's head
+is bowed into the beard with the eyes not showing** (the check: `far-down`, no eyes), the one miss;
+the beard and the bald crown may be what the bust's tilt met there. Across the day's green-eyed
+renders with a bust beside the crop: eyes on 5 of 6 first renders (Tychon 7, Cecil 8 narrow, Ansel,
+Tobin, Cassia; Brom not), against about half on the grey captures. The owner's eye on the four.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
