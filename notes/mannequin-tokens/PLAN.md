@@ -545,7 +545,8 @@ before it. Nothing renders without the owner's word.
 
 Stages 1 and 2 first, the baseline on the bodies we have, one of them free; 3 and 4 only
 after, so a change in the head rate can be read as the body's. Stage 5 takes its shape from 1
-to 3 and from the owner. About $3.50 for stages 1 to 4; 5 and 6 as picked.
+to 3 (the owner had no tweaks in mind as of the morning of 2026-10-17; the candidates are the
+record's). About $3.50 for stages 1 to 4; 5 and 6 as picked.
 
 ### Scoring the judges
 
