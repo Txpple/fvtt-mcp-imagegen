@@ -8,21 +8,21 @@
 // built server exactly as the MCP does (dist/), so build first.
 //
 //   node scripts/headtest.mjs [--pcs <pcs.json>] [--npcs-only | --pcs-only] [--repeat <n>]
-//                             [--bust <1-4>] [--steer] [--universal] [--body <body>-<sex>]
+//                             [--calibrate] [--steer] [--universal] [--body <body>-<sex>]
 //                             [--only <id,id>] [--yes]
 //   node scripts/headtest.mjs --rejudge <run dir>          re-judge a run's plates, no renders
 //   node scripts/headtest.mjs --judge <image> [<image>...]  judge any plates or tokens, no renders
 //
-// Without --yes it prints the plan and the estimate and stops. --bust N is the calibration
-// mode: one bust across the NPC set, three renders each, no steered retries, so the sheet shows
-// where that bust sends a first render; --steer with it keeps the retries, an A/B of that bust as
+// Without --yes it prints the plan and the estimate and stops. --calibrate is the calibration
+// mode: the bust on record across the NPC set, three renders each, no retries, so the sheet shows
+// where the bust sends a first render; --steer with it keeps the retries, an A/B of the bust as
 // the default rather than a calibration. --pcs names a JSON file of PC items (campaign content,
 // kept in the campaign repo): [{ "id", "capture", "instruction", "references": [{ "path",
 // "role", "label" }] }], paths relative to the file; the character reference is the PC's
 // approved token head (mannequins/heads/band/ or the campaign shelf), the object one the
 // portrait's head-to-waist crop for the outfit. --universal renders each PC's "universal" entry
 // instead (the portrait crop as character, bound to identity only, with the bust carrying the
-// head, bust-2 or --bust N): the route that needs no approved token head. An entry's own
+// head): the route that needs no approved token head. An entry's own
 // "headAnchor" wins over the default. --only keeps the items whose id contains one of the names.
 // --body <body>-<sex> (say human-male) renders every item on that body's capture of the same
 // pose and setup instead of its own: the single-body question (2026-10-17), whether one human
@@ -127,7 +127,7 @@ const opt = name => {
 };
 const pcsFile = opt('--pcs');
 const repeat = Number(opt('--repeat') ?? 3);
-const bust = opt('--bust');
+const bust = flag('--calibrate') ? 'bust' : undefined;
 const rejudgeDir = opt('--rejudge');
 const judgeAt = args.indexOf('--judge');
 const yes = flag('--yes');
@@ -145,10 +145,6 @@ if (body && !/^(human|dwarf|small|large|orc|elf)-(male|female)$/.test(body)) {
 const onBody = name =>
   body ? name.replace(/^(human|dwarf|small|large|orc|elf)-(male|female)-/, `${body}-`) : name;
 const bodyTag = body ? ` on ${body}` : '';
-if (bust && !/^[1-4]$/.test(bust)) {
-  console.error('--bust takes 1, 2, 3 or 4');
-  process.exit(2);
-}
 
 const gemini = new Gemini({ apiKey: config.geminiApiKey, timeoutMs: config.timeoutMs });
 
@@ -367,7 +363,7 @@ if (!npcsOnly) {
             : {}),
           ...(universal
             ? {
-                headAnchor: entry.headAnchor ?? `bust-${bust ?? '2'}`,
+                headAnchor: entry.headAnchor ?? DEFAULT_BUST,
                 ...(bust && !steer ? { headRetries: 0 } : {}),
               }
             : pc.headAnchor
@@ -383,7 +379,7 @@ if (!pcsOnly) {
     for (let k = 1; k <= repeat; k++) {
       items.push({
         id: `${npc.id}-${k}`,
-        group: `${bust ? `npc on bust-${bust}` : 'npc'}${bodyTag}`,
+        group: `${bust ? 'npc calibration' : 'npc'}${bodyTag}`,
         capture: onBody(npc.capture),
         args: {
           sourceImage: mannequin(onBody(npc.capture)),
@@ -392,7 +388,7 @@ if (!pcsOnly) {
           source: 'mannequin',
           slug: `headtest-${npc.id}-${k}`,
           ...(npc.creatureSize ? { creatureSize: npc.creatureSize } : {}),
-          ...(bust ? { headAnchor: `bust-${bust}`, ...(steer ? {} : { headRetries: 0 }) } : {}),
+          ...(bust ? { headAnchor: bust, ...(steer ? {} : { headRetries: 0 }) } : {}),
         },
       });
     }
@@ -419,7 +415,7 @@ console.log(
   `headtest: ${items.length} renders (${pcCount} PC${universal ? ' universal' : ''}, ${items.length - pcCount} NPC)` +
     (body ? ` on the ${body} captures` : '') +
     (bust
-      ? ` on bust-${bust}${steer ? ' as the default, steering on' : ', no retries (calibration)'}`
+      ? ` on the ${bust} anchor${steer ? ', retries on' : ', no retries (calibration)'}`
       : ` on the server's ${DEFAULT_BUST} anchor, steering on`)
 );
 console.log(
@@ -435,7 +431,7 @@ const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 16);
 const runDir = path.join(
   config.outputDir,
   'headtest',
-  `${stamp}${bust ? `-bust-${bust}` : ''}${universal ? '-universal' : ''}${body ? `-body-${body}` : ''}`
+  `${stamp}${bust ? '-calibrate' : ''}${universal ? '-universal' : ''}${body ? `-body-${body}` : ''}`
 );
 fs.mkdirSync(runDir, { recursive: true });
 const spend = new SpendMeter();
@@ -500,7 +496,7 @@ const lines = report(items, spend.totalUsd);
 const sheetPath = path.join(runDir, 'sheet.png');
 await writeSheet(
   items,
-  `headtest ${stamp}${bust ? ` on bust-${bust}` : ''}${universal ? ' (universal PCs)' : ''}${body ? ` on the ${body} captures` : ''}: ${lines.join('; ')}`,
+  `headtest ${stamp}${bust ? ' (calibration)' : ''}${universal ? ' (universal PCs)' : ''}${body ? ` on the ${body} captures` : ''}: ${lines.join('; ')}`,
   sheetPath
 );
 save();

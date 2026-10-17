@@ -12,7 +12,7 @@ import {
   parseEyes,
   parseVerdict,
 } from './head.js';
-import { JUDGE_EXEMPLARS, loadExemplars, steerBust } from './heads.js';
+import { JUDGE_EXEMPLARS, loadExemplars } from './heads.js';
 
 describe('parseVerdict', () => {
   it('takes the first word, any case or punctuation, hyphenated steps included', () => {
@@ -45,17 +45,6 @@ describe('the band and the steering', () => {
     expect(needsRetry('camera-dropped')).toBe(true);
     expect(needsRetry('unclear')).toBe(false);
     expect(needsRetry('right')).toBe(false);
-  });
-
-  it('far-down goes up the dial to bust-3 at least, far-up to bust-1, a dropped camera stays', () => {
-    expect(steerBust('far-down', 'bust-2')).toBe('bust-3');
-    expect(steerBust('far-down', 'bust-1')).toBe('bust-3');
-    expect(steerBust('far-down', undefined)).toBe('bust-3');
-    expect(steerBust('far-down', 'bust-3')).toBe('bust-4');
-    expect(steerBust('far-down', 'bust-4')).toBe('bust-4');
-    expect(steerBust('far-up', 'bust-2')).toBe('bust-1');
-    expect(steerBust('far-up', 'bust-1')).toBe('bust-1');
-    expect(steerBust('camera-dropped', 'bust-2')).toBeUndefined();
   });
 
   it('ships the five ruled exemplars the prompt names', () => {

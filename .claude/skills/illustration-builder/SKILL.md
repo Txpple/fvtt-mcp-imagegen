@@ -352,7 +352,7 @@ prompt can simply say the character's name and be understood:
   call unless the owner asks for something deliberately different.
 - **Tokens take the world's own tokens as the style reference** (words-only and restyle routes
   only; the mannequin route in Step 4 takes the character's portrait as a head-to-waist crop
-  for `character` with `headAnchor: "bust-2-green"` beside it, and crops of signature gear as
+  for `character` with the bust beside it (the server attaches it), and crops of signature gear as
   `object`, never a style image). They are top-down full-body
   figures on transparency (`assets/tokens/<name>.png` in the world data). Attach one as
   `role: "style"` and the new token comes out at the same angle and in the same look.
@@ -511,7 +511,7 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    orthographic top-down body, and carries the head by a grey bust it attaches at the wanted
    tilt, the same universal anchor for a PC and an NPC; the words supply race, sex, age, face,
    kit, colours and finish, and never a word about the head. **A known character also gets
-   references: the portrait's head-to-waist crop as `character` with `headAnchor: "bust-2-green"`
+   references: the portrait's head-to-waist crop as `character` with `headAnchor: "bust"`
    on the call, and crops of its signature gear as `object`** (below). A new NPC with no
    portrait is words alone. About 120 test renders
    (2026-10-15) and the first real run on the four PCs (about 50 renders, 2026-10-16; the record
@@ -549,7 +549,7 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    mannequin guide, the camera, the head anchor and the no-grey rule, so the instruction says
    none of that, and nothing about the head, the angle or the camera, ever. For a known
    character, attach the portrait's head-to-waist crop as `references: [{ role: "character",
-   label: "<Name>" }]` **and pass `headAnchor: "bust-2-green"`**: the bust then carries the head and
+   label: "<Name>" }]` **and pass `headAnchor: "bust"`**: the bust then carries the head and
    the crop is bound to identity only (features, hair, skin, build and kit). Add each signature
    piece of gear as `{ role: "object", label: "<the axe>" }`, cropped from the approved art;
    the tool binds each by its image number, so the instruction only names them. For a new NPC,
@@ -573,7 +573,7 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
      pull on the head: a render leans toward the head tilt of whatever reference carries a
      head, and a frontal portrait crop bound on its own lifted faces to the camera. The fix is
      not to anchor PCs to their old token heads (the owner ruled those were luck, not a
-     standard) but to put the bust beside the portrait: with `headAnchor: "bust-2-green"` on the
+     standard) but to put the bust beside the portrait: with `headAnchor: "bust"` on the
      call the tool attaches the bust after the crop, binds the crop to identity only, and the
      bust wins the head. The universal run (2026-10-17, 02:16; 8 renders, $0.51; `headtest/2026-10-17-02-16-universal/`,
 the sheet on the Desktop as `PC Tokens/headtest-2-universal-sheet.png`): 6 of 8 first renders in
@@ -581,8 +581,8 @@ the band, 8 of 8 after steering, every face a clear likeness of its portrait and
 The heads sit at the low end of the band with the portrait beside bust-2 (six `down`, Lysandra's
 stand `up`): Kartor's stand came back `far-down` and landed `down` on bust-3, Lysandra's combat
 `far-down` twice and landed `up` on bust-4. The bust-2 NPC run centred on `right`, so a portrait
-beside the bust pulls the head a step lower; whether the universal route should default to bust-3
-is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
+beside the bust pulls the head a step lower. (That dial is history: since the evening of
+2026-10-17 there is one bust on record, `mannequins/heads/bust.png`, and no step to move to.)
      Horns follow the crop rather than the words, so restate the horn shape when it matters. A
      `character` reference with no `headAnchor` is bound as an approved token head instead (it
      carries its own tilt, no bust); that route is kept for a head the owner has ruled on, and
@@ -622,18 +622,20 @@ is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
      the angle (absolute lines, degrees, gaze targets, edits, "exactly as the mannequin's head")
      fail, and that a render leans toward the head tilt of any reference that has a head. So
      the head is an image: with no `character` reference the tool attaches a grey HeroForge
-     bust at the wanted tilt (`mannequins/heads/bust-2-green.png`: bust-2, the middle of the owner's band, with the capture's green eye marks in its sockets; the pipeline's bust since 2026-10-17)
-     after your references and binds it as a dial; with one, the reference is the approved
+     bust at the wanted tilt (`mannequins/heads/bust.png`, the one bust on record since
+     2026-10-17: the owner's HeroForge head at the middle of the band, shot at 90 degrees with the
+     two eyes painted chroma green; the old dial of four is in `heads/archive/`)
+     after your references and binds it with the marks named; with one, the reference is the approved
      token head and carries the tilt itself. Then a check model grades the plate beside five
      crops the owner ruled on (`mannequins/heads/band/`, one per step) on five steps, `far-down`, `down`,
      `right`, `up`, `far-up`, plus `camera-dropped` and `unclear`; `down`, `right` and `up` are
      the band and deliver, and a second, eyes-only call asks whether both eyes read, the owner's
      criterion (2026-10-17): a `no` with the tilt in band is fixed by one edit on the plate, the
      eyes opened and nothing else changed (14 of 14 opened on the fourteen it was ruled on, the
-     pose kept on every one), and only a second `no` re-renders on the next bust; `head` reports
+     pose kept on every one), and only a second `no` re-renders; `head` reports
      `eyes` and `eyesEdited`. Over-opened eyes ("bug eyes") pass the gate: look for them in the
-     flaw pass. `far-down` is rendered again with the
-     next bust up (bust-3 at least), `far-up` with bust-1, a dropped camera once unchanged, at most two retries, every
+     flaw pass. With `headRetries` above its default of 0, `far-down` and `far-up` are rendered
+     again on the same bust, a dropped camera once unchanged, at most two retries, every
      kept plate named `-head<n>-<verdict>.png`, and the result's `head` reports `verdict`,
      `inBand`, `anchorUsed`, `first`, every verdict and the kept plates. Two bad verdicts still
      deliver, flagged, because the check can be wrong (re-cut 2026-10-17 from the owner's blind rulings: every
@@ -643,8 +645,8 @@ is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
      (Cecil's combat dropped the camera three times on `combat-empty` and landed first time on
      `combat-dagger-shield` with the shield removed). `unclear` with an `error` means the judge
      was not reached and the token went through unchecked; `unclear` without one is a lying,
-     hooded or helmeted figure, which is fine. `headAnchor` picks another bust ("bust-1" to
-     "bust-4", or "none") and `headRetries` caps the retries; neither is needed in the ordinary
+     hooded or helmeted figure, which is fine. `headAnchor` takes "bust" (the default), "none" or
+     "capture", and `headRetries` buys retries (0 by default); neither is needed in the ordinary
      run. **Never put head wording in the instruction, and never attach a frontal head (a
      portrait crop as `character`, a frontal token head as `pose`)**: both pull the face to the
      camera. Every change to the head path runs through `npm run headtest` in the server repo

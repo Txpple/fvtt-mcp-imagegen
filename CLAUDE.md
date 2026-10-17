@@ -29,10 +29,12 @@ steered retries, and `npm run headtest` (`scripts/headtest.mjs`) as the measurem
 `anatomy` line, a token's facing included, reported as `anatomy`; and the no-eyes remedy, one edit
 on the plate (`EYES_OPEN_PROMPT`), never a re-render first. The path the owner set on 2026-10-17: the library going
 forward is the human male alone, one capture per pose and setup, shot at 90 degrees with the eyes
-painted chroma green, bust-2-green (bust-2 with the same marks, the default) beside it on the render, race and sex from the words; the recapture
+painted chroma green, the bust beside it on the render, race and sex from the words; the recapture
 is the owner's and nothing is cut until it exists; the pipeline is locked at one paint per token,
-`headRetries` defaulting to 0 with the steering and the eyes edit kept until the recapture holds; `headAnchor: "capture"` paints a capture's own
-head with nothing attached. The record is `notes/mannequin-tokens/PLAN.md` ("The path from here"),
+`headRetries` defaulting to 0 with the retries and the eyes edit kept until the recapture holds; `headAnchor: "capture"` paints a capture's own
+head with nothing attached. The bust on record since 2026-10-17 (the owner's HeroForge
+head at 90 degrees, green eyes) is `mannequins/heads/bust.png`, the only one: the four-bust
+dial, its steering and the scripted busts are gone, the files in `mannequins/heads/archive/`. The record is `notes/mannequin-tokens/PLAN.md` ("The path from here"),
 the next session's start `notes/mannequin-tokens/HANDOFF.md` (the research scripts in
 `scripts/research/`). Release detail is the GitHub release notes; the
 dated journal is `docs/log/YYYY-MM.md`.
@@ -87,8 +89,9 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
   mouth read, never bowed with the eyes hidden, never the face lifted to the camera, never a
   dropped camera. Words about the angle fail and a render leans toward the head tilt of any
   reference that has a head (about 95 renders), so the head is an image: with no
-  `character` reference the server attaches `mannequins/heads/bust-2.png` after the caller's
-  references, bound as a dial (`headAnchor` picks bust-1 to bust-4 or none); a `character`
+  `character` reference the server attaches `mannequins/heads/bust.png`, the one bust on
+  record, after the caller's references, bound with its green eye marks named (`headAnchor`
+  takes `bust`, `none` or `capture`; the retired dial is in `heads/archive/`); a `character`
   reference is the approved token head and carries the tilt. Then the plate is shown to
   `JUDGE_MODEL` (flash, temperature 0, a flat `JUDGE_USD` in the session total) beside five crops
   the owner ruled on (`mannequins/heads/band/`, one per step) for one of `far-down`, `down`, `right`, `up`,
@@ -96,9 +99,10 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
   on the plate asks whether both eyes read (`EYES_PROMPT`, no exemplars): the owner's criterion is
   the eyes and the tilt steps do not carry it. A `no` with the tilt in band is fixed by one edit
   on the plate (`EYES_OPEN_PROMPT`: the eyes opened, nothing else changed) and re-checked; only a
-  second `no` re-renders on the next bust; `head` reports `eyes` and `eyesEdited`. `far-down` is redone
-  with the next bust up, `far-up` with bust-1, a dropped camera once unchanged (then "change the
-  capture"), at most two retries (`headRetries`), every call billed, then delivered flagged; the
+  second `no` re-renders; `head` reports `eyes` and `eyesEdited`. `far-down` and `far-up` are
+  redone on the same bust, a dropped camera once unchanged (then "change the capture"), at most
+  two retries (`headRetries`, 0 by default: one paint, the checks report only), every call
+  billed, then delivered flagged; the
   result reports `head`. A judge that cannot be reached never blocks a render. Tests mock the
   judge like every other call; `npm run headtest` is the live measurement, run only on the
   owner's word (about $1.50 a run), and every change to the head path goes through it.

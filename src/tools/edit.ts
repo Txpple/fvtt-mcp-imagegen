@@ -77,10 +77,10 @@ const editImageSchema = z.object({
     .enum(HEAD_ANCHOR_CHOICES)
     .optional()
     .describe(
-      'Mannequin tokens only. The grey bust the tool attaches after your references as the ' +
-        'head-angle anchor, bust-1 (the lowest tilt, crown only) to bust-4 (eyes, nose, mouth ' +
-        'and the chin edge); or bust-2-green, the default: bust-2 with the capture\'s green eye marks in its sockets, bound with the marks named; the grey bust-2 centres the owner\'s band. "none" attaches no ' +
-        'bust on the first render (a steered retry still adds one). With a reference of role ' +
+      'Mannequin tokens only. "bust" (the default) attaches the one bust on record after your ' +
+        "references as the head-angle anchor: the owner's HeroForge head at the pipeline's " +
+        'tilt with the two eyes painted chroma green, bound with the marks named. "none" ' +
+        'attaches no bust on the first render (a retry still adds one). With a reference of role ' +
         'character attached: unset, the reference is taken as the approved token head and ' +
         'carries the tilt itself (no bust); a bust named here rides beside the reference, which ' +
         'is then bound to identity only (features, hair, skin, build and kit), the route for a ' +
@@ -96,7 +96,7 @@ const editImageSchema = z.object({
     .optional()
     .describe(
       'Mannequin tokens only. How many steered re-renders a head verdict outside the band may ' +
-        'buy. Default 0: one paint, the head and eyes checks report only (the owner\'s pipeline, ' +
+        "buy. Default 0: one paint, the head and eyes checks report only (the owner's pipeline, " +
         '2026-10-17); up to 2 turns the steering and the eyes edit back on.'
     ),
   anatomy: anatomySchema,
@@ -206,8 +206,8 @@ export const PROP_EDIT_PAD = 0.12;
 
 /**
  * Assemble the edit prompt for a kind. The token plate sentence is appended later by render(),
- * and so is a mannequin token's bust binding (render attaches the bust, and may swap it on a
- * steered retry). `headAnchored` says an image carries the head, so the head words are left out;
+ * and so is a mannequin token's bust binding (render attaches the bust, and adds it to a
+ * character head on a retry). `headAnchored` says an image carries the head, so the head words are left out;
  * `characterIsHead` says a character reference is the approved token head (bound to carry the
  * tilt) rather than a portrait beside a bust (bound to identity only).
  */
@@ -267,15 +267,17 @@ export class EditImageTool {
           'same call. "give this an updated painterly style" restyles a world token in place. ' +
           'source: "mannequin" paints a grey pose capture into a token with the pose, camera and ' +
           'grip bound to the capture, and carries the head by an image, never by words: with no ' +
-          'character reference the tool attaches a grey bust at the wanted tilt (headAnchor, ' +
-          'default bust-2-green); a character reference is taken as the approved token head and ' +
-          'carries the tilt itself, or, with headAnchor named too, binds identity only while the ' +
-          'bust carries the head. A judge model then grades the plate against four ruled head ' +
-          'crops on five steps (far-down, down, right, up, far-up) plus camera-dropped and ' +
-          "unclear; down, right and up are inside the owner's band and deliver. far-down is " +
-          're-rendered with the next bust up, far-up with bust-1, a dropped camera once ' +
-          'unchanged (twice means change the capture), at most two retries (headRetries), then ' +
-          'delivered flagged; every kept plate and verdict is in `head` (read it). Every token ' +
+          'character reference the tool attaches the bust on record, a grey head at the wanted ' +
+          'tilt with green eye marks (headAnchor "bust", the default); a character reference is ' +
+          'taken as the approved token head and carries the tilt itself, or, with headAnchor ' +
+          'named too, binds identity only while the bust carries the head. A check model then ' +
+          'grades the plate against five ruled head crops (far-down, down, right, up, far-up) ' +
+          "plus camera-dropped and unclear; down, right and up are inside the owner's band and " +
+          'deliver, and a second call asks whether both eyes read. By default (headRetries 0) ' +
+          'one paint is delivered and the checks report only; with retries, far-down and ' +
+          'far-up are re-rendered on the same bust, a dropped camera once unchanged (twice ' +
+          'means change the capture), eyes shut fixed by one edit on the plate, at most two, ' +
+          'then delivered flagged; every kept plate and verdict is in `head` (read it). Every token ' +
           'and portrait edit is counted by the judge as well (heads, eyes, limbs, hands and ' +
           "fingers, tails, tendrils, held objects, and a token's facing) against an optional " +
           '`anatomy` line from the book; the result reports `anatomy`: what it found, each flaw ' +

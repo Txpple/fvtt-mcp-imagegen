@@ -1334,3 +1334,26 @@ graded sheet out) once the head path is stable, so a flaw pass starts from flagg
 
 Folded in from before: whether the universal route should default to bust-3 is stage 5; the
 stale worktree `.claude/worktrees/elegant-franklin-bdff24` (detached, clean) is housekeeping.
+
+### The bust on record (2026-10-17, evening)
+
+The owner's re-shoot landed: `Bust Main-Portrait.png`, the bald human mannequin, head and
+shoulders, camera straight down, the eyes painted chroma green, 1024 square with alpha. Checked
+against bust-2 before it went in (a sheet beside bust-2-green, bust-2 and bust-3, now on the
+Desktop in `RefImageRefactor`): by eye the brow, both eyes, the nose and the top of the mouth
+read, a hair more face than bust-2 and clearly less than bust-3, so inside the band at the step
+the pipeline was locked on; the framing is looser than the legacy busts (more shoulder, the head
+smaller in the square), which does not matter for a tilt anchor; two green marks at the capture
+colour (about 200, 250, 50; 845 pixels against the scripted lenses' 4,500, since they sit on the
+eyeball surface at the tilt). The owner's word on the fit: "did it match well enough?", answered
+yes on that reading.
+
+The owner's instruction with it: this is the only bust on record, the legacy ones archived for
+reference and deleted some day. So the file is `mannequins/heads/bust.png` (not the handoff's
+`bust-2-green.png`, which named a step that no longer exists), `headAnchor` takes `bust`, `none`
+or `capture`, `DEFAULT_BUST` is `bust`, and the four-bust dial, `steerBust`, the eyed and the
+scripted green busts are cut from `src/heads.ts`; a retry outside the band (still off by default)
+re-renders on the same bust, and a render that carried no bust gets it added. The six old files
+sit in `mannequins/heads/archive/` with a README. `headtest --bust N` became `--calibrate`. 189
+tests. The Desktop review folders (`EyeColorTests` and the rest) were cleared by the owner the
+same evening; anything to see goes to `RefImageRefactor` from here.

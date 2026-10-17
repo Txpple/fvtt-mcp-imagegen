@@ -36,7 +36,14 @@ import {
   judgeHead,
   needsRetry,
 } from '../head.js';
-import { type Bust, bustBinding, type HeadAnchor, isBust, loadBust, steerBust } from '../heads.js';
+import {
+  type Bust,
+  bustBinding,
+  DEFAULT_BUST,
+  type HeadAnchor,
+  isBust,
+  loadBust,
+} from '../heads.js';
 import { type Box, type Dimensions, dimensions, fitRect, postProcess } from '../post.js';
 import {
   CREATURE_SIZES,
@@ -406,15 +413,16 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
   }
   // The head check (owner rule 2026-10-16): a mannequin token's head sits inside the owner's
   // band (down, right or up), never bowed with the eyes hidden, never the face lifted to the
-  // camera, never a dropped camera. The check's word steers a re-render (head.ts, heads.ts):
-  // far-down goes up the bust dial, far-up to bust-1, a dropped camera is redone once unchanged
-  // and then blamed on the capture. The eyes gate (2026-10-17) is a second word on the same
-  // plate: NO means the eyes do not read, the owner's own criterion. With the tilt in band it
-  // is fixed by one edit on the plate (EYES_OPEN_PROMPT: the eyes opened, nothing else changed)
-  // and re-checked; only a second NO re-renders on the next bust up, like a bowed head. At
-  // most `retries` re-renders or edits, then the token is delivered flagged; it
-  // never refuses, since the check can be wrong. A retry that clips is kept and counted, never
-  // delivered; the earlier clean plate stays.
+  // camera, never a dropped camera. The check's word buys a re-render (head.ts): far-down and
+  // far-up are redone on the same bust (there is one bust on record since 2026-10-17; the dial
+  // that steered between four is archived), a dropped camera is redone once unchanged and then
+  // blamed on the capture. The eyes gate (2026-10-17) is a second word on the same plate: NO
+  // means the eyes do not read, the owner's own criterion. With the tilt in band it is fixed by
+  // one edit on the plate (EYES_OPEN_PROMPT: the eyes opened, nothing else changed) and
+  // re-checked; only a second NO re-renders, like a bowed head. At most `retries` re-renders or
+  // edits (0 by default: one paint, the checks report only), then the token is delivered
+  // flagged; it never refuses, since the check can be wrong. A retry that clips is kept and
+  // counted, never delivered; the earlier clean plate stays.
   let head: HeadReport | undefined;
   if (cut && chromaKey && input.head) {
     const anchorName = (b: Bust | undefined) => {
@@ -435,8 +443,9 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     ) {
       const verdict = checked.verdict;
       // A head the tilt accepts but the eyes gate rejects is fixed first by one edit on the plate
-      // (the owner's rule: a flaw pass keeps the pose); only a second NO is steered like a bowed
-      // head, up the dial.
+      // (the owner's rule: a flaw pass keeps the pose); only a second NO is re-rendered like a
+      // bowed head, on the same bust. A render that carried no bust (a character head, or the
+      // head in words) takes the bust on its retry, beside what it had.
       const reason = needsRetry(verdict) ? verdict : 'no-eyes';
       const edit = reason === 'no-eyes' && !eyesEdited;
       let next = bust;
@@ -444,7 +453,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
         if (drops) break; // twice: the capture is the cause, not the bust
         drops++;
       } else if (!edit) {
-        next = steerBust(reason === 'no-eyes' ? 'far-down' : verdict, bust);
+        next = bust ?? DEFAULT_BUST;
       }
       const keptPath = path.join(
         deps.outputDir,

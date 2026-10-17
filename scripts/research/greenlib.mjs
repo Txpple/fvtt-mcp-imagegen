@@ -1,6 +1,6 @@
 // Green eyes scripted onto the library (the owner, 2026-10-17, evening): thirty captures across
 // bodies, sexes, poses and weapons get the two green marks the owner painted on the 90-degree
-// capture, then render words-only with bust-2, checks report-only.
+// capture, then render words-only with the bust, checks report-only.
 //
 //   node scripts/research/greenlib.mjs mark            the check model finds each capture's eye
 //                                                      sockets (a fifth of a cent each), the green
@@ -186,7 +186,7 @@ if (phase === 'render') {
     console.error(`✗ ${missing.length} green captures missing; run \`mark\` first`);
     process.exit(2);
   }
-  console.log(`greenlib: ${items.length} renders, words only, bust-2 by the server, checks report-only; about $${(items.length * 0.045).toFixed(2)}`);
+  console.log(`greenlib: ${items.length} renders, words only, the bust by the server, checks report-only; about $${(items.length * 0.045).toFixed(2)}`);
   if (!yes) {
     console.log('Add --yes to run.');
     process.exit(0);

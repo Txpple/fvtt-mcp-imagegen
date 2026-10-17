@@ -7,43 +7,43 @@ never the face lifted to the camera (the chin's underside, the throat), which th
 most. About 95 renders that day showed that words about the angle (absolute lines, degrees, gaze
 targets, edits, "exactly as the mannequin's head") fail, and that a render leans toward the head
 tilt of whatever reference image carries a head. So the head is carried by an image, never by
-words: a grey bust at the wanted tilt for a figure made from words, the approved token head for a
+words: the bust at the wanted tilt for a figure made from words, the approved token head for a
 PC. `edit-image` with `source: "mannequin"` attaches the bust itself (`src/heads.ts`); the
 illustration-builder skill's recipe says nothing about the head.
 
-## The busts (`bust-1.png` to `bust-4.png`)
+## The bust (`bust.png`)
 
-Four captures of the bald human HeroForge mannequin with the camera straight down (90 degrees, the
-owner's standard for every capture) and only the head tilted, a tight
-head and shoulders, 1024 square with alpha, the head tipped a step further toward the camera each
-time. None shows the throat, so none pushes toward a frontal face.
+The one bust on record (the owner, 2026-10-17, evening): the bald human HeroForge mannequin, head
+and shoulders, the camera straight down at 90 degrees (the standard for every capture) and only
+the head tilted, the two eyes painted chroma green like every capture's, 1024 square with alpha.
+The tilt is the retired bust-2's, the middle of the owner's band: the brow, both eyes, the nose
+and the top of the mouth read, the throat does not. Checked against bust-2 before it went in: a
+hair more face than bust-2, clearly less than bust-3. The green marks are two, at the capture
+colour (about 200, 250, 50), smaller than the scripted lenses because they sit on the eyeball
+surface at the tilt.
 
-| File | Shows | Measured effect (2026-10-16) |
-| --- | --- | --- |
-| `bust-1` | the crown only | sent a guard eyes-down (like band 5) |
-| `bust-2` | brow and eye sockets | mid-band (like 10); the grey original of the default |
-| `bust-3` | eyes, nose and mouth | face-forward (like 11) |
-| `bust-4` | eyes, nose, mouth and the chin edge | sent a guard eyes-down once; the top of the dial is not a lock |
-| `bust-2-green` | bust-2 with the capture's two green marks in its sockets (2026-10-17) | **the server's default since 2026-10-17** (the owner's word after ten a side beside the green-eyed capture); bound with the marks named; the owner's re-shot bust replaces this file at the same name |
-| `bust-2-eyes` | bust-2 with two open eyes drawn into the sockets by script (2026-10-17): a lens, a grey iris, a lid line | the owner's "for fun" test; a `headAnchor` choice outside the dial, bound with its eyes named |
+Attached after the caller's references, it bleeds no identity into the figure. `headAnchor`
+takes `bust` (the default), `none` (no bust on the first render, the head in words) or `capture`
+(the capture's own head, nothing attached and nothing said). With `headRetries` above 0 a verdict
+outside the band re-renders on the same bust; a render that carried no bust (a character head, or
+the head in words) gets the bust added beside what it had.
 
-Attached as a `pose` reference they act as a dial with about one step of spread (bust-2 on an orc,
-a goblin, a knight and a dwarf centred the heads, with the goblin and one knight a step low), not
-a lock, and bleed no identity into the figure. The server steers with them: a `far-down` verdict
-re-renders with the next bust up (bust-3 at least), a `far-up` one with bust-1.
+**Binding sentence** (the server writes it):
 
-**Binding sentence for a bust** (the server writes it; `headAnchor` picks the bust):
+> Image N is a grey clay head with two bright green marks where its eyes are, showing only how
+> far a head is tipped toward this overhead camera and where the eyes sit: tip the figure's head
+> exactly like it, so that the same amount of brow, eyes, nose and mouth shows, paint the figure's
+> two eyes open where this head's green marks sit, and take nothing else from it.
 
-> Image N is a grey clay head showing only how far a head is tipped toward this overhead camera:
-> tip the figure's head exactly like it, so that the same amount of brow, eyes, nose and mouth
-> shows, and take nothing else from it.
+The four-bust dial it replaced (bust-1 to bust-4, with the scripted bust-2-green and bust-2-eyes)
+is in `archive/` with its own README, for reference only; the server never reads it.
 
 ## The band (`band/`)
 
 Head-and-shoulders crops (190 px of the 512, upscaled to 512) of the live Echoes of Halruaa PC
-tokens the owner ruled on `head-angle-sheet.png` (Desktop, `PC Tokens`), numbered as on that sheet.
-The six `right-*` crops are the band, from eyes-down (5) to face-forward (11); the two `wrong-*`
-crops are outside it. Until 2026-10-17 the head check (`src/head.ts`) was shown `right-05` as DOWN,
+tokens the owner ruled on `head-angle-sheet.png` (2026-10-16), numbered as on that sheet. The six
+`right-*` crops are the band, from eyes-down (5) to face-forward (11); the two `wrong-*` crops
+are outside it. Until 2026-10-17 the head check (`src/head.ts`) was shown `right-05` as DOWN,
 `right-10` as RIGHT, `right-11` as UP and `wrong-12` as FAR-UP beside every plate it grades;
 since then its ruler is the five crops in the next section, and these stay as the record of the
 2026-10-16 ruling.
@@ -51,11 +51,11 @@ since then its ruler is the five crops in the next section, and these stay as th
 ### The ruler since 2026-10-17 (`band/*-s2-*`, and `wrong-12`)
 
 Head crops (220 px of the 512, upscaled to 512) of four stage-2 renders the owner ruled blind on
-2026-10-17 (the universal PC route, the review folder `TokenImprovements/06-stage-2-...`), one
-per step, with the legacy FAR-UP kept. Measured against the owner's 27 ruled plates over three
-passes: the legacy four passed a head the owner rejects every time and wobbled on six cells;
-these five caught every rejected head every time, rejected two accepted NPC heads (a re-render
-each, about 3.5 cents) and wobbled on three. The record is `notes/mannequin-tokens/PLAN.md`.
+2026-10-17 (the universal PC route), one per step, with the legacy FAR-UP kept. Measured against
+the owner's 27 ruled plates over three passes: the legacy four passed a head the owner rejects
+every time and wobbled on six cells; these five caught every rejected head every time, rejected
+two accepted NPC heads (a re-render each, about 3.5 cents) and wobbled on three. The record is
+`notes/mannequin-tokens/PLAN.md`.
 
 | File | Step | Stage-2 cell | The owner's words |
 | --- | --- | --- | --- |
@@ -68,15 +68,15 @@ each, about 3.5 cents) and wobbled on three. The record is `notes/mannequin-toke
 **The eyes gate (2026-10-17).** The owner's criterion for a head is whether both eyes read, and
 the tilt steps do not carry it: on stage 3 the owner rejected eleven heads, ten of them "no eyes",
 and the tilt check passed ten of the eleven. So a second, eyes-only call on the plate
-(`EYES_PROMPT` in `src/head.ts`, no exemplars) answers EYES, NO-EYES or NO-FACE, and NO-EYES is
-sent back up the dial like far-down. Measured on 53 ruled plates over two passes: 12 of the
-owner's 13 eyeless heads caught on both passes (the miss a front view), 3 of 17 accepted heads
-sent back; a two-word answer folded into the tilt call caught 10. A NO with the tilt in band is
-fixed by one edit on the plate (`EYES_OPEN_PROMPT`), the remedy the owner ruled on 2026-10-17 from
-fourteen edited tokens (14 of 14 opened, the pose kept on every one, two opened too wide until the
-line softened); only a second NO re-renders on the next bust.
+(`EYES_PROMPT` in `src/head.ts`, no exemplars) answers EYES, NO-EYES or NO-FACE, and NO-EYES is a
+rejection like far-down. Measured on 53 ruled plates over two passes: 12 of the owner's 13
+eyeless heads caught on both passes (the miss a front view), 3 of 17 accepted heads sent back; a
+two-word answer folded into the tilt call caught 10. A NO with the tilt in band is fixed by one
+edit on the plate (`EYES_OPEN_PROMPT`), the remedy the owner ruled on 2026-10-17 from fourteen
+edited tokens (14 of 14 opened, the pose kept on every one, two opened too wide until the line
+softened); only a second NO re-renders. By default (`headRetries` 0) both checks report only.
 
-| File | Sheet | Source (Desktop `PC Tokens/prod/`) | Ruling |
+| File | Sheet | Source | Ruling |
 | --- | --- | --- | --- |
 | `right-05-tychon-stand.png` | 5 | `tychon-tessarin.png` | right: the eyes-down end of the band |
 | `right-06-kartor-stand.png` | 6 | `kartor-bloodaxe.png` | right |
@@ -87,9 +87,9 @@ line softened); only a second NO re-renders on the next bust.
 | `wrong-08-cecil-stand.png` | 8 | `cecil-edmunds.png` | wrong |
 | `wrong-12-cecil-combat.png` | 12 | `cecil-edmunds-combat.png` | wrong: the face lifted to the camera |
 
-These crops are the judge's ruler, not a render reference: the owner ruled (2026-10-17) that the
+These crops are the check's ruler, not a render reference: the owner ruled (2026-10-17) that the
 legacy heads were luck, not a standard, so a PC renders on the bust like any NPC, with the
-portrait's head-to-waist crop as `character` and `headAnchor: "bust-2"` on the call (the crop is
+portrait's head-to-waist crop as `character` and `headAnchor: "bust"` on the call (the crop is
 then bound to identity only). A head the owner has ruled on can still be attached as `character`
 with no `headAnchor`, when it is bound as the token head and carries its own tilt.
 
@@ -101,5 +101,5 @@ with no `headAnchor`, when it is bound as the token head and carries its own til
 > background.
 
 When a `character` reference is attached the server attaches no bust: the reference is taken as a
-token head and carries the tilt itself. A steered retry on a PC render adds a bust as a second
+token head and carries the tilt itself. A retry on such a render adds the bust as a second
 reference beside it rather than replacing it.

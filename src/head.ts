@@ -119,7 +119,7 @@ export async function judgeHead(
 // eyes-only call on the plate, with no exemplars, caught twelve of the owner's thirteen eyeless
 // heads on both of two passes over 53 ruled plates and sent three of seventeen accepted heads
 // back (a two-word answer folded into the tilt call caught ten). Its NO is a rejection that
-// steers up the dial like far-down; NO-FACE and anything unparsed never reject.
+// buys a retry like far-down; NO-FACE and anything unparsed never reject.
 
 export const EYES_VERDICTS = ['yes', 'no', 'no-face', 'unclear'] as const;
 export type EyesVerdict = (typeof EYES_VERDICTS)[number];
@@ -160,7 +160,7 @@ export async function judgeEyes(gemini: Gemini, plate: Buffer): Promise<EyesVerd
 // The eyes remedy (owner rule 2026-10-17): a NO from the eyes gate with the tilt in band is one
 // edit on the delivered plate, never a re-render first. On fourteen eyeless tokens one edit
 // opened the eyes on 14 of 14 and kept every pose, kit and likeness, where a re-render on the
-// next bust delivered eyes one time in two and lost the pose one time in four. The first line
+// next bust of the then dial delivered eyes one time in two and lost the pose one time in four. The first line
 // ("fully ... the lids up, the eyes alive") opened two of the fourteen too wide ("bug eyes");
 // this one asks for natural eyes and names no gaze, since gaze words pull the head.
 export const EYES_OPEN_PROMPT =

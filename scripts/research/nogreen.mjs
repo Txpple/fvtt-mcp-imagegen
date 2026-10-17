@@ -305,7 +305,7 @@ async function worker() {
         headRetries: 0,
         ...(ANCHOR ? { headAnchor: ANCHOR } : {}),
         ...(it.crop
-          ? { headAnchor: ANCHOR ?? 'bust-2', references: [{ path: it.crop, role: 'character', label: it.label }] }
+          ? { headAnchor: ANCHOR ?? 'bust', references: [{ path: it.crop, role: 'character', label: it.label }] }
           : {}),
       });
       const dest = path.join(DESK, 'tokens', `${String(i + 1).padStart(2, '0')}-${it.id}.png`);

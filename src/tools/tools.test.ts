@@ -618,7 +618,7 @@ describe('edit-image', () => {
     const last = parts[parts.length - 2];
     if (!last?.inline_data) return undefined;
     const data = Buffer.from(last.inline_data.data, 'base64');
-    for (const b of ['bust-1', 'bust-2', 'bust-3', 'bust-4', 'bust-2-eyes', 'bust-2-green'] as const) {
+    for (const b of ['bust'] as const) {
       if (data.equals(fs.readFileSync(bustPath(b)))) return b;
     }
     return undefined;
@@ -667,7 +667,7 @@ describe('edit-image', () => {
     expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/face, hair/);
   });
 
-  it('mannequin source with no character: attaches bust-2-green last, bound as the head-angle dial, and grades against the five exemplars', async () => {
+  it('mannequin source with no character: attaches the bust last, bound with its green marks named, and grades against the five exemplars', async () => {
     const { dispatch, spend } = build();
     const r: any = await dispatch('edit-image', {
       sourceImage: refPng,
@@ -680,15 +680,15 @@ describe('edit-image', () => {
     expect(sent).toHaveLength(1);
     const parts = sent[0].body.contents[0].parts;
     expect(parts).toHaveLength(4); // source, object, bust, text
-    expect(sentBust(0)).toBe('bust-2-green');
+    expect(sentBust(0)).toBe('bust');
     const text = parts[3].text;
-    expect(text).toContain(`${MANNEQUIN_EDIT_KEEP} ${bustBinding(3, 'bust-2-green')} The ENTIRE image background`);
+    expect(text).toContain(`${MANNEQUIN_EDIT_KEEP} ${bustBinding(3, 'bust')} The ENTIRE image background`);
     expect(text).not.toContain(MANNEQUIN_HEAD_WORDS);
     expect(judged).toHaveLength(1);
     const jp = judged[0].body.contents[0].parts;
     expect(jp).toHaveLength(7);
     expect(jp[6].text).toMatch(/Image 1 is FAR-DOWN.*Image 6 is the token to grade/);
-    expect(r.head).toEqual({ verdict: 'right', eyes: 'yes', inBand: true, anchorUsed: 'bust-2-green' });
+    expect(r.head).toEqual({ verdict: 'right', eyes: 'yes', inBand: true, anchorUsed: 'bust' });
     expect(eyed).toHaveLength(1);
     expect(eyed[0].body.contents[0].parts).toHaveLength(2); // the plate and the prompt, no exemplars
     expect(eyed[0].body.contents[0].parts[1].text).toMatch(/both of its eyes read/);
@@ -696,34 +696,6 @@ describe('edit-image', () => {
     const m = new SpendMeter();
     m.recordJudge(0.001);
     expect(m.totalUsd).toBeCloseTo(0.001, 3);
-  });
-
-  it('mannequin source: an eyed bust is attached by name and bound with its eyes named', async () => {
-    const { dispatch } = build();
-    const r: any = await dispatch('edit-image', {
-      sourceImage: refPng,
-      instruction: 'a guard',
-      kind: 'token',
-      source: 'mannequin',
-      slug: 'guard',
-      headAnchor: 'bust-2-eyes',
-    });
-    expect(sentBust(0)).toBe('bust-2-eyes');
-    const text = sent[0].body.contents[0].parts.at(-1).text;
-    expect(text).toContain('grey clay head with two open eyes');
-    expect(text).toContain('have both of its eyes open exactly as they are here');
-    expect(r.head.anchorUsed).toBe('bust-2-eyes');
-    const g: any = await dispatch('edit-image', {
-      sourceImage: refPng,
-      instruction: 'a guard',
-      kind: 'token',
-      source: 'mannequin',
-      slug: 'guard',
-      headAnchor: 'bust-2-green',
-    });
-    expect(sentBust(1)).toBe('bust-2-green');
-    expect(sent[1].body.contents[0].parts.at(-1).text).toContain('two bright green marks where its eyes are');
-    expect(g.head.anchorUsed).toBe('bust-2-green');
   });
 
   it('mannequin source: headAnchor picks the bust, and "none" sends no bust with the head in words', async () => {
@@ -734,9 +706,10 @@ describe('edit-image', () => {
       kind: 'token',
       source: 'mannequin',
       slug: 'guard',
-      headAnchor: 'bust-4',
+      headAnchor: 'bust',
     });
-    expect(sentBust(0)).toBe('bust-4');
+    expect(sentBust(0)).toBe('bust');
+    expect(sent[0].body.contents[0].parts.at(-1).text).toContain('two bright green marks where its eyes are');
     expect(sent[0].body.contents[0].parts.at(-1).text).toContain(bustBinding(2));
     const r: any = await dispatch('edit-image', {
       sourceImage: refPng,
@@ -787,7 +760,7 @@ describe('edit-image', () => {
     expect(r2.head.anchorUsed).toBe('none');
   });
 
-  it('mannequin source: far-down is re-rendered with bust-3, the first plate kept, every verdict reported', async () => {
+  it('mannequin source: far-down is re-rendered on the same bust, the first plate kept, every verdict reported', async () => {
     const { dispatch } = build();
     verdicts = ['FAR-DOWN', 'UP'];
     const r: any = await dispatch('edit-image', {
@@ -800,15 +773,15 @@ describe('edit-image', () => {
     });
     expect(sent).toHaveLength(2);
     expect(judged).toHaveLength(2);
-    expect(sentBust(0)).toBe('bust-2-green');
-    expect(sentBust(1)).toBe('bust-3');
+    expect(sentBust(0)).toBe('bust');
+    expect(sentBust(1)).toBe('bust');
     expect(r.head).toMatchObject({
       verdict: 'up',
       inBand: true,
       first: 'far-down',
       verdicts: ['far-down', 'up'],
       retried: true,
-      anchorUsed: 'bust-3',
+      anchorUsed: 'bust',
     });
     expect(r.head.kept).toHaveLength(1);
     expect(path.basename(r.head.kept[0])).toMatch(/^token-guard-[0-9a-f]{8}-head1-far-down\.png$/);
@@ -816,7 +789,7 @@ describe('edit-image', () => {
     expect(r.estimatedUsd).toBeCloseTo(0.0336 * 2, 6);
   });
 
-  it('mannequin source: far-up is re-rendered with bust-1; a third bad verdict still delivers, flagged, never a fourth render', async () => {
+  it('mannequin source: far-up is re-rendered on the same bust; a third bad verdict still delivers, flagged, never a fourth render', async () => {
     const { dispatch } = build();
     verdicts = ['FAR-UP', 'FAR-DOWN', 'FAR-UP'];
     const r: any = await dispatch('edit-image', {
@@ -828,14 +801,14 @@ describe('edit-image', () => {
       slug: 'guard',
     });
     expect(sent).toHaveLength(3);
-    expect([sentBust(0), sentBust(1), sentBust(2)]).toEqual(['bust-2-green', 'bust-1', 'bust-3']);
+    expect([sentBust(0), sentBust(1), sentBust(2)]).toEqual(['bust', 'bust', 'bust']);
     expect(r.head).toMatchObject({
       verdict: 'far-up',
       inBand: false,
       first: 'far-up',
       verdicts: ['far-up', 'far-down', 'far-up'],
       retried: true,
-      anchorUsed: 'bust-3',
+      anchorUsed: 'bust',
     });
     expect(
       r.head.kept.map((k: string) => path.basename(k).replace(/^token-guard-[0-9a-f]{8}-/, ''))
@@ -856,12 +829,12 @@ describe('edit-image', () => {
       slug: 'guard',
     });
     expect(sent).toHaveLength(2);
-    expect([sentBust(0), sentBust(1)]).toEqual(['bust-2-green', 'bust-2-green']);
+    expect([sentBust(0), sentBust(1)]).toEqual(['bust', 'bust']);
     expect(r.head).toMatchObject({
       verdict: 'camera-dropped',
       inBand: false,
       verdicts: ['camera-dropped', 'camera-dropped'],
-      anchorUsed: 'bust-2-green',
+      anchorUsed: 'bust',
     });
     expect(r.head.advice).toMatch(/change the capture/);
     expect(fs.existsSync(r.file)).toBe(true);
@@ -883,7 +856,7 @@ describe('edit-image', () => {
     expect(sent[0].body.contents[0].parts).toHaveLength(3);
     expect(sentBust(0)).toBeUndefined();
     expect(sent[1].body.contents[0].parts).toHaveLength(4);
-    expect(sentBust(1)).toBe('bust-1');
+    expect(sentBust(1)).toBe('bust');
     expect(sent[1].body.contents[0].parts[3].text).toMatch(
       /is a CHARACTER reference: this figure's head/
     );
@@ -891,11 +864,11 @@ describe('edit-image', () => {
     expect(r.head).toMatchObject({
       verdict: 'right',
       first: 'far-up',
-      anchorUsed: 'character + bust-1',
+      anchorUsed: 'character + bust',
     });
   });
 
-  it('mannequin source: a bust named beside a character reference binds it to identity only and steers the bust', async () => {
+  it('mannequin source: a bust named beside a character reference binds it to identity only and keeps it on a retry', async () => {
     const { dispatch } = build();
     verdicts = ['FAR-UP', 'RIGHT'];
     const r: any = await dispatch('edit-image', {
@@ -905,26 +878,26 @@ describe('edit-image', () => {
       source: 'mannequin',
       headRetries: 2,
       slug: 'dwarf',
-      headAnchor: 'bust-2',
+      headAnchor: 'bust',
       references: [{ path: refPng, role: 'character', label: 'the dwarf' }],
     });
     expect(sent).toHaveLength(2);
     expect(sent[0].body.contents[0].parts).toHaveLength(4); // source, portrait, bust, text
-    expect(sentBust(0)).toBe('bust-2');
+    expect(sentBust(0)).toBe('bust');
     const text = sent[0].body.contents[0].parts[3].text;
     expect(text).toMatch(/Image 2 \(the dwarf\) is a CHARACTER reference: paint the features/);
     expect(text).toMatch(/posed and framed as the prompt and the source image say/);
     expect(text).not.toMatch(/this figure's head/);
     expect(text).toContain(bustBinding(3));
-    expect(sentBust(1)).toBe('bust-1');
+    expect(sentBust(1)).toBe('bust');
     expect(r.head).toMatchObject({
       verdict: 'right',
       first: 'far-up',
-      anchorUsed: 'bust-1 + identity',
+      anchorUsed: 'bust + identity',
     });
   });
 
-  it('mannequin source: eyes NO with the tilt in band is one edit on the plate, a second NO re-renders up the dial, the eyes reported', async () => {
+  it('mannequin source: eyes NO with the tilt in band is one edit on the plate, a second NO re-renders on the same bust, the eyes reported', async () => {
     const { dispatch, spend } = build();
     verdicts = ['RIGHT', 'RIGHT'];
     eyesAnswers = ['NO-EYES', 'EYES'];
@@ -952,7 +925,7 @@ describe('edit-image', () => {
       verdict: 'right',
       eyes: 'yes',
       inBand: true,
-      anchorUsed: 'bust-2-green',
+      anchorUsed: 'bust',
       first: 'right',
       verdicts: ['right', 'right'],
       eyesVerdicts: ['no', 'yes'],
@@ -960,7 +933,7 @@ describe('edit-image', () => {
       eyesEdited: true,
     });
     expect(path.basename(r.head.kept[0])).toMatch(/-head1-no-eyes\.png$/);
-    // A second NO after the edit re-renders on the next bust up, like a bowed head.
+    // A second NO after the edit re-renders on the same bust, like a bowed head.
     verdicts = ['RIGHT', 'RIGHT', 'RIGHT'];
     eyesAnswers = ['NO-EYES', 'NO-EYES', 'EYES'];
     const r3: any = await dispatch('edit-image', {
@@ -972,9 +945,9 @@ describe('edit-image', () => {
       slug: 'guard',
     });
     expect(sent).toHaveLength(5);
-    expect(sentBust(4)).toBe('bust-3');
+    expect(sentBust(4)).toBe('bust');
     expect(r3.head).toMatchObject({
-      anchorUsed: 'bust-3',
+      anchorUsed: 'bust',
       verdicts: ['right', 'right', 'right'],
       eyesVerdicts: ['no', 'no', 'yes'],
       eyesEdited: true,
@@ -996,7 +969,7 @@ describe('edit-image', () => {
       slug: 'guard',
       headRetries: 0,
     });
-    expect(r2.head).toEqual({ verdict: 'right', eyes: 'no', inBand: false, anchorUsed: 'bust-2-green' });
+    expect(r2.head).toEqual({ verdict: 'right', eyes: 'no', inBand: false, anchorUsed: 'bust' });
   });
 
   it('mannequin source: headRetries 0 delivers the first render flagged, and unclear never retries', async () => {
@@ -1011,7 +984,7 @@ describe('edit-image', () => {
       headRetries: 0,
     });
     expect(sent).toHaveLength(1);
-    expect(r.head).toEqual({ verdict: 'far-up', eyes: 'yes', inBand: false, anchorUsed: 'bust-2-green' });
+    expect(r.head).toEqual({ verdict: 'far-up', eyes: 'yes', inBand: false, anchorUsed: 'bust' });
     verdicts = ['UNCLEAR'];
     const r2: any = await dispatch('edit-image', {
       sourceImage: refPng,
@@ -1025,7 +998,7 @@ describe('edit-image', () => {
       verdict: 'unclear',
       eyes: 'yes',
       inBand: false,
-      anchorUsed: 'bust-2-green',
+      anchorUsed: 'bust',
     });
   });
 
