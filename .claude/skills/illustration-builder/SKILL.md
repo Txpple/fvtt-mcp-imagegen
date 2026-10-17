@@ -578,7 +578,13 @@ is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
      Horns follow the crop rather than the words, so restate the horn shape when it matters. A
      `character` reference with no `headAnchor` is bound as an approved token head instead (it
      carries its own tilt, no bust); that route is kept for a head the owner has ruled on, and
-     is not the default.
+     is not the default. **A portrait with hair over the brow bows the head** (one PC,
+     2026-10-17: seven renders with his portrait beside bust-3 and bust-4 came back with the
+     hair over the eyes; words-only on bust-2 with "hair pushed back off his forehead so his
+     brow and both eyes are clear" landed first time). For such a face, drop the portrait,
+     describe the hair off the brow, and let the bust carry the head. **An instrument or a
+     large object cradled across the chest drops the camera** to a front-and-above view; sling
+     it on the back or hold it by the neck at the side.
    - **Never attach a whole image beside the mannequin.** A full style token or a full portrait
      gets its subject copied in (a wizard and a harpy came back as the attached drow). The crop
      rule above is the only exception: a crop, bound to the face and kit, nothing else.

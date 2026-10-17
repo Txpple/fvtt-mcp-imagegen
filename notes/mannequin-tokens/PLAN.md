@@ -438,3 +438,19 @@ stand `up`): Kartor's stand came back `far-down` and landed `down` on bust-3, Ly
 `far-down` twice and landed `up` on bust-4. The bust-2 NPC run centred on `right`, so a portrait
 beside the bust pulls the head a step lower; whether the universal route should default to bust-3
 is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
+
+**Cecil, the hard case (2026-10-17; eleven renders, about $0.80; `Desktop/Headtest/cecil`).** The
+owner passed the other seven universal renders and failed Cecil's two: the body not at 90 degrees
+and the heads weird. Two pulls, found one at a time. The lute cradled across his chest dropped the
+camera to a front-and-above view on the `stand-open` capture; slung on his back or held by the
+neck at his side (on `stand-dagger-open`, the dagger replaced) the body came back true top-down on
+every render since. His wavy jaw-length hair then fell over the eyes from above on every render
+with the portrait crop beside the bust, and bust-3 and bust-4 could not lift it (seven heads
+`far-down` or `down` with the hair over the eyes); "hair pushed back off his forehead so his brow
+and both green eyes are clear" is a face word, not a head word, and with it the combat landed
+`down` with the eyes clear. The stand still failed with the portrait (a dropped camera, then two
+bowed heads on bust-1 and bust-3), and landed `right` first time words-only on bust-2 with the
+same hair words, as his run 1 head had. **A frontal portrait with a fringe bows the head and can
+drop the camera; such a character goes words-only on the bust, the hair described off the brow.**
+The other three PCs' portraits (short, swept-back or pulled-back hair) rode beside the bust
+without harm.
