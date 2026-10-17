@@ -31,6 +31,21 @@ file is the agenda and the working rules for the next session; it does not repea
 - **Not done, on the owner's list for the real tokens**: the anatomy check's six-finger catch on
   Lysandra's stand (stage 2b) is report-only and unfixed.
 
+## Update (2026-10-17, later that evening): the owner's new route
+
+Picking up this handoff the owner did not rule on the end-to-end sheet; they set the painted-bust
+lever aside ("the eye gates are OK but still fail; Cecil again failed. I want to try a different
+route") and brought a capture with the eyes painted chroma green
+(`Desktop\EyeColorTests\Mann 15 Stand 3-Portrait.png`). The route: the standard words-only
+mannequin render, no bust, no portrait, the instruction naming the green eyes, and the checks out
+of the loop (`headRetries: 0`, report-only; the owner: "don't burden yourself with the eye
+gates"). Tychon and Cecil, two lines each: eyes open and reading on 4 of 4, the head lifted past
+the capture's tilt on all four. The record is the plan's "The owner's new route" paragraph; the
+sheet is `Desktop\TokenImprovements2\02-chroma-green-eyes-on-the-new-pose`. The agenda below
+is the one from before the redirect and is superseded where the owner says so; steps 1 to 3 wait
+on the owner's word as before, and the busts with drawn eyes (`03-side-result-...`) were made
+but never rendered against.
+
 ## The agenda, in order, each step on the owner's word
 
 1. **The owner rules on the end-to-end sheet** (`TokenImprovements2\01\RULINGS-fill-in.md`) and on
@@ -76,7 +91,7 @@ file is the agenda and the working rules for the next session; it does not repea
 - **The review folders**: `Desktop\TokenImprovements` (part 1) and `Desktop\TokenImprovements2`
   (part 2), numbered subfolders, a README row per folder saying what it is and what is needed
   back. Never dump files.
-- **Commit as you go** on `main` (27 commits today, none pushed; push on the owner's word), the
+- **Commit as you go** on `main` (pushed through the end-to-end run; push on the owner's word), the
   log in `docs/log/2026-10.md`, the State block in CLAUDE.md, a plan paragraph per result.
 
 ## The tools

@@ -955,6 +955,44 @@ delivered rate closest. The owner's rulings give the owner-measured numbers. Thi
 the painted-eyes bust has to beat: p(no-eyes) on a first render is about 14 of 26 here, and the
 edit fixed all ten it was tried on, so the bust is worth its run only if it halves that.
 
+**The owner's new route: chroma-green eyes on the capture (2026-10-17, evening; 4 renders,
+$0.19; `token-eyecolor-*` in the output folder, filed as
+`Desktop\TokenImprovements2\02-chroma-green-eyes-on-the-new-pose`; the owner's eye, no ruling
+asked).** Picking up the handoff the owner set the bust lever aside ("the eye gates are OK but
+still fail; Cecil again failed. I want to try a different route") and exported a new HeroForge
+capture, `Desktop\EyeColorTests\Mann 15 Stand 3-Portrait.png`: a standing human male, the camera
+steep, the head tipped up a little, and **the two eyes painted chroma green** (two slivers about
+80 by 6 px in the 1024 frame, 49 green pixels in all). The route is the standard one, the
+illustration put into words, the mannequin handed over, no bust and no portrait attached
+(`headAnchor: "none"`, so the server's own head words ride along), and the instruction telling
+the model to paint the green eyes; the owner asked for the checks left out of the loop
+(`headRetries: 0`: the two check words and the anatomy count still ran, report-only, nothing
+steered or edited). Tychon and Cecil, two lines each: the first ("the mannequin's two bright
+green eyes mark exactly where his eyes are: paint both of his eyes there, open, level with each
+other ... looking straight ahead the way his head faces"), then, on the owner's rewording
+("don't veer from the mannequin pose, head, eyes"), a bound line ("the mannequin's two bright
+green eyes are his eyes: paint them exactly where the green is, at the same size, the same slant
+and the same spacing ... his head is tipped exactly as far as the mannequin's and no further, so
+that the same amount of brow, eyes, nose and mouth shows as on the mannequin, no more of the
+face"). *Result, by my eye and the checks' report:* **both eyes open and reading on 4 of 4**,
+Cecil's included, with no green left anywhere; the hair, outfit, build and pose held on all
+four and every anatomy count came back clean. **The head is lifted toward the camera past the
+capture's tilt on all four**: the capture shows mostly brow with the eyes just under it, the
+renders show the whole face, Cecil's nearly frontal both times (the tilt check: `far-up` on
+three, `up` on Tychon's bound line, which is the one render that sits nearest the capture).
+The bound wording moved Tychon a step down and Cecil not at all. Green found the eyes every time,
+so no other marker colour was tried; the plate keyed magenta on all four without a clash. What
+this says: a marked eye on the capture delivers open eyes on the first render where the grey
+bust delivered them about half the time, and the tilt now overshoots the other way (the face
+lifted, which the owner dislikes most) with no bust in the frame. Levers for that, untested: a
+capture with the head tipped less (the green eyes would then sit deeper under the brow, and the
+question is whether the model still paints them open), the bust dial brought back beside the
+green-eyed capture, or the eyes-level line dropped in favour of the bound one alone. The owner
+rules from the sheet. On the side, before the redirect, `bust-2` and `bust-3` got open eyes
+drawn in with sharp (a lens, a grey iris, a lid line), filed as
+`03-side-result-busts-with-drawn-eyes` with no render behind them; the `edit-image` way was
+not run.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
