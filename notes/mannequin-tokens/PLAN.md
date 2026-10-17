@@ -559,6 +559,21 @@ against out, across a human man and woman, an orc, a dwarf woman, a goblin and a
 head and no hoods or helmets, so this scores the head check's acceptances and barely its rejections;
 those get scored as stages 2 and 3 produce them. Nothing in the head path changes on it.
 
+**Stage 2 result (2026-10-17, 13:33; 8 renders, $0.36; `headtest/2026-10-17-13-33-universal/`,
+filed blind as `06-stage-2-hair-line-universal-pcs` in the review folder, awaiting the owner's
+ruling).** The universal route with the hair sentence in the keep line, the same four PCs,
+captures and words as run 2: 8 of 8 first renders in the band and no retries, where run 2 had 6
+of 8 and three retries. Tychon and Cecil `down`, Kartor `right`, Lysandra `up`. Cecil on his
+portrait, which bowed seven of seven heads the night before, came back `down` twice with the
+brow and both eyes showing under the parted hair. The anatomy check counted every figure sanely
+(two of everything, Lysandra's one tail, the held objects, four visible fingers on a few hands,
+unflagged) and then called the facing `bottom` on all eight with a 180-degree rotation each, on
+tokens whose heads sit at the top of the image: a systematic miss in the facing question, not in
+the renders (a top-down face looks toward the camera, and the check model reads that as the
+bottom edge). Until the question is reworded and re-checked on these eight plates (a few
+cents), `anatomy.verdict` reads `flawed` on every token, and the rotation it gives must not be
+followed. Not changed yet.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
