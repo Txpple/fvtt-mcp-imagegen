@@ -14,7 +14,9 @@ them, and hand the winners to the Foundry pipeline (`upload-asset` → `set-acto
 and `npm run doctor` check the setup; seven kinds (icon, token, prop, portrait, illustration,
 battlemap, overland), every one on flash by default. `main` carries, past 1.3.1: the mannequin
 library (`mannequins/`, 312 grey captures, `scripts/mannequin.mjs`), the `illustration-builder`
-skill's newer owner rules for maps, tiles and tokens, and the token changes of 2026-10-16:
+skill's newer owner rules for maps, tiles and tokens, the `art-audit` skill (the batch-level
+second count of limbs, eyes, tendrils and token facing over an installed set, fixed in place), and
+the token changes of 2026-10-16:
 `edit-image` takes `source: "mannequin"` (with a judge-model head check, `src/head.ts`), references
 take role `object`, both render tools take `thinking` and report `thinkingTokens`, and the token
 framing and the mannequin line set the owner's camera, a 90-degree orthographic body with the head

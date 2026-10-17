@@ -758,3 +758,7 @@ area first:
   scale/ring/rotation) follows the dnd5e MCP's `token-cutout` skill, which now holds only that half.
 - If canon details were invented in Step 1, offer to write them back into the actor bio/journal so
   the art and the text agree forever after.
+- **After a batch is installed, offer the `art-audit` skill** (owner, 2026-10-16): a second
+  session's count of limbs, eyes, tendrils, hands and token facing over the whole set, against
+  the book, fixed in place by one edit each. The flaw pass above is run by the session that made
+  the art, and in one batch of eleven actors it let three flawed pieces through to the table.
