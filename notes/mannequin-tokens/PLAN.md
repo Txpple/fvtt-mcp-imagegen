@@ -815,6 +815,34 @@ re-rendering, and the review's point 8 is overruled. Step 1 of the revised order
 the eyes-open edit pass on the eyeless delivered plates, is next and waits on the owner's word in
 this session (it costs credit).
 
+**The lever after the edit pass, contingent (the owner, 2026-10-17, relayed by the review session,
+verbatim): "if that doesnt work, id like to test your point about why dont we try with painted eyes
+in the bust, as opposed to just grey, maybe gemini will pick them up more easily".** The hypothesis:
+the grey bust's empty sockets teach the render shut eyes, and a bust with two open eyes, white sclera
+and a dark iris visible under the brow, teaches open ones. The design, from the review session and
+judged here:
+
+- **The painted busts are new files beside the grey ones** (`bust-2-eyes.png`, `bust-3-eyes.png`),
+  so `headAnchor` can pick either and every earlier run stays comparable; the grey busts stay as
+  they are. Everything but the eyes stays grey clay, so the bust still bleeds no identity, and the
+  iris is a neutral dark grey, so no eye colour carries into a token.
+- **Made without a HeroForge session**, two ways, both cheap, the owner picking by eye before any
+  render: one `edit-image` on each grey bust ("paint two open eyes into the sockets, white sclera and
+  a neutral dark grey iris, looking the way the head faces, keep everything else identical grey
+  clay"), about 3 cents each and natural-looking but a model's eyes; or drawn with sharp at no cost,
+  exact but crude. Make both, show the owner, keep one.
+- **The binding sentence changes for that arm.** Today it says the bust shows "only how far a head
+  is tipped" and "take nothing else from it", which tells the model to ignore the eyes; the painted
+  arm binds the tilt and "the eyes open exactly as they are here". Without naming the eyes it is
+  not a test of the eyes.
+- **Folded into the A/B already planned, with power**, three arms rather than two: grey bust,
+  painted-eyes bust, no bust, 24 renders each (the eight PCs and six NPC captures, mixed),
+  gate-scored first-render eye rate, the owner ruling a sample of about 10 a side; one run of about
+  $4.50 instead of two. The owner may cut it to two arms or to 12 a side; 8 a side cannot read it.
+
+Spend waits on the owner's word in this session; this is a plan entry. It runs only if the edit
+pass does not deliver eyes on most of the fourteen.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
