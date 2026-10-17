@@ -54,9 +54,11 @@ crops are outside it. The judge (`src/head.ts`) is shown `right-05` as DOWN, `ri
 | `wrong-08-cecil-stand.png` | 8 | `cecil-edmunds.png` | wrong |
 | `wrong-12-cecil-combat.png` | 12 | `cecil-edmunds-combat.png` | wrong: the face lifted to the camera |
 
-A PC's approved token head, cropped like these, is the reference for that PC's new tokens: as
-`character`, it held the band four of four and carries its own tilt. The portrait's head-to-waist
-crop then goes in as `object` for the outfit only.
+These crops are the judge's ruler, not a render reference: the owner ruled (2026-10-17) that the
+legacy heads were luck, not a standard, so a PC renders on the bust like any NPC, with the
+portrait's head-to-waist crop as `character` and `headAnchor: "bust-2"` on the call (the crop is
+then bound to identity only). A head the owner has ruled on can still be attached as `character`
+with no `headAnchor`, when it is bound as the token head and carries its own tilt.
 
 **Binding sentence for a PC head as `character`** (the server writes it on a mannequin edit):
 

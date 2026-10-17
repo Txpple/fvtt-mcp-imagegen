@@ -351,9 +351,9 @@ prompt can simply say the character's name and be understood:
   Attach the standing style shelf (from `art/SHELF.md`) on every portrait and illustration
   call unless the owner asks for something deliberately different.
 - **Tokens take the world's own tokens as the style reference** (words-only and restyle routes
-  only; the mannequin route in Step 4 takes the character's approved token head as
-  `character`, the portrait's head-to-waist crop as `object` for the outfit, and crops of
-  signature gear as `object`, never a style image). They are top-down full-body
+  only; the mannequin route in Step 4 takes the character's portrait as a head-to-waist crop
+  for `character` with `headAnchor: "bust-2"` beside it, and crops of signature gear as
+  `object`, never a style image). They are top-down full-body
   figures on transparency (`assets/tokens/<name>.png` in the world data). Attach one as
   `role: "style"` and the new token comes out at the same angle and in the same look.
   The tool appends the framing and the chroma plate sentence itself, picks a plate colour the
@@ -500,12 +500,12 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    kind `token`, `source: "mannequin"`, flash, the capture as `sourceImage`, turns a capture
    into a finished token at about 3 cents: the tool binds pose, proportions and grip to the
    capture, sets the camera itself, the owner's standard (2026-10-16): a 90-degree
-   orthographic top-down body, and carries the head by an image it attaches (a grey bust at
-   the wanted tilt) or by the approved token head; the words supply race, sex, age, face,
+   orthographic top-down body, and carries the head by a grey bust it attaches at the wanted
+   tilt, the same universal anchor for a PC and an NPC; the words supply race, sex, age, face,
    kit, colours and finish, and never a word about the head. **A known character also gets
-   references: the approved token head as `character`, the portrait's head-to-waist crop as
-   `object` for the outfit, and crops of its signature gear as `object`** (below). A new NPC
-   with no portrait is words alone, and the tool's bust carries its head. About 120 test renders
+   references: the portrait's head-to-waist crop as `character` with `headAnchor: "bust-2"`
+   on the call, and crops of its signature gear as `object`** (below). A new NPC with no
+   portrait is words alone. About 120 test renders
    (2026-10-15) and the first real run on the four PCs (about 50 renders, 2026-10-16; the record
    is `notes/mannequin-tokens/PLAN.md`) came out usable on the first pass almost every time;
    the PC run is what added the reference and the guide sentence. The
@@ -540,19 +540,16 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    `art/SHELF.md` at the end, and `source: "mannequin"` on the call: the tool then carries the
    mannequin guide, the camera, the head anchor and the no-grey rule, so the instruction says
    none of that, and nothing about the head, the angle or the camera, ever. For a known
-   character, attach the approved token head (a head-and-shoulders crop of the live token,
-   about 190 px of the 512, upscaled to 512; the campaign shelf files them) as `references:
-   [{ role: "character", label: "<Name>'s head" }]`, the portrait's head-to-waist crop as
-   `{ role: "object", label: "<Name>'s outfit" }`, and each signature piece of gear as
-   `{ role: "object", label: "<the axe>" }`, cropped from the approved art; the tool binds each
-   by its image number, so the instruction only names them. For a new NPC, describe the face
-   in full instead and attach nothing: the tool attaches a grey bust (bust-2) after your
-   references as the head anchor.
-   `Paint it as <Name>, <race, sex, age, build, skin, hair, eyes; horn shape if any>,
+   character, attach the portrait's head-to-waist crop as `references: [{ role: "character",
+   label: "<Name>" }]` **and pass `headAnchor: "bust-2"`**: the bust then carries the head and
+   the crop is bound to identity only (features, hair, skin, build and kit). Add each signature
+   piece of gear as `{ role: "object", label: "<the axe>" }`, cropped from the approved art;
+   the tool binds each by its image number, so the instruction only names them. For a new NPC,
+   describe the face in full instead and attach nothing: the tool attaches the bust by itself.
+   `Paint it as <Name> (Image 2), <race, sex, age, build, skin, hair, eyes; horn shape if any>,
    <anything the mannequin lacks: ONE tail curving out behind to the lower left only, wings
-   folded, a hood>. Image 3 shows <his|her> outfit and gear only: <clothing and armour,
-   materials and colours>; take nothing of its head, face, lighting, background or camera.
-   <Always the footwear>. Replace
+   folded, a hood>, in <his|her> <clothing and armour, materials and colours, always the
+   footwear>. Replace
    the entire <weapon> in <his|her> fist at the <lower left>, keeping only the fist's grip and
    the line it points along: none of the old <blade, crossguard, pommel> remain. The new weapon
    is <each part, grip to tip>. Replace the entire shield, keeping its exact position and angle
@@ -560,19 +557,28 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    remain, and nothing round is left. The new shield is <shape, material, emblem>. <Any held
    light or magic, named as the key light>. <The finish line>; nothing left grey clay.`
    The rules behind it, each one paid for:
-   - **A known character takes the approved token head as `character` and the portrait's
-     head-to-waist crop as `object` (owner, 2026-10-16, revised the same evening).** Sixteen
-     words-only PC tokens came out 15 of 16 usable, and the owner rejected them: the likeness
-     drifted. A head-to-waist crop of the portrait as `character` fixed every face and pulled
-     the kit toward the portrait too (plate, shield boss, leather, scarf, robe), and then the
-     head review showed it was also the strongest pull on the head: a render leans toward the
-     head tilt of whatever reference carries a head, and a frontal portrait crop bound as the
-     character lifted faces to the camera. So the portrait crop goes in as `object` for the
-     outfit only (the instruction says "Image 3 shows the outfit and gear only ... take nothing
-     of its head"), and the `character` slot carries a head-and-shoulders crop of the approved
-     token, already at the token camera, which held the band four of four and carries its own
-     tilt. The tool binds that reference as the token head (face, hair, skin, eyes and tilt).
-     Horns follow the crop rather than the words, so restate the horn shape when it matters.
+   - **A known character takes the portrait's head-to-waist crop as `character` beside the
+     bust (owner, 2026-10-16 and 17).** Sixteen words-only PC tokens came out 15 of 16 usable,
+     and the owner rejected them: the likeness drifted. A head-to-waist crop of the portrait as
+     `character` fixed every face and pulled the kit toward the portrait too (plate, shield
+     boss, leather, scarf, robe), and then the head review showed it was also the strongest
+     pull on the head: a render leans toward the head tilt of whatever reference carries a
+     head, and a frontal portrait crop bound on its own lifted faces to the camera. The fix is
+     not to anchor PCs to their old token heads (the owner ruled those were luck, not a
+     standard) but to put the bust beside the portrait: with `headAnchor: "bust-2"` on the
+     call the tool attaches the bust after the crop, binds the crop to identity only, and the
+     bust wins the head. The universal run (2026-10-17, 02:16; 8 renders, $0.51; `headtest/2026-10-17-02-16-universal/`,
+the sheet on the Desktop as `PC Tokens/headtest-2-universal-sheet.png`): 6 of 8 first renders in
+the band, 8 of 8 after steering, every face a clear likeness of its portrait and no camera drop.
+The heads sit at the low end of the band with the portrait beside bust-2 (six `down`, Lysandra's
+stand `up`): Kartor's stand came back `far-down` and landed `down` on bust-3, Lysandra's combat
+`far-down` twice and landed `up` on bust-4. The bust-2 NPC run centred on `right`, so a portrait
+beside the bust pulls the head a step lower; whether the universal route should default to bust-3
+is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
+     Horns follow the crop rather than the words, so restate the horn shape when it matters. A
+     `character` reference with no `headAnchor` is bound as an approved token head instead (it
+     carries its own tilt, no bust); that route is kept for a head the owner has ruled on, and
+     is not the default.
    - **Never attach a whole image beside the mannequin.** A full style token or a full portrait
      gets its subject copied in (a wizard and a harpy came back as the attached drow). The crop
      rule above is the only exception: a crop, bound to the face and kit, nothing else.

@@ -422,3 +422,19 @@ stand render as his approved head: its head-and-shoulders crop is filed beside t
 campaign repo (`art/headtest/anchor-head-cecil-edmunds-stand.png`, with the render itself) and
 his two headtest entries now carry it as `character` with his portrait crop as `object`, like the
 other three. The fix is live in `dist/` after the owner's next Claude Code restart.
+
+**The universal route (owner ruling, 2026-10-17).** The legacy PC token heads were luck, not a
+standard, so new renders are not anchored to them: a PC renders on the bust like any NPC, with the
+portrait's head-to-waist crop as `character` and `headAnchor: "bust-2"` on the call, which binds
+the crop to identity only (features, hair, skin, build and kit) and lets the bust carry the head;
+steering swaps the bust and keeps the crop (`anchorUsed` reads `bust-2 + identity`). The
+token-head binding stays for a `character` reference with no `headAnchor`, for a head the owner
+has ruled on. `npm run headtest -- --universal` renders each PC's `universal` entry this way.
+The universal run (2026-10-17, 02:16; 8 renders, $0.51; `headtest/2026-10-17-02-16-universal/`,
+the sheet on the Desktop as `PC Tokens/headtest-2-universal-sheet.png`): 6 of 8 first renders in
+the band, 8 of 8 after steering, every face a clear likeness of its portrait and no camera drop.
+The heads sit at the low end of the band with the portrait beside bust-2 (six `down`, Lysandra's
+stand `up`): Kartor's stand came back `far-down` and landed `down` on bust-3, Lysandra's combat
+`far-down` twice and landed `up` on bust-4. The bust-2 NPC run centred on `right`, so a portrait
+beside the bust pulls the head a step lower; whether the universal route should default to bust-3
+is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
