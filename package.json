@@ -20,7 +20,8 @@
     "check:fix": "biome check --write .",
     "knip": "knip",
     "doctor": "node scripts/doctor.mjs",
-    "mannequin": "node scripts/mannequin.mjs"
+    "mannequin": "node scripts/mannequin.mjs",
+    "headtest": "node scripts/headtest.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",

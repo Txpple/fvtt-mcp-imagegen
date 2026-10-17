@@ -30,10 +30,15 @@ export const PRICE: Record<Tier, Record<ImageSize, number>> = {
 /** USD per 1M output text tokens, the rate thinking is billed at (Google's price table, 2026-10-16). */
 export const TEXT_OUT_PRICE: Record<Tier, number> = { flash: 7.5, pro: 12 };
 
-/** The vision text model the head check asks: the cheapest non-preview flash lite the key lists (2026-10-16). */
-export const JUDGE_MODEL = 'gemini-3.5-flash-lite';
-/** A flat estimate per judge call: four 512 crops and a 1024 plate in, one word out, about a tenth of a cent. */
-export const JUDGE_USD = 0.001;
+/**
+ * The vision text model the head check asks. Flash, not flash-lite (2026-10-16): on the owner's
+ * ruled set of 21 heads, flash-lite hit the band 16 times and called a bowed guard
+ * camera-dropped, flash 19 with every step the owner ruled matched; a checklist prompt and a
+ * locate-then-crop step bought nothing on top.
+ */
+export const JUDGE_MODEL = 'gemini-3.5-flash';
+/** A flat estimate per judge call: four 512 crops and a 1024 plate in, one word out, a fifth of a cent. */
+export const JUDGE_USD = 0.002;
 
 export interface JudgeRequest {
   prompt: string;

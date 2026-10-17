@@ -21,7 +21,6 @@ export type Bust = (typeof BUSTS)[number];
 
 /** What a caller may ask for: a bust, or no bust on the first render. */
 export const HEAD_ANCHOR_CHOICES = [...BUSTS, 'none'] as const;
-export type HeadAnchorChoice = (typeof HEAD_ANCHOR_CHOICES)[number];
 
 /** What a render carries: a bust, the caller's `character` head, or nothing. */
 export type HeadAnchor = Bust | 'character' | 'none';

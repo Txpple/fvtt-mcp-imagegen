@@ -3,9 +3,10 @@
 // read, hair over the top half of the head; never bowed with the eyes hidden, never the face
 // lifted to the camera (chin underside, throat), never a lowered camera that shows the chest
 // head-on. No pixel measure tells those apart across races, hoods and helmets, so the plate is
-// shown to a cheap vision model beside four crops the owner ruled on (mannequins/heads/band/)
-// and graded on five steps. The first judge, shown the plate alone, was noise on the head (it
-// called bowed heads up and a frontal one ahead); the exemplars are what calibrate it. The
+// shown to a flash vision model beside four crops the owner ruled on (mannequins/heads/band/)
+// and graded on five steps. The first judge, flash-lite shown the plate alone, was noise on the
+// head (it called bowed heads up and a frontal one ahead); the exemplars and the model are what
+// calibrate it (19 of 21 on the ruled set, every known step matched; gemini.ts). The
 // verdict steers a re-render (shared.ts) and is reported; it never refuses, because the judge
 // can be wrong and the flaw pass still reads every token.
 
