@@ -87,6 +87,8 @@ export interface HeadReport {
   first?: HeadVerdict;
   verdicts?: HeadVerdict[];
   eyesVerdicts?: EyesVerdict[];
+  /** The eyes were opened by one edit on the plate (the remedy for a NO with the tilt in band). */
+  eyesEdited?: boolean;
   retried?: boolean;
   kept?: string[];
   /** A camera that dropped twice: the capture, not the words or the bust, is the cause. */
@@ -154,3 +156,16 @@ export async function judgeEyes(gemini: Gemini, plate: Buffer): Promise<EyesVerd
   });
   return parseEyes(text);
 }
+
+// The eyes remedy (owner rule 2026-10-17): a NO from the eyes gate with the tilt in band is one
+// edit on the delivered plate, never a re-render first. On fourteen eyeless tokens one edit
+// opened the eyes on 14 of 14 and kept every pose, kit and likeness, where a re-render on the
+// next bust delivered eyes one time in two and lost the pose one time in four. The first line
+// ("fully ... the lids up, the eyes alive") opened two of the fourteen too wide ("bug eyes");
+// this one asks for natural eyes and names no gaze, since gaze words pull the head.
+export const EYES_OPEN_PROMPT =
+  "Image 1 is the token to edit. Open both of the figure's eyes naturally beneath the brow so " +
+  'that the whites and the irises of both eyes show, the lids relaxed, neither narrowed nor ' +
+  'wide; keep everything else identical: the same head and its tilt, the same hair, face, ' +
+  'expression, pose, gear, colours, lighting and camera, and the same flat plate behind the ' +
+  'figure.';

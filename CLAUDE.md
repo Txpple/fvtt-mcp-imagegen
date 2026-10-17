@@ -88,8 +88,9 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
   the owner ruled on (`mannequins/heads/band/`, one per step) for one of `far-down`, `down`, `right`, `up`,
   `far-up`, `camera-dropped`, `unclear`; `down`, `right` and `up` deliver. A second, eyes-only call
   on the plate asks whether both eyes read (`EYES_PROMPT`, no exemplars): the owner's criterion is
-  the eyes and the tilt steps do not carry it, so `no` is a rejection steered up the dial like
-  `far-down`, and `head` reports `eyes`. `far-down` is redone
+  the eyes and the tilt steps do not carry it. A `no` with the tilt in band is fixed by one edit
+  on the plate (`EYES_OPEN_PROMPT`: the eyes opened, nothing else changed) and re-checked; only a
+  second `no` re-renders on the next bust; `head` reports `eyes` and `eyesEdited`. `far-down` is redone
   with the next bust up, `far-up` with bust-1, a dropped camera once unchanged (then "change the
   capture"), at most two retries (`headRetries`), every call billed, then delivered flagged; the
   result reports `head`. A judge that cannot be reached never blocks a render. Tests mock the

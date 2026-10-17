@@ -27,6 +27,7 @@ import {
 import { type DriftReport, measureDrift, overlandDrifted } from '../drift.js';
 import { EDGE_BAND, EDGE_LIMIT, edgeContact } from '../edge.js';
 import {
+  EYES_OPEN_PROMPT,
   type EyesVerdict,
   headOk,
   type HeadReport,
@@ -349,6 +350,30 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     return { result, png, usd };
   };
 
+  // The eyes remedy (owner rule 2026-10-17): the plate alone goes back with the eyes line and the
+  // plate sentence; the mannequin, the references and the bust stay out, so nothing but the eyes
+  // is asked for and the pose survives (14 of 14 on the fourteen eyeless tokens it was ruled on).
+  const onceEdit = async (plate: Buffer) => {
+    const result = await deps.gemini.generate({
+      tier: input.tier,
+      prompt: [EYES_OPEN_PROMPT, chromaKey ? chromaSuffix(chromaKey) : '']
+        .filter(Boolean)
+        .join(' '),
+      images: [{ data: plate, mimeType: 'image/png' }],
+      aspect: input.aspect ?? preset.aspect,
+      size: preset.size,
+      ...(input.thinking ? { thinking: input.thinking } : {}),
+    });
+    const png = await postProcess(result.image.data, preset.post);
+    const usd = deps.spend.record(
+      input.tool,
+      input.tier,
+      preset.size,
+      thinkingUsd(input.tier, result.usage?.thinking)
+    );
+    return { result, png, usd };
+  };
+
   let bust: Bust | undefined =
     input.head && isBust(input.head.anchor) ? input.head.anchor : undefined;
   let { result, png, usd: estimatedUsd } = await once(bust);
@@ -384,8 +409,10 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
   // camera, never a dropped camera. The check's word steers a re-render (head.ts, heads.ts):
   // far-down goes up the bust dial, far-up to bust-1, a dropped camera is redone once unchanged
   // and then blamed on the capture. The eyes gate (2026-10-17) is a second word on the same
-  // plate: NO means the eyes do not read, the owner's own criterion, and is sent back up the
-  // dial like far-down. At most `retries` re-renders, then the token is delivered flagged; it
+  // plate: NO means the eyes do not read, the owner's own criterion. With the tilt in band it
+  // is fixed by one edit on the plate (EYES_OPEN_PROMPT: the eyes opened, nothing else changed)
+  // and re-checked; only a second NO re-renders on the next bust up, like a bowed head. At
+  // most `retries` re-renders or edits, then the token is delivered flagged; it
   // never refuses, since the check can be wrong. A retry that clips is kept and counted, never
   // delivered; the earlier clean plate stays.
   let head: HeadReport | undefined;
@@ -400,19 +427,23 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     const kept: string[] = [];
     let retries = 0;
     let drops = 0;
+    let eyesEdited = false;
     while (
       !checked.error &&
       (needsRetry(checked.verdict) || checked.eyes === 'no') &&
       retries < input.head.retries
     ) {
       const verdict = checked.verdict;
-      // A head the tilt accepts but the eyes gate rejects is steered like a bowed one.
+      // A head the tilt accepts but the eyes gate rejects is fixed first by one edit on the plate
+      // (the owner's rule: a flaw pass keeps the pose); only a second NO is steered like a bowed
+      // head, up the dial.
       const reason = needsRetry(verdict) ? verdict : 'no-eyes';
+      const edit = reason === 'no-eyes' && !eyesEdited;
       let next = bust;
       if (verdict === 'camera-dropped') {
         if (drops) break; // twice: the capture is the cause, not the bust
         drops++;
-      } else {
+      } else if (!edit) {
         next = steerBust(reason === 'no-eyes' ? 'far-down' : verdict, bust);
       }
       const keptPath = path.join(
@@ -421,7 +452,8 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       );
       fs.writeFileSync(keptPath, png);
       kept.push(keptPath);
-      const again = await once(next);
+      if (edit) eyesEdited = true;
+      const again = edit ? await onceEdit(png) : await once(next);
       estimatedUsd += again.usd;
       if (again.result.usage) thinkingTokens = (thinkingTokens ?? 0) + again.result.usage.thinking;
       retries++;
@@ -433,7 +465,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
         continue;
       }
       ({ result, png } = again);
-      bust = next;
+      if (!edit) bust = next;
       checked = await checkHead(deps, png);
       verdicts.push(checked.verdict);
       eyesVerdicts.push(checked.eyes);
@@ -446,6 +478,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       ...(verdicts.length > 1
         ? { first: verdicts[0], verdicts, eyesVerdicts, retried: true, kept }
         : {}),
+      ...(eyesEdited ? { eyesEdited: true } : {}),
       ...(checked.verdict === 'camera-dropped'
         ? {
             advice:

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Gemini, JUDGE_MODEL } from './gemini.js';
 import {
+  EYES_OPEN_PROMPT,
   EYES_PROMPT,
   HEAD_PROMPT,
   headOk,
@@ -152,5 +153,15 @@ describe('the eyes gate', () => {
     expect(EYES_PROMPT).toMatch(/both of its eyes read/);
     expect(EYES_PROMPT).toMatch(/NO-EYES when the eyes are shut, hidden under the brow/);
     expect(EYES_PROMPT).toMatch(/Judge nothing else/);
+  });
+
+  it('the remedy line asks for natural eyes and nothing else, with no gaze word', () => {
+    expect(EYES_OPEN_PROMPT).toMatch(
+      /^Image 1 is the token to edit\. Open both of the figure's eyes naturally/
+    );
+    expect(EYES_OPEN_PROMPT).toMatch(/neither narrowed nor wide/);
+    expect(EYES_OPEN_PROMPT).toMatch(/keep everything else identical/);
+    // "fully ... the lids up, the eyes alive" opened two of fourteen too wide; a gaze word pulls the head.
+    expect(EYES_OPEN_PROMPT).not.toMatch(/fully|alive|looking|gaze/);
   });
 });

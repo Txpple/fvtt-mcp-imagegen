@@ -858,7 +858,7 @@ describe('edit-image', () => {
     });
   });
 
-  it('mannequin source: eyes NO is re-rendered up the dial like far-down, the plate kept as no-eyes, the eyes reported', async () => {
+  it('mannequin source: eyes NO with the tilt in band is one edit on the plate, a second NO re-renders up the dial, the eyes reported', async () => {
     const { dispatch, spend } = build();
     verdicts = ['RIGHT', 'RIGHT'];
     eyesAnswers = ['NO-EYES', 'EYES'];
@@ -870,20 +870,50 @@ describe('edit-image', () => {
       slug: 'guard',
     });
     expect(sent).toHaveLength(2);
-    expect(sentBust(1)).toBe('bust-3');
+    // The remedy is one edit on the plate: the plate alone and the eyes line, no bust, no refs.
+    const editParts = sent[1].body.contents[0].parts;
+    expect(editParts).toHaveLength(2);
+    expect(editParts[0].inline_data.mime_type).toBe('image/png');
+    expect(editParts[1].text).toMatch(
+      /^Image 1 is the token to edit\. Open both of the figure's eyes naturally/
+    );
+    expect(editParts[1].text).toContain('chroma-key');
+    expect(sentBust(1)).toBeUndefined();
     expect(judged).toHaveLength(2);
     expect(eyed).toHaveLength(2);
     expect(r.head).toMatchObject({
       verdict: 'right',
       eyes: 'yes',
       inBand: true,
-      anchorUsed: 'bust-3',
+      anchorUsed: 'bust-2',
       first: 'right',
       verdicts: ['right', 'right'],
       eyesVerdicts: ['no', 'yes'],
       retried: true,
+      eyesEdited: true,
     });
     expect(path.basename(r.head.kept[0])).toMatch(/-head1-no-eyes\.png$/);
+    // A second NO after the edit re-renders on the next bust up, like a bowed head.
+    verdicts = ['RIGHT', 'RIGHT', 'RIGHT'];
+    eyesAnswers = ['NO-EYES', 'NO-EYES', 'EYES'];
+    const r3: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+    });
+    expect(sent).toHaveLength(5);
+    expect(sentBust(4)).toBe('bust-3');
+    expect(r3.head).toMatchObject({
+      anchorUsed: 'bust-3',
+      verdicts: ['right', 'right', 'right'],
+      eyesVerdicts: ['no', 'no', 'yes'],
+      eyesEdited: true,
+    });
+    expect(
+      r3.head.kept.map((k: string) => path.basename(k).replace(/^token-guard-[0-9a-f]{8}-/, ''))
+    ).toEqual(['head1-no-eyes.png', 'head2-no-eyes.png']);
     // Two renders and four check calls.
     expect(spend.totalUsd).toBeGreaterThanOrEqual(0.034 * 2 + 0.002 * 4);
     // Delivered flagged when the eyes never read: inBand false, the eyes word on the report.

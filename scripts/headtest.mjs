@@ -211,7 +211,7 @@ async function writeSheet(items, title, out) {
       ? stepWords(it.head).join(' → ')
       : `error: ${(it.error ?? '').slice(0, 40)}`;
     const line1 = `${it.id}  ${it.head?.anchorUsed ?? ''}`;
-    const line2 = `${verdicts}${it.head?.advice ? '  (change the capture)' : ''}`;
+    const line2 = `${verdicts}${it.head?.eyesEdited ? '  (eyes edited)' : ''}${it.head?.advice ? '  (change the capture)' : ''}`;
     const a = it.anatomy;
     const line3 = a
       ? `anatomy ${a.verdict}${a.facing ? `, facing ${a.facing}` : ''}${a.flaws.length ? `: ${a.flaws[0].slice(0, 36)}` : ''}`

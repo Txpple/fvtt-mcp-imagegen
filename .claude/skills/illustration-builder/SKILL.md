@@ -627,9 +627,12 @@ is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
      token head and carries the tilt itself. Then a check model grades the plate beside five
      crops the owner ruled on (`mannequins/heads/band/`, one per step) on five steps, `far-down`, `down`,
      `right`, `up`, `far-up`, plus `camera-dropped` and `unclear`; `down`, `right` and `up` are
-     the band and deliver, and a second, eyes-only call asks whether both eyes read: a `no`
-     is sent back up the dial like `far-down`, since the owner's criterion is whether the
-     eyes read (2026-10-17), and `head` reports `eyes`. `far-down` is rendered again with the
+     the band and deliver, and a second, eyes-only call asks whether both eyes read, the owner's
+     criterion (2026-10-17): a `no` with the tilt in band is fixed by one edit on the plate, the
+     eyes opened and nothing else changed (14 of 14 opened on the fourteen it was ruled on, the
+     pose kept on every one), and only a second `no` re-renders on the next bust; `head` reports
+     `eyes` and `eyesEdited`. Over-opened eyes ("bug eyes") pass the gate: look for them in the
+     flaw pass. `far-down` is rendered again with the
      next bust up (bust-3 at least), `far-up` with bust-1, a dropped camera once unchanged, at most two retries, every
      kept plate named `-head<n>-<verdict>.png`, and the result's `head` reports `verdict`,
      `inBand`, `anchorUsed`, `first`, every verdict and the kept plates. Two bad verdicts still

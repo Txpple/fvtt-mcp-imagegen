@@ -872,6 +872,74 @@ the band still re-renders on the next bust as now. The gate cannot see over-open
 eyes on both bug-eyed tokens, the anatomy check ok), so "bug eyes" joins the flaw pass's list, not
 the gate's. The painted-eyes bust stays a first-render lever, to run only if fewer edits are wanted.
 
+**Done on the owner's word (2026-10-17, afternoon).** (1) The server's remedy: a NO from the eyes
+gate with the tilt in band now runs one edit on the delivered plate (`EYES_OPEN_PROMPT` in
+`src/head.ts`, the plate alone with the eyes line and the plate sentence, no mannequin, references
+or bust) and re-checks; only a second NO re-renders on the next bust up; a tilt outside the band
+re-renders as before. `head` reports `eyesEdited`, the kept plate is `-no-eyes`, the headtest sheet
+says "(eyes edited)"; tests cover the edit, the second-NO re-render and the line (189 pass). (2) The
+softer line ("open both of the figure's eyes naturally beneath the brow so that the whites and the
+irises of both eyes show, the lids relaxed, neither narrowed nor wide; keep everything else
+identical ..."), with no gaze word, re-edited Kartor's combat and Cecil's combat from their eyeless
+originals (2 edits, $0.09): both `right` with eyes by the checks; filed as a three-column sheet
+(original, bug eyes, softer line) in `12-eyes-open-edit-pass/softer-line/`, awaiting the owner's two
+words per token (natural, same).
+
+### The review thread closed (2026-10-17): what it hands over
+
+The review session's consolidation, recorded so nothing from that thread is lost. The owner's
+rulings relayed through it, verbatim: on the table-zoom sheet, "this doenst out, half them have no
+eyes" (the eyes criterion stands at every display size; a scale argument is not evidence against
+it); on the next lever, "if that desnt work, id like to test your point about why dont we try with
+painted eyes in the bust, as opposed to just grey, maybe gemini will pick them up more easily"; and
+the edit-pass ruling given here (14 of 14 open, 1 and 3 bug-eyed).
+
+**The painted-eyes bust as a path in the process, not a one-off test** (the owner's wish, the
+review's design, judged here):
+
+1. *Prevention:* `bust-2-eyes` and `bust-3-eyes` as `headAnchor` values beside the grey ones, so
+   first renders arrive with eyes more often and the edit is needed less. The eyes drawn into the
+   sockets so that they read as open FROM STRAIGHT ABOVE (sclera under the brow); an eye that only
+   reads from the front teaches nothing. Neutral dark grey iris, everything else grey clay. Both
+   busts made cheaply (an edit-image each, about 3 cents, or sharp) and shown to the owner before
+   any render; the owner picks.
+2. *The binding for that arm names the eyes with the tilt:* "tip the figure's head exactly like it
+   and have its eyes open exactly as they are here"; today's "take nothing else from it" would void
+   the test.
+3. *Remedy, as the tree `render()` now runs:* tilt out of band (far-down, far-up, camera-dropped),
+   re-render with the bust steer (the eyed bust once it proves out); tilt in band and NO-EYES, one
+   edit on the plate; a second NO, one re-render on the next bust; then delivered flagged. Not
+   built: a WIDE answer in the eyes check for a stare, with one re-edit ("relax the lids") on it;
+   two bug-eyed samples cannot calibrate a word, so it is logged, not written.
+4. *A hypothesis to test, not a rule:* both bug-eyed plates were heads that had been bowed or
+   eyeless through every retry (Kartor's combat on busts 2, 3 and 4; Cecil's combat far-down three
+   times); an edit that opens eyes on a bowed head may push them up into a stare. If it holds,
+   bowed heads belong to the re-render path and in-band heads to the edit path, which the tree does.
+5. *When it pays:* with the edit in the loop a delivered token costs about render plus two checks
+   plus p(no-eyes) times (edit plus two checks); at p of one half, about 5.5 cents, inside the
+   proposed 6-cent stopping rule without the painted bust. The bust earns its $4.50 three-arm run
+   only if it cuts p(no-eyes) by about half. So the end-to-end headtest with the edit in the loop
+   runs FIRST, for a baseline first-render eye rate and edit rate to beat.
+
+If the painted bust does not move the rate, the next arm is the keep-line figure sentence ("both
+eyes open and showing beneath the brow"); arms stay at three a run. The review's line for the
+stare ("a calm gaze the way the head faces") names a gaze, which the record says pulls the head, so
+the server's line stays gaze-free; the difference is noted, not adopted.
+
+**Standing rules from the review, binding:** every A/B at 24 a side, the gate as proxy, the owner
+rules a sample of about 10 a side; no sheet over about 14 cells and no re-ruling of old sheets; no
+further ruler or majority-of-three work; one body parked until the eyes are settled; the stopping
+rule written and measured on 30 unseen renders; nothing renders without the owner's word in this
+session. The anatomy check stays report-only; its six-finger catch on Lysandra's stand (stage 2b) is
+unfixed and belongs on the owner's list for the real tokens, not the headtest.
+
+**Order from here, each on the owner's word:** (1) done, the edit as the remedy; (2) done, plates 1
+and 3 re-edited, awaiting the ruling; (3) one end-to-end headtest with the edit in the loop (the
+full 26, about $1.50 plus edits), scored against the stopping rule as delivered rate and cost per
+token; (4) the painted busts made and shown; (5) the three-arm A/B only if (3) says the edit rate
+is worth cutting, or the owner says run it regardless. The open question for the owner: park the
+painted bust, or run it.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's

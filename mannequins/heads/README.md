@@ -69,7 +69,10 @@ and the tilt check passed ten of the eleven. So a second, eyes-only call on the 
 (`EYES_PROMPT` in `src/head.ts`, no exemplars) answers EYES, NO-EYES or NO-FACE, and NO-EYES is
 sent back up the dial like far-down. Measured on 53 ruled plates over two passes: 12 of the
 owner's 13 eyeless heads caught on both passes (the miss a front view), 3 of 17 accepted heads
-sent back; a two-word answer folded into the tilt call caught 10.
+sent back; a two-word answer folded into the tilt call caught 10. A NO with the tilt in band is
+fixed by one edit on the plate (`EYES_OPEN_PROMPT`), the remedy the owner ruled on 2026-10-17 from
+fourteen edited tokens (14 of 14 opened, the pose kept on every one, two opened too wide until the
+line softened); only a second NO re-renders on the next bust.
 
 | File | Sheet | Source (Desktop `PC Tokens/prod/`) | Ruling |
 | --- | --- | --- | --- |
