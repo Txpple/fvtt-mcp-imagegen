@@ -456,3 +456,15 @@ The other three PCs' portraits (short, swept-back or pulled-back hair) rode besi
 without harm. The owner passed that head (the body and kit of a headtest render are a measurement,
 not a token: the real tokens come through the skill's recipe with the campaign's finish line and
 gear crops, after the restart).
+
+**No carve-outs (owner ruling, 2026-10-17, late).** The route has to make hundreds of tokens with
+nobody tuning an instruction, so a words-only exception for one character is refused. The
+universal fix is in the tool, unmeasured as of this note: the mannequin keep line now says "any
+hair lies back over the top of the head, leaving the brow and both eyes clear of it", a
+description of the figure, not of the head's angle, a no-op for short or swept-back hair. Cecil's
+headtest entries are back on his portrait like the other three (the lute by the neck or low, which
+fixed his camera, stays). **Open, to pick up next:** run `npm run headtest -- --universal` (the
+eight PCs, Cecil on his portrait, about $0.47; the full 26 with the NPCs about $1.50) and rule on
+the sheet; one unit test fails after the keep-line change and has not been looked at (183 of 184
+pass); the skill's rule for a portrait with a fringe (words-only on the bust) is superseded by the
+tool's line and wants rewriting once the run confirms it.
