@@ -25,7 +25,9 @@ const onlyAt = args.indexOf('--only');
 const only = onlyAt >= 0 ? (args[onlyAt + 1] ?? '').split(',').filter(Boolean) : [];
 
 const CAPTURE = process.env.CAPTURE ?? 'C:/Users/sippelmc/Desktop/EyeColorTests/Mann 15 Stand 3-Portrait-nogreen.png';
-const DESK = process.env.DESK ?? 'C:/Users/sippelmc/Desktop/EyeColorTests/06-no-green-control';
+// HEAD_ANCHOR=bust-2-eyes runs the same items with that bust on every call (the owner's eyed-bust test).
+const ANCHOR = process.env.HEAD_ANCHOR ?? null;
+const DESK = process.env.DESK ?? (ANCHOR ? `C:/Users/sippelmc/Desktop/EyeColorTests/09-eyed-bust-${ANCHOR}` : 'C:/Users/sippelmc/Desktop/EyeColorTests/06-no-green-control');
 const CAMPAIGN = path.resolve(root, '..', '..', 'fvtt-campaign-echoesofhalruaa', 'art', 'headtest');
 const ELDER_CROPS = process.env.ELDER_CROPS ?? path.join(DESK, '..', '02-the-elders', 'portrait-crops-attached');
 
@@ -275,7 +277,7 @@ if (!yes) {
 }
 
 const stamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '-');
-const runDir = path.join(config.outputDir, 'headtest', `${stamp}-nogreen`);
+const runDir = path.join(config.outputDir, 'headtest', `${stamp}-nogreen${ANCHOR ? `-${ANCHOR}` : ''}`);
 fs.mkdirSync(runDir, { recursive: true });
 fs.mkdirSync(path.join(DESK, 'tokens'), { recursive: true });
 const gemini = new Gemini({ apiKey: config.geminiApiKey, timeoutMs: config.timeoutMs });
@@ -294,10 +296,11 @@ async function worker() {
         instruction: it.instruction,
         kind: 'token',
         source: 'mannequin',
-        slug: `nogreen-${it.id}`,
+        slug: `nogreen-${it.id}${ANCHOR ? `-${ANCHOR}` : ''}`,
         headRetries: 0,
+        ...(ANCHOR ? { headAnchor: ANCHOR } : {}),
         ...(it.crop
-          ? { headAnchor: 'bust-2', references: [{ path: it.crop, role: 'character', label: it.label }] }
+          ? { headAnchor: ANCHOR ?? 'bust-2', references: [{ path: it.crop, role: 'character', label: it.label }] }
           : {}),
       });
       const dest = path.join(DESK, 'tokens', `${String(i + 1).padStart(2, '0')}-${it.id}.png`);

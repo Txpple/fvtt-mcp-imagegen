@@ -1231,6 +1231,44 @@ The capture rules change: every capture is the human male; the camera straight d
 two eyes painted the owner's green (about `rgb(190,240,48)`), each a lens the width of about 4% of
 the figure's height; alpha, 1024 square; the weapon in a closed fist and wholly inside the frame.
 
+### The pipeline, locked (the owner, 2026-10-17, late evening)
+
+The owner asked for the order in simple terms, read it back, and locked it ("lock the above as
+our planned go forward and write it in"). This is the route for every humanoid token from here,
+one paint per token:
+
+1. The skill reads the character (the bio, the shelf's anchor, the portrait if there is one) and
+   writes the description: race, sex, age, build, face, kit, the weapon, the green-eyes line, the
+   house finish line. Race and sex live here, in the words, not in the capture.
+2. The skill picks the capture by file name, by pose and setup, to match what the character holds.
+   One body, the human male; the server never chooses a pose.
+3. The capture carries two green marks where the eyes are (painted in HeroForge, or scripted on
+   the `greenlib.mjs mark` way and reviewed), and the skill passes bust-2 beside a portrait crop
+   (`headAnchor: "bust-2"`) or lets the server attach it.
+4. One call: the capture, the crop if any, bust-2, and the description wrapped in the server's
+   own words (the lead sentence binding pose, camera, proportions and grip; the keep line; the
+   bust binding; the plate sentence). The model paints once.
+5. The server keys the plate off, refuses a figure that clips the edge twice, fits the figure to
+   its square, counts the anatomy and **reports** the head and eyes words. It steers nothing and
+   edits nothing: `headRetries` defaults to 0 from this commit.
+6. The skill looks at the token and the report, re-rolls a bowed head (about one in ten on the
+   green-eyed captures, four cents), fixes a flaw with one edit, and uploads on the owner's word.
+
+**Retired from the default, kept in the code for now:** the bust dial and the steered re-renders,
+the eyes edit on the plate, the five-crop tilt ruler as a gate. They stay reachable with
+`headRetries: 1` or `2` and are slated for deletion once a thirty-token run on the recaptured
+library holds the rate; the ruled crops in `mannequins/heads/band/` stay as the record of the
+owner's criteria whatever happens to the code. **Kept:** bust-2 beside the capture, the green
+marks, the clip check, the cutout and the fit, the anatomy count as a report. No further checks
+are added unless the rate drops on the new captures, and then the one the miss asks for.
+
+**The owner's "for fun" test, same evening:** a bust with two open eyes drawn in by script
+(`bust-2-eyes.png`, the morning's sharp drawing, now a named `headAnchor` choice bound with its
+eyes named: "have both of its eyes open exactly as they are here"), against the grey bust-2 on the
+no-green capture, where the eyes had room to move (12 of 18 with the grey bust). My expectation
+going in, written here so it can be wrong: little or no change, since the misses on that capture
+were bowed heads and a bust does not lift one. The result follows.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's

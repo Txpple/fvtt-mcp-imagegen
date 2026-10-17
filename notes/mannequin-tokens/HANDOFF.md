@@ -56,7 +56,9 @@ Claude Code restarts, `npm run headtest` the new).** The owner names every test 
 After the evening's runs (the plan's "The path from here"): **the library going forward is the
 human male alone, one capture per pose and setup, shot at 90 degrees with the eyes painted chroma
 green, bust-2 beside it; race, sex and build from the words and a portrait crop.** The recapture
-is the owner's work in HeroForge; nothing is cut until the captures exist. The next session starts
+is the owner's work in HeroForge; nothing is cut until the captures exist. The pipeline is locked (the plan's "The pipeline, locked"): one paint per token, `headRetries`
+defaulting to 0, the steering and the eyes edit kept in the code until a thirty-token run on the
+recaptured library holds the rate, then deleted. The next session starts
 there: file each new capture as it lands (`scripts/mannequin.mjs take`, the naming without body and
 sex), move the green-eyes line into the keep line once every capture carries marks, and ask the
 owner what the loop does with the one-in-ten bowed head on this route. The agenda below is the

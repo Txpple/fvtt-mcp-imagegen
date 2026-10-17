@@ -29,7 +29,15 @@ export const EDIT_SOURCES = ['mannequin'] as const;
 export type EditSource = (typeof EDIT_SOURCES)[number];
 
 /** Steered head re-renders a mannequin token may buy by default (owner rule: at most two). */
+/** The most steered re-renders a call may ask for. */
 export const HEAD_RETRIES = 2;
+/**
+ * The default since the owner locked the pipeline (2026-10-17): one paint, the head and eyes
+ * checks report only, nothing steered or edited. On the green-eyed 90-degree captures the first
+ * render carries eyes about nine times in ten and the miss is a bowed head a re-roll fixes; the
+ * steering loop stays available by asking for it and is slated to go once the recapture holds.
+ */
+export const HEAD_RETRIES_DEFAULT = 0;
 
 const editImageSchema = z.object({
   sourceImage: z.string().min(1).describe('Absolute path of the image to edit (PNG/JPEG/WebP).'),
@@ -88,7 +96,8 @@ const editImageSchema = z.object({
     .optional()
     .describe(
       'Mannequin tokens only. How many steered re-renders a head verdict outside the band may ' +
-        'buy (default 2; 0 for a calibration run that wants first-render verdicts only).'
+        'buy. Default 0: one paint, the head and eyes checks report only (the owner\'s pipeline, ' +
+        '2026-10-17); up to 2 turns the steering and the eyes edit back on.'
     ),
   anatomy: anatomySchema,
 });
@@ -383,7 +392,7 @@ export class EditImageTool {
         ? {
             head: {
               anchor: headAnchor,
-              retries: p.headRetries ?? HEAD_RETRIES,
+              retries: p.headRetries ?? HEAD_RETRIES_DEFAULT,
               ...(identity ? { identity: true } : {}),
             },
           }

@@ -322,7 +322,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
   const promptWith = (bust: Bust | undefined) =>
     [
       input.prompt,
-      bust ? bustBinding(input.images.length + 1) : '',
+      bust ? bustBinding(input.images.length + 1, bust) : '',
       chromaKey ? chromaSuffix(chromaKey) : '',
     ]
       .filter(Boolean)

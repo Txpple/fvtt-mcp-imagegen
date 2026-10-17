@@ -24,6 +24,7 @@ time. None shows the throat, so none pushes toward a frontal face.
 | `bust-2` | brow and eye sockets | mid-band (like 10); the server's default |
 | `bust-3` | eyes, nose and mouth | face-forward (like 11) |
 | `bust-4` | eyes, nose, mouth and the chin edge | sent a guard eyes-down once; the top of the dial is not a lock |
+| `bust-2-eyes` | bust-2 with two open eyes drawn into the sockets by script (2026-10-17): a lens, a grey iris, a lid line | the owner's "for fun" test; a `headAnchor` choice outside the dial, bound with its eyes named |
 
 Attached as a `pose` reference they act as a dial with about one step of spread (bust-2 on an orc,
 a goblin, a knight and a dwarf centred the heads, with the goblin and one knight a step low), not

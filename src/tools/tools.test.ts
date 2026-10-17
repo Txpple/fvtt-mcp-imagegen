@@ -618,7 +618,7 @@ describe('edit-image', () => {
     const last = parts[parts.length - 2];
     if (!last?.inline_data) return undefined;
     const data = Buffer.from(last.inline_data.data, 'base64');
-    for (const b of ['bust-1', 'bust-2', 'bust-3', 'bust-4'] as const) {
+    for (const b of ['bust-1', 'bust-2', 'bust-3', 'bust-4', 'bust-2-eyes'] as const) {
       if (data.equals(fs.readFileSync(bustPath(b)))) return b;
     }
     return undefined;
@@ -698,6 +698,23 @@ describe('edit-image', () => {
     expect(m.totalUsd).toBeCloseTo(0.001, 3);
   });
 
+  it('mannequin source: an eyed bust is attached by name and bound with its eyes named', async () => {
+    const { dispatch } = build();
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+      headAnchor: 'bust-2-eyes',
+    });
+    expect(sentBust(0)).toBe('bust-2-eyes');
+    const text = sent[0].body.contents[0].parts.at(-1).text;
+    expect(text).toContain('grey clay head with two open eyes');
+    expect(text).toContain('have both of its eyes open exactly as they are here');
+    expect(r.head.anchorUsed).toBe('bust-2-eyes');
+  });
+
   it('mannequin source: headAnchor picks the bust, and "none" sends no bust with the head in words', async () => {
     const { dispatch } = build();
     await dispatch('edit-image', {
@@ -767,6 +784,7 @@ describe('edit-image', () => {
       instruction: 'a guard',
       kind: 'token',
       source: 'mannequin',
+      headRetries: 2,
       slug: 'guard',
     });
     expect(sent).toHaveLength(2);
@@ -795,6 +813,7 @@ describe('edit-image', () => {
       instruction: 'a guard',
       kind: 'token',
       source: 'mannequin',
+      headRetries: 2,
       slug: 'guard',
     });
     expect(sent).toHaveLength(3);
@@ -822,6 +841,7 @@ describe('edit-image', () => {
       instruction: 'a guard',
       kind: 'token',
       source: 'mannequin',
+      headRetries: 2,
       slug: 'guard',
     });
     expect(sent).toHaveLength(2);
@@ -844,6 +864,7 @@ describe('edit-image', () => {
       instruction: 'a dwarf',
       kind: 'token',
       source: 'mannequin',
+      headRetries: 2,
       slug: 'dwarf',
       references: [{ path: refPng, role: 'character', label: 'the dwarf' }],
     });
@@ -871,6 +892,7 @@ describe('edit-image', () => {
       instruction: 'a dwarf',
       kind: 'token',
       source: 'mannequin',
+      headRetries: 2,
       slug: 'dwarf',
       headAnchor: 'bust-2',
       references: [{ path: refPng, role: 'character', label: 'the dwarf' }],
@@ -900,6 +922,7 @@ describe('edit-image', () => {
       instruction: 'a guard',
       kind: 'token',
       source: 'mannequin',
+      headRetries: 2,
       slug: 'guard',
     });
     expect(sent).toHaveLength(2);
@@ -934,6 +957,7 @@ describe('edit-image', () => {
       instruction: 'a guard',
       kind: 'token',
       source: 'mannequin',
+      headRetries: 2,
       slug: 'guard',
     });
     expect(sent).toHaveLength(5);
@@ -957,6 +981,7 @@ describe('edit-image', () => {
       instruction: 'a guard',
       kind: 'token',
       source: 'mannequin',
+      headRetries: 2,
       slug: 'guard',
       headRetries: 0,
     });
@@ -1001,6 +1026,7 @@ describe('edit-image', () => {
       instruction: 'a guard',
       kind: 'token',
       source: 'mannequin',
+      headRetries: 2,
       slug: 'guard',
     });
     expect(sent).toHaveLength(1);
@@ -1355,6 +1381,7 @@ describe('the anatomy check', () => {
       instruction: 'a guard',
       kind: 'token',
       source: 'mannequin',
+      headRetries: 2,
       slug: 'guard',
     });
     expect(sent).toHaveLength(2);

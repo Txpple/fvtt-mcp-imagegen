@@ -17,14 +17,19 @@ export const HEADS_DIR = path.join(repoRoot, 'mannequins', 'heads');
 
 /** The busts, lowest tilt first: crown only, brow and eye sockets, eyes nose mouth, plus the chin edge. */
 export const BUSTS = ['bust-1', 'bust-2', 'bust-3', 'bust-4'] as const;
-export type Bust = (typeof BUSTS)[number];
+/**
+ * The same busts with two open eyes drawn into the sockets by script (2026-10-17, the owner's
+ * "for fun" test): bound with the eyes named, outside the steering dial.
+ */
+export const EYED_BUSTS = ['bust-2-eyes'] as const;
+export type Bust = (typeof BUSTS)[number] | (typeof EYED_BUSTS)[number];
 
 /**
  * What a caller may ask for: a bust; no bust on the first render (the head then in words); or
  * "capture", the capture's own head with nothing attached and nothing said about it (the owner's
  * test of 2026-10-17: a capture shot fully top-down, crown only, the eyes not asked for).
  */
-export const HEAD_ANCHOR_CHOICES = [...BUSTS, 'none', 'capture'] as const;
+export const HEAD_ANCHOR_CHOICES = [...BUSTS, ...EYED_BUSTS, 'none', 'capture'] as const;
 
 /** What a render carries: a bust, the caller's `character` head, or nothing. */
 export type HeadAnchor = Bust | 'character' | 'none';
@@ -33,7 +38,11 @@ export type HeadAnchor = Bust | 'character' | 'none';
 export const DEFAULT_BUST: Bust = 'bust-2';
 
 export function isBust(anchor: string): anchor is Bust {
-  return (BUSTS as readonly string[]).includes(anchor);
+  return (BUSTS as readonly string[]).includes(anchor) || (EYED_BUSTS as readonly string[]).includes(anchor);
+}
+
+export function isEyedBust(bust: Bust): boolean {
+  return (EYED_BUSTS as readonly string[]).includes(bust);
 }
 
 export function bustPath(bust: Bust): string {
@@ -48,7 +57,15 @@ export function loadBust(bust: Bust): InlineImage {
  * The binding that made the busts a dial (2026-10-16): the head's tilt and nothing else. The
  * bust is attached last, so `n` is one past the caller's images.
  */
-export function bustBinding(n: number): string {
+export function bustBinding(n: number, bust?: Bust): string {
+  if (bust && isEyedBust(bust)) {
+    return (
+      `Image ${n} is a grey clay head with two open eyes, showing only how far a head is tipped ` +
+      "toward this overhead camera and how its eyes sit open beneath the brow: tip the figure's " +
+      'head exactly like it, so that the same amount of brow, eyes, nose and mouth shows, have ' +
+      'both of its eyes open exactly as they are here, and take nothing else from it.'
+    );
+  }
   return (
     `Image ${n} is a grey clay head showing only how far a head is tipped toward this overhead ` +
     "camera: tip the figure's head exactly like it, so that the same amount of brow, eyes, nose " +
@@ -63,7 +80,7 @@ export function bustBinding(n: number): string {
  */
 export function steerBust(verdict: HeadVerdict, current: Bust | undefined): Bust | undefined {
   if (verdict === 'far-down') {
-    const i = current ? BUSTS.indexOf(current) : -1;
+    const i = current ? (BUSTS as readonly string[]).indexOf(current) : -1;
     return BUSTS[Math.min(BUSTS.length - 1, Math.max(2, i + 1))];
   }
   if (verdict === 'far-up') return 'bust-1';
