@@ -1269,6 +1269,28 @@ no-green capture, where the eyes had room to move (12 of 18 with the grey bust).
 going in, written here so it can be wrong: little or no change, since the misses on that capture
 were bowed heads and a bust does not lift one. The result follows.
 
+**The eyed bust ran (2026-10-17, 19:41; 10 renders, $0.47; `headtest/2026-10-17-19-41-nogreen-bust-2-eyes/`,
+filed as `EyeColorTests\09-eyed-bust-bust-2-eyes` with each token beside its grey-bust twin from
+the no-green control).** The ten species of the control, the same words, the no-green capture,
+`bust-2-eyes` in place of the grey bust-2. *Result:*
+
+| on the no-green capture | eyes reading, by the check | by my eye |
+| --- | --- | --- |
+| grey bust-2 (the control's ten) | 7 of 10 | 7 of 10 |
+| bust-2-eyes | 10 of 10 | 9 or 10 of 10 |
+
+The three the grey bust lost, the dwarf, the gnome and the goliath woman, all read with the eyed
+bust, and the heads sit a step higher across the ten. One likeness slip on the eyed side: the
+tiefling came back pale-skinned with no horns (eyes present), which is a thing the model does
+on its own one time in twenty and not a thing a bust binding would cause, but it is on the sheet.
+**My expectation going in was wrong**: I wrote that a bust does not lift a bowed head and the
+eyes would not move; on this run the eyed bust lifted the heads and delivered the eyes. Ten a
+side is one run, and this capture had no green marks, so the eyed bust was doing the work the
+marks do on the real route. Whether it adds anything on top of the green-eyed captures, where the
+rate is already about nine in ten, is a separate question and the one that matters for the path:
+ten species on the green-eyed capture with each bust would answer it for about 90 cents. The owner
+says whether to run it.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
