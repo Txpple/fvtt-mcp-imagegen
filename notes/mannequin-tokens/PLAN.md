@@ -1185,6 +1185,10 @@ way; the library of 312 could be the 26 human-male captures (recaptured at 90 wi
 plus whatever the owner's eye says the small and large bodies still need. The owner rules from
 the pairs sheet; nothing is cut on this.
 
+*The owner's reading of the pairs sheet (2026-10-17, evening, verbatim):* "the pairs mostly match,
+really just down to variance of the model." A reading, not a word to cut the library; what follows
+from it waits on the owner.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
