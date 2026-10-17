@@ -66,11 +66,18 @@ export function steerBust(verdict: HeadVerdict, current: Bust | undefined): Bust
   return undefined;
 }
 
-/** The judge's exemplars, in the order HEAD_PROMPT names them: DOWN, RIGHT, UP, then FAR-UP. */
+/**
+ * The head check's exemplars, in the order HEAD_PROMPT names them: FAR-DOWN, DOWN, RIGHT, UP,
+ * FAR-UP. The first four are head crops of the stage-2 renders the owner ruled blind on
+ * 2026-10-17 (too far down; a bit down; about perfect; maybe too high); FAR-UP is the owner's
+ * 2026-10-16 ruling on a legacy token. The legacy band crops stay in band/ as that ruling's
+ * record, and the measurement behind the swap is in notes/mannequin-tokens/PLAN.md.
+ */
 export const JUDGE_EXEMPLARS = [
-  'band/right-05-tychon-stand.png',
-  'band/right-10-kartor-combat.png',
-  'band/right-11-lysandra-combat.png',
+  'band/far-down-s2-08-cecil-combat.png',
+  'band/down-s2-05-lysandra-stand.png',
+  'band/right-s2-03-kartor-stand.png',
+  'band/up-s2-04-kartor-combat.png',
   'band/wrong-12-cecil-combat.png',
 ] as const;
 

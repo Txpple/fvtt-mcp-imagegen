@@ -596,6 +596,33 @@ it. *The camera on the standing captures leans toward front-and-above* (1 and 7,
 grade for between top-down and dropped; a capture-level cause that the one-body question
 inherits, since those are the captures it would keep. None of these is changed yet.
 
+**The checks recalibrated (2026-10-17; about 320 check calls, $0.65, no renders;
+`headtest/recalibration-2026-10-17/` in the output folder, filed as `07-recalibration-of-the-checks`
+in the review folder).** The owner's 27 ruled plates (stage 1's 19, stage 2's 8) were re-graded
+under four rulers: the legacy four crops; a five-step ruler cut from the stage-2 renders the owner
+ruled (cell 8 "too far down" as FAR-DOWN, 5 "a bit down" as DOWN, 3 "about perfect" as RIGHT, 4
+"maybe too high" as UP, the legacy 12 as FAR-UP); the same five as whole tokens; and the legacy
+four plus the FAR-DOWN crop. Whole tokens were the worst (five accepted heads rejected); the
+legacy-plus-one set missed Tychon's stand. The first pass also showed the check's word wobbling
+at the down/far-down boundary between identical calls (2 of 27 changed on the legacy ruler between
+the live run and the re-run), so the two front-runners ran three times each. By majority of
+three: the legacy ruler agreed 23 of 24, passed Cecil's rejected combat head every pass, and
+wobbled on 6 cells; today's ruler agreed 20 of 22 (its four exemplar cells excluded), caught every
+rejected head every pass (Tychon's stand, Cecil's combat, the goblin's redone first render, and
+Cecil's eyeless stand), rejected two accepted NPC heads every pass (stage-1 cells 3 and 6, guard-3
+and knight-3: a re-render on bust-3 each, about 3.5 cents) and wobbled on 3. **Adopted**, on the
+asymmetry: a missed rejection ships a head the owner would not take, a false one costs a retry.
+The ruler is `JUDGE_EXEMPLARS` in `src/heads.ts` (`band/*-s2-*` and `wrong-12`), the prompt names
+six images, the legacy crops stay as the 2026-10-16 record, and three plates through the live
+`--judge` path agreed with the owner. The anatomy check's facing question: asked which edge the
+head "points to", the check model answered bottom on 30 of 34 top-down tokens whose heads sat at
+the top; asked which edge the head is nearest, the eyes expressly ignored, top on 34 of 34 (a
+second wording did the same; the shorter is kept in `src/anatomy.ts`). On the side, one pass
+flagged the two-dagger goblin's daggers as "painted twice": identical twin weapons can read as a
+duplicate. Open from this: the wobble at the boundary (a majority of three per plate would steady
+it at three times a fifth of a cent); whether the owner minds a re-render on heads like guard-3
+and knight-3; and a grade for a camera leaning front-and-above, which neither check has.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's

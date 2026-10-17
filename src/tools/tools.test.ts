@@ -656,7 +656,7 @@ describe('edit-image', () => {
     expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/face, hair/);
   });
 
-  it('mannequin source with no character: attaches bust-2 last, bound as the head-angle dial, and grades against the four exemplars', async () => {
+  it('mannequin source with no character: attaches bust-2 last, bound as the head-angle dial, and grades against the five exemplars', async () => {
     const { dispatch, spend } = build();
     const r: any = await dispatch('edit-image', {
       sourceImage: refPng,
@@ -675,8 +675,8 @@ describe('edit-image', () => {
     expect(text).not.toContain(MANNEQUIN_HEAD_WORDS);
     expect(judged).toHaveLength(1);
     const jp = judged[0].body.contents[0].parts;
-    expect(jp).toHaveLength(6);
-    expect(jp[5].text).toMatch(/Image 1 is DOWN.*Image 5 is the token to grade/);
+    expect(jp).toHaveLength(7);
+    expect(jp[6].text).toMatch(/Image 1 is FAR-DOWN.*Image 6 is the token to grade/);
     expect(r.head).toEqual({ verdict: 'right', inBand: true, anchorUsed: 'bust-2' });
     expect(spend.totalUsd).toBeGreaterThanOrEqual(0.034);
     const m = new SpendMeter();

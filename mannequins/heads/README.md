@@ -40,8 +40,27 @@ re-renders with the next bust up (bust-3 at least), a `far-up` one with bust-1.
 Head-and-shoulders crops (190 px of the 512, upscaled to 512) of the live Echoes of Halruaa PC
 tokens the owner ruled on `head-angle-sheet.png` (Desktop, `PC Tokens`), numbered as on that sheet.
 The six `right-*` crops are the band, from eyes-down (5) to face-forward (11); the two `wrong-*`
-crops are outside it. The judge (`src/head.ts`) is shown `right-05` as DOWN, `right-10` as RIGHT,
-`right-11` as UP and `wrong-12` as FAR-UP beside every plate it grades.
+crops are outside it. Until 2026-10-17 the head check (`src/head.ts`) was shown `right-05` as DOWN,
+`right-10` as RIGHT, `right-11` as UP and `wrong-12` as FAR-UP beside every plate it grades;
+since then its ruler is the five crops in the next section, and these stay as the record of the
+2026-10-16 ruling.
+
+### The ruler since 2026-10-17 (`band/*-s2-*`, and `wrong-12`)
+
+Head crops (220 px of the 512, upscaled to 512) of four stage-2 renders the owner ruled blind on
+2026-10-17 (the universal PC route, the review folder `TokenImprovements/06-stage-2-...`), one
+per step, with the legacy FAR-UP kept. Measured against the owner's 27 ruled plates over three
+passes: the legacy four passed a head the owner rejects every time and wobbled on six cells;
+these five caught every rejected head every time, rejected two accepted NPC heads (a re-render
+each, about 3.5 cents) and wobbled on three. The record is `notes/mannequin-tokens/PLAN.md`.
+
+| File | Step | Stage-2 cell | The owner's words |
+| --- | --- | --- | --- |
+| `far-down-s2-08-cecil-combat.png` | FAR-DOWN (wrong) | 8 | head looks too far down |
+| `down-s2-05-lysandra-stand.png` | DOWN (the lowest acceptable) | 5 | head a bit down, good likeness |
+| `right-s2-03-kartor-stand.png` | RIGHT (the ideal) | 3 | head is about perfect, good likeness |
+| `up-s2-04-kartor-combat.png` | UP (the highest acceptable) | 4 | head maybe too high up |
+| `wrong-12-cecil-combat.png` | FAR-UP (wrong) | legacy 12 | the face lifted to the camera (2026-10-16) |
 
 | File | Sheet | Source (Desktop `PC Tokens/prod/`) | Ruling |
 | --- | --- | --- | --- |

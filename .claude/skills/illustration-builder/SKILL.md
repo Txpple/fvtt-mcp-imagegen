@@ -624,14 +624,15 @@ is one `--universal --bust 3` calibration run away (eight renders, about $0.35).
      the head is an image: with no `character` reference the tool attaches a grey HeroForge
      bust at the wanted tilt (`mannequins/heads/bust-2.png`, the middle of the owner's band)
      after your references and binds it as a dial; with one, the reference is the approved
-     token head and carries the tilt itself. Then a judge model grades the plate beside four
-     crops the owner ruled on (`mannequins/heads/band/`) on five steps, `far-down`, `down`,
+     token head and carries the tilt itself. Then a check model grades the plate beside five
+     crops the owner ruled on (`mannequins/heads/band/`, one per step) on five steps, `far-down`, `down`,
      `right`, `up`, `far-up`, plus `camera-dropped` and `unclear`; `down`, `right` and `up` are
      the band and deliver. `far-down` is rendered again with the next bust up (bust-3 at
      least), `far-up` with bust-1, a dropped camera once unchanged, at most two retries, every
      kept plate named `-head<n>-<verdict>.png`, and the result's `head` reports `verdict`,
      `inBand`, `anchorUsed`, `first`, every verdict and the kept plates. Two bad verdicts still
-     deliver, flagged, because the judge can be wrong (19 of 21 on the owner's ruled heads):
+     deliver, flagged, because the check can be wrong (re-cut 2026-10-17 from the owner's blind rulings: every
+     rejected head caught over three passes, two accepted NPC heads sent for a re-render):
      read `head` before the flaw pass; a delivered `far-up` or `far-down` is a re-render, not
      an edit. `camera-dropped` twice comes with `advice`: change the capture, not the words
      (Cecil's combat dropped the camera three times on `combat-empty` and landed first time on

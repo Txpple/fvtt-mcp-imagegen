@@ -47,25 +47,26 @@ describe('the band and the steering', () => {
     expect(steerBust('camera-dropped', 'bust-2')).toBeUndefined();
   });
 
-  it('ships the four ruled exemplars the prompt names', () => {
+  it('ships the five ruled exemplars the prompt names', () => {
     expect(JUDGE_EXEMPLARS).toEqual([
-      'band/right-05-tychon-stand.png',
-      'band/right-10-kartor-combat.png',
-      'band/right-11-lysandra-combat.png',
+      'band/far-down-s2-08-cecil-combat.png',
+      'band/down-s2-05-lysandra-stand.png',
+      'band/right-s2-03-kartor-stand.png',
+      'band/up-s2-04-kartor-combat.png',
       'band/wrong-12-cecil-combat.png',
     ]);
     const ex = loadExemplars();
-    expect(ex).toHaveLength(4);
+    expect(ex).toHaveLength(5);
     for (const e of ex) expect(e.data.subarray(1, 4).toString()).toBe('PNG');
     expect(HEAD_PROMPT).toMatch(
-      /Image 1 is DOWN.*Image 2 is RIGHT.*Image 3 is UP.*Image 4 is FAR-UP/
+      /Image 1 is FAR-DOWN.*Image 2 is DOWN.*Image 3 is RIGHT.*Image 4 is UP.*Image 5 is FAR-UP/
     );
-    expect(HEAD_PROMPT).toMatch(/Image 5 is the token to grade/);
+    expect(HEAD_PROMPT).toMatch(/Image 6 is the token to grade/);
   });
 });
 
 describe('judgeHead', () => {
-  it('shows the four exemplars, then the plate, then the prompt, and returns the verdict', async () => {
+  it('shows the five exemplars, then the plate, then the prompt, and returns the verdict', async () => {
     let seen: { url: string; body: any } | undefined;
     const fakeFetch = (async (url: any, init: any) => {
       seen = { url: String(url), body: JSON.parse(init.body) };
@@ -79,10 +80,10 @@ describe('judgeHead', () => {
     expect(verdict).toBe('far-down');
     expect(seen?.url).toContain(`/models/${JUDGE_MODEL}:generateContent`);
     const parts = seen?.body.contents[0].parts;
-    expect(parts).toHaveLength(6);
-    for (let i = 0; i < 5; i++) expect(parts[i].inline_data.mime_type).toBe('image/png');
-    expect(Buffer.from(parts[4].inline_data.data, 'base64').toString()).toBe('plate');
-    expect(parts[5].text).toBe(HEAD_PROMPT);
+    expect(parts).toHaveLength(7);
+    for (let i = 0; i < 6; i++) expect(parts[i].inline_data.mime_type).toBe('image/png');
+    expect(Buffer.from(parts[5].inline_data.data, 'base64').toString()).toBe('plate');
+    expect(parts[6].text).toBe(HEAD_PROMPT);
     expect(seen?.body.generationConfig).toEqual({ temperature: 0 });
   });
 

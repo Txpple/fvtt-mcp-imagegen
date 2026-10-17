@@ -3,10 +3,14 @@
 // read, hair over the top half of the head; never bowed with the eyes hidden, never the face
 // lifted to the camera (chin underside, throat), never a lowered camera that shows the chest
 // head-on. No pixel measure tells those apart across races, hoods and helmets, so the plate is
-// shown to a flash vision model beside four crops the owner ruled on (mannequins/heads/band/)
-// and graded on five steps. The first judge, flash-lite shown the plate alone, was noise on the
+// shown to a flash vision model beside five crops the owner ruled on (mannequins/heads/band/),
+// one per step, and graded on five steps. The first judge, flash-lite shown the plate alone, was noise on the
 // head (it called bowed heads up and a frontal one ahead); the exemplars and the model are what
-// calibrate it (19 of 21 on the ruled set, every known step matched; gemini.ts). The
+// calibrate it (19 of 21 on the ruled set, every known step matched; gemini.ts). The ruler was
+// re-cut on 2026-10-17 from the owner's blind stage-2 rulings, with a FAR-DOWN exemplar the
+// first set lacked: over three passes on 27 ruled plates the legacy four passed a head the
+// owner rejects every time and wobbled on six cells; today's five caught every rejected head
+// every time, rejected two accepted NPC heads (a re-render each) and wobbled on three. The
 // verdict steers a re-render (shared.ts) and is reported; it never refuses, because the judge
 // can be wrong and the flaw pass still reads every token.
 
@@ -37,26 +41,28 @@ export function needsRetry(verdict: HeadVerdict): boolean {
 }
 
 export const HEAD_PROMPT =
-  'You are grading the head angle of a virtual tabletop token: one upright figure on a flat ' +
-  'coloured plate, seen from directly above, the camera looking straight down onto the tops of ' +
-  'the shoulders. The wanted head faces the way the body faces and is tipped just enough toward ' +
-  'the camera that the brow, both eyes, the nose and the mouth read, with hair over the top ' +
-  'half of the head. Images 1 to 4 are head crops from approved tokens at this camera, each ' +
-  'with its grade. Image 1 is DOWN: the lowest acceptable tilt, the crown and hair large, the ' +
-  'eyes turned down but readable under the brow. Image 2 is RIGHT: the ideal, brow, both eyes, ' +
-  'nose and mouth all reading under the hair. Image 3 is UP: the highest acceptable tilt, the ' +
-  'face forward with every feature reading and the hair still over the top of the head. Image ' +
-  '4 is FAR-UP, which is wrong: the face lifted to the camera as in a portrait, the eyes at ' +
-  "mid-height of the head, the chin's underside or the throat showing. Image 5 is the token to " +
-  'grade. Compare the tilt of its head to the four crops and answer with exactly one of these ' +
-  'words. FAR-DOWN: lower than Image 1, the eyes hidden, shut or unreadable, only the crown and ' +
-  'hair show. DOWN: like Image 1. RIGHT: like Image 2. UP: like Image 3. FAR-UP: like Image 4 ' +
-  'or beyond it. CAMERA-DROPPED: the camera is not above the figure, the chest or the front of ' +
-  'the body faces the viewer and the figure is seen from the front or the side rather than from ' +
-  'above. UNCLEAR: the figure is lying flat on the ground (on its back or its side, arms out, ' +
-  'dropped gear beside it), or no face can be made out (a helmet with no visor, a deep hood, the ' +
-  "face turned away). Judge only how far the head is tipped toward the camera, never the figure's " +
-  'race, kit, art or pose. One word.';
+  'You are grading the head angle of a virtual tabletop token: one upright figure on a ' +
+  'flat coloured plate, seen from directly above, the camera looking straight down onto ' +
+  'the tops of the shoulders. The wanted head faces the way the body faces and is tipped ' +
+  'just enough toward the camera that the brow, both eyes, the nose and the mouth read, ' +
+  'with hair over the top half of the head. Images 1 to 5 are heads from tokens at this ' +
+  'camera, each with its grade. Image 1 is FAR-DOWN, which is wrong: the head bowed too ' +
+  'far, the crown and hair large, the eyes hidden, shut or turned so far down that they ' +
+  'do not read. Image 2 is DOWN: the lowest acceptable tilt, the crown and hair still ' +
+  'large, the eyes turned down but readable under the brow. Image 3 is RIGHT: the ideal, ' +
+  'brow, both eyes, nose and mouth all reading under the hair. Image 4 is UP: the highest ' +
+  'acceptable tilt, the face forward with every feature reading and the hair still over ' +
+  'the top of the head. Image 5 is FAR-UP, which is wrong: the face lifted to the camera ' +
+  "as in a portrait, the eyes at mid-height of the head, the chin's underside or the " +
+  'throat showing. Image 6 is the token to grade. Compare the tilt of its head to the ' +
+  'five and answer with exactly one of these words. FAR-DOWN: like Image 1 or lower. ' +
+  'DOWN: like Image 2. RIGHT: like Image 3. UP: like Image 4. FAR-UP: like Image 5 or ' +
+  'beyond it. CAMERA-DROPPED: the camera is not above the figure, the chest or the front ' +
+  'of the body faces the viewer and the figure is seen from the front or the side rather ' +
+  'than from above. UNCLEAR: the figure is lying flat on the ground (on its back or its ' +
+  'side, arms out, dropped gear beside it), or no face can be made out (a helmet with no ' +
+  'visor, a deep hood, the face turned away). Judge only how far the head is tipped ' +
+  "toward the camera, never the figure's race, kit, art or pose. One word.";
 
 /** The judge's first word, as a verdict; anything else is unclear. */
 export function parseVerdict(text: string): HeadVerdict {
@@ -87,7 +93,7 @@ export interface HeadReport {
 }
 
 /**
- * One verdict on a plate: the four exemplars go first, the plate fifth, the prompt last.
+ * One verdict on a plate: the five exemplars go first, the plate sixth, the prompt last.
  * `exemplars` is injectable so a caller can grade against another set.
  */
 export async function judgeHead(

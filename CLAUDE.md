@@ -84,8 +84,8 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
   `character` reference the server attaches `mannequins/heads/bust-2.png` after the caller's
   references, bound as a dial (`headAnchor` picks bust-1 to bust-4 or none); a `character`
   reference is the approved token head and carries the tilt. Then the plate is shown to
-  `JUDGE_MODEL` (flash, temperature 0, a flat `JUDGE_USD` in the session total) beside four crops
-  the owner ruled on (`mannequins/heads/band/`) for one of `far-down`, `down`, `right`, `up`,
+  `JUDGE_MODEL` (flash, temperature 0, a flat `JUDGE_USD` in the session total) beside five crops
+  the owner ruled on (`mannequins/heads/band/`, one per step) for one of `far-down`, `down`, `right`, `up`,
   `far-up`, `camera-dropped`, `unclear`; `down`, `right` and `up` deliver. `far-down` is redone
   with the next bust up, `far-up` with bust-1, a dropped camera once unchanged (then "change the
   capture"), at most two retries (`headRetries`), every call billed, then delivered flagged; the
