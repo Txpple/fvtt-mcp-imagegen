@@ -675,6 +675,13 @@ at stage-3 scrutiny, free, so the body comparison has a fair baseline; (3) the b
 captures: why the eyes close (a bowed capture head, a bust that shows the brow but not the eyes,
 the model's habit) is the next measured question, since no ruler change delivers eyes.
 
+*Two leads from the owner after ruling (2026-10-17), on the body question, not rulings:* the large
+renders come out with forward-facing heads, which the owner puts down to the large mannequin itself
+(the large-male and human-male `twohand-right` captures carry the same bowed head, so the pull would
+be the large body's mass, not its head pose); and the smaller creatures are "definitely more accurate"
+on the small mannequin (the goblin pairs 21 and 22). If those hold, the answer is fewer bodies, not
+one: the human male for every medium race, the small body kept, the large body open.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
