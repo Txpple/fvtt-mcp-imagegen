@@ -736,6 +736,15 @@ gaze word, which failed before); a tight face crop in place of the head-to-waist
 portrait at all beside the bust for the eyes' sake (the words-only NPC route gave eyes on 7 of 19
 by the gate, so that is no cure either). None chosen; the owner picks.
 
+**Stage 2b ruled (2026-10-17, from the pairs sheet; `stage2b-rulings.json` beside the run).** The
+gate's word on the eight delivered tokens matched the owner's eye on seven: 1, 2, 3, 5 and 6 "ok"
+or "good" with eyes, 4 and 8 "no eyes" as the gate said; the miss is 7, Cecil's stand, where the gate
+said eyes on the last two retries and the owner sees none, so the gate can say yes on a bowed head
+(the tilt word, `far-down`, held it out of the band). Steering delivered eyes, by the owner, on
+exactly the three the gate accepted after a retry (1, 2, 6) and not on the three it gave up on (4,
+7, 8). The pose is off on 5 (a first render, "bad stand") and 8 ("combat stance off" after two
+retries). Stage 2's renders seen again beside these ruled the same as before.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
