@@ -453,4 +453,6 @@ bowed heads on bust-1 and bust-3), and landed `right` first time words-only on b
 same hair words, as his run 1 head had. **A frontal portrait with a fringe bows the head and can
 drop the camera; such a character goes words-only on the bust, the hair described off the brow.**
 The other three PCs' portraits (short, swept-back or pulled-back hair) rode beside the bust
-without harm.
+without harm. The owner passed that head (the body and kit of a headtest render are a measurement,
+not a token: the real tokens come through the skill's recipe with the campaign's finish line and
+gear crops, after the restart).
