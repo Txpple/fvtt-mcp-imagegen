@@ -858,6 +858,20 @@ fourteen, the no-eyes remedy in the server becomes one edit on the delivered pla
 call) instead of a re-render on the next bust, and the painted-eyes bust stays a lever for the
 first render rather than a remedy.
 
+**Ruled (the owner, 2026-10-17): "yes their eyes are open. two of them had bug eyes though, which
+wouldn't pass a review. 1 and 3".** Eyes open on 14 of 14, 12 pass, Kartor's combat and Cecil's
+combat fail on eyes opened too wide; nothing else flagged as changed, the lifted heads included. So
+**the no-eyes remedy is an edit, not a re-render**: one `edit-image` on the delivered plate at about
+4 cents, pose kept, against a re-render that lost the pose on 2 of 8 and delivered eyes one time in
+two. Two consequences, both for the owner's word: (1) the line softens, since "fully ... the lids up,
+the eyes alive" over-asked on 2 of 14 ("open both eyes naturally beneath the brow so that the whites
+and irises show, neither narrowed nor wide"), checked by re-editing the two bug-eyed tokens from
+their originals (about 9 cents); (2) the server's gate remedy changes: a NO from the eyes gate with
+the tilt in band runs the edit on the plate and re-checks, once, before any re-render; a tilt outside
+the band still re-renders on the next bust as now. The gate cannot see over-opened eyes (it said
+eyes on both bug-eyed tokens, the anatomy check ok), so "bug eyes" joins the flaw pass's list, not
+the gate's. The painted-eyes bust stays a first-render lever, to run only if fewer edits are wanted.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
