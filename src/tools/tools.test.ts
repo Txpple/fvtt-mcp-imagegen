@@ -34,15 +34,24 @@ let judged: Array<{ url: string; body: any }> = [];
 /** The anatomy judge's answers, in order; 'ERROR' fails the call; empty answers a clean count. */
 let counts: string[] = [];
 let counted: Array<{ url: string; body: any }> = [];
+/** The eyes gate's answers, in order; 'ERROR' fails the call; empty answers EYES. */
+let eyesAnswers: string[] = [];
+let eyed: Array<{ url: string; body: any }> = [];
 const CLEAN_COUNT =
   'COUNTS: heads 1, eyes 2, arms 2, legs 2, hands 2 (5 fingers each), tails 0, held objects 1\n' +
   'FACING: TOP\nFLAWS: none\nVERDICT: OK';
 
 /** Answer a judge call: the anatomy count (its prompt asks for COUNTS) or the head grade. */
 function judgeResponse(url: string, body: any): Response {
-  const anatomy = /COUNTS:/.test(body.contents[0].parts.at(-1).text);
-  (anatomy ? counted : judged).push({ url, body });
-  const answer = anatomy ? (counts.shift() ?? CLEAN_COUNT) : (verdicts.shift() ?? 'RIGHT');
+  const prompt = body.contents[0].parts.at(-1).text;
+  const anatomy = /COUNTS:/.test(prompt);
+  const eyes = /both of its eyes read/.test(prompt);
+  (anatomy ? counted : eyes ? eyed : judged).push({ url, body });
+  const answer = anatomy
+    ? (counts.shift() ?? CLEAN_COUNT)
+    : eyes
+      ? (eyesAnswers.shift() ?? 'EYES')
+      : (verdicts.shift() ?? 'RIGHT');
   if (answer === 'ERROR')
     return new Response('{"error":{"message":"judge down"}}', { status: 500 });
   return new Response(
@@ -54,6 +63,8 @@ function judgeResponse(url: string, body: any): Response {
 function resetJudges() {
   judged = [];
   verdicts = [];
+  eyed = [];
+  eyesAnswers = [];
   counted = [];
   counts = [];
 }
@@ -677,7 +688,10 @@ describe('edit-image', () => {
     const jp = judged[0].body.contents[0].parts;
     expect(jp).toHaveLength(7);
     expect(jp[6].text).toMatch(/Image 1 is FAR-DOWN.*Image 6 is the token to grade/);
-    expect(r.head).toEqual({ verdict: 'right', inBand: true, anchorUsed: 'bust-2' });
+    expect(r.head).toEqual({ verdict: 'right', eyes: 'yes', inBand: true, anchorUsed: 'bust-2' });
+    expect(eyed).toHaveLength(1);
+    expect(eyed[0].body.contents[0].parts).toHaveLength(2); // the plate and the prompt, no exemplars
+    expect(eyed[0].body.contents[0].parts[1].text).toMatch(/both of its eyes read/);
     expect(spend.totalUsd).toBeGreaterThanOrEqual(0.034);
     const m = new SpendMeter();
     m.recordJudge(0.001);
@@ -844,6 +858,48 @@ describe('edit-image', () => {
     });
   });
 
+  it('mannequin source: eyes NO is re-rendered up the dial like far-down, the plate kept as no-eyes, the eyes reported', async () => {
+    const { dispatch, spend } = build();
+    verdicts = ['RIGHT', 'RIGHT'];
+    eyesAnswers = ['NO-EYES', 'EYES'];
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+    });
+    expect(sent).toHaveLength(2);
+    expect(sentBust(1)).toBe('bust-3');
+    expect(judged).toHaveLength(2);
+    expect(eyed).toHaveLength(2);
+    expect(r.head).toMatchObject({
+      verdict: 'right',
+      eyes: 'yes',
+      inBand: true,
+      anchorUsed: 'bust-3',
+      first: 'right',
+      verdicts: ['right', 'right'],
+      eyesVerdicts: ['no', 'yes'],
+      retried: true,
+    });
+    expect(path.basename(r.head.kept[0])).toMatch(/-head1-no-eyes\.png$/);
+    // Two renders and four check calls.
+    expect(spend.totalUsd).toBeGreaterThanOrEqual(0.034 * 2 + 0.002 * 4);
+    // Delivered flagged when the eyes never read: inBand false, the eyes word on the report.
+    verdicts = ['RIGHT'];
+    eyesAnswers = ['NO-EYES'];
+    const r2: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+      headRetries: 0,
+    });
+    expect(r2.head).toEqual({ verdict: 'right', eyes: 'no', inBand: false, anchorUsed: 'bust-2' });
+  });
+
   it('mannequin source: headRetries 0 delivers the first render flagged, and unclear never retries', async () => {
     const { dispatch } = build();
     verdicts = ['FAR-UP'];
@@ -856,7 +912,7 @@ describe('edit-image', () => {
       headRetries: 0,
     });
     expect(sent).toHaveLength(1);
-    expect(r.head).toEqual({ verdict: 'far-up', inBand: false, anchorUsed: 'bust-2' });
+    expect(r.head).toEqual({ verdict: 'far-up', eyes: 'yes', inBand: false, anchorUsed: 'bust-2' });
     verdicts = ['UNCLEAR'];
     const r2: any = await dispatch('edit-image', {
       sourceImage: refPng,
@@ -866,7 +922,12 @@ describe('edit-image', () => {
       slug: 'guard',
     });
     expect(sent).toHaveLength(2);
-    expect(r2.head).toEqual({ verdict: 'unclear', inBand: false, anchorUsed: 'bust-2' });
+    expect(r2.head).toEqual({
+      verdict: 'unclear',
+      eyes: 'yes',
+      inBand: false,
+      anchorUsed: 'bust-2',
+    });
   });
 
   it('mannequin source: a judge that cannot be reached never blocks the render', async () => {

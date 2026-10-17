@@ -3,7 +3,8 @@
 // every change to the head path runs through this, never one render at a time). It renders a
 // fixed set through the real tool path (edit-image, source "mannequin", the server's bust
 // anchor and judge), writes a contact sheet with every verdict beside each token, and prints
-// the hit rate inside the owner's band, first render and after steering. It loads .env and the
+// the hit rate inside the owner's band, first render and after steering (the tilt word and, since
+// 2026-10-17, the eyes gate's word beside it: `down·no-eyes` is a head the gate sent back). It loads .env and the
 // built server exactly as the MCP does (dist/), so build first.
 //
 //   node scripts/headtest.mjs [--pcs <pcs.json>] [--npcs-only | --pcs-only] [--repeat <n>]
@@ -47,7 +48,7 @@ const { Gemini, PRICE } = await load('gemini.js');
 const { SpendMeter } = await load('spend.js');
 const { makeCutout } = await load('cutout.js');
 const { buildToolRegistry } = await load('registry.js');
-const { judgeHead, inBand } = await load('head.js');
+const { judgeHead, judgeEyes, headOk } = await load('head.js');
 const { DEFAULT_BUST } = await load('heads.js');
 
 const mannequin = name => path.join(root, 'mannequins', `mannequin-${name}.png`);
@@ -159,7 +160,10 @@ if (judgeAt >= 0) {
   for (const f of files) {
     const plate = await sharp(f).flatten({ background: '#ff00ff' }).png().toBuffer();
     const verdict = await judgeHead(gemini, plate);
-    console.log(`${verdict.padEnd(15)} ${inBand(verdict) ? 'in band ' : 'OUT     '} ${f}`);
+    const eyes = await judgeEyes(gemini, plate);
+    console.log(
+      `${verdict.padEnd(15)} eyes ${eyes.padEnd(8)} ${headOk(verdict, eyes) ? 'in band ' : 'OUT     '} ${f}`
+    );
   }
   process.exit(0);
 }
@@ -202,7 +206,7 @@ async function writeSheet(items, title, out) {
     }
     const ok = it.head ? it.head.inBand : false;
     const verdicts = it.head
-      ? (it.head.verdicts ?? [it.head.verdict]).join(' → ')
+      ? stepWords(it.head).join(' → ')
       : `error: ${(it.error ?? '').slice(0, 40)}`;
     const line1 = `${it.id}  ${it.head?.anchorUsed ?? ''}`;
     const line2 = `${verdicts}${it.head?.advice ? '  (change the capture)' : ''}`;
@@ -230,12 +234,27 @@ async function writeSheet(items, title, out) {
     .toFile(out);
 }
 
-/** Hit rates for one group: first-render and final verdicts inside the band. */
+/** Each step's tilt word with its eyes word when the gate spoke (`down·no-eyes`). */
+function stepWords(head) {
+  const tilts = head.verdicts ?? [head.verdict];
+  const eyes = head.eyesVerdicts ?? [head.eyes];
+  return tilts.map((v, i) => {
+    const e = eyes[i];
+    return e === 'no' ? `${v}·no-eyes` : e === 'yes' ? `${v}·eyes` : v;
+  });
+}
+
+/** A render's first head: the tilt in band and the eyes not NO. */
+function firstOk(head) {
+  const v = (head.verdicts ?? [head.verdict])[0];
+  const e = (head.eyesVerdicts ?? [head.eyes ?? 'unclear'])[0];
+  return headOk(v, e);
+}
+
+/** Hit rates for one group: first-render and final heads inside the band. */
 function rate(items) {
   const n = items.length;
-  const first = items.filter(
-    it => it.head && inBand((it.head.verdicts ?? [it.head.verdict])[0])
-  ).length;
+  const first = items.filter(it => it.head && firstOk(it.head)).length;
   const final = items.filter(it => it.head?.inBand).length;
   return { n, first, final };
 }
@@ -269,20 +288,28 @@ if (rejudgeDir) {
       items.push(it);
       continue;
     }
-    const verdict = await judgeHead(gemini, fs.readFileSync(it.plate));
+    const plateBuf = fs.readFileSync(it.plate);
+    const verdict = await judgeHead(gemini, plateBuf);
+    const eyes = await judgeEyes(gemini, plateBuf);
     const keptVerdicts = [];
-    for (const k of it.head?.kept ?? [])
-      keptVerdicts.push(await judgeHead(gemini, fs.readFileSync(k)));
+    const keptEyes = [];
+    for (const k of it.head?.kept ?? []) {
+      const b = fs.readFileSync(k);
+      keptVerdicts.push(await judgeHead(gemini, b));
+      keptEyes.push(await judgeEyes(gemini, b));
+    }
     const head = {
       ...it.head,
       verdict,
-      inBand: inBand(verdict),
+      eyes,
+      inBand: headOk(verdict, eyes),
       verdicts: [...keptVerdicts, verdict],
+      eyesVerdicts: [...keptEyes, eyes],
       previous: it.head?.verdicts ?? [it.head?.verdict],
     };
     items.push({ ...it, head });
     console.log(
-      `${it.id.padEnd(16)} was ${(it.head?.verdicts ?? [it.head?.verdict]).join(' → ')}  now ${head.verdicts.join(' → ')}`
+      `${it.id.padEnd(16)} was ${(it.head?.verdicts ?? [it.head?.verdict]).join(' → ')}  now ${stepWords(head).join(' → ')}`
     );
   }
   const lines = report(items);
@@ -394,7 +421,7 @@ console.log(
       : ` on the server's ${DEFAULT_BUST} anchor, steering on`)
 );
 console.log(
-  `estimate: about $${expected.toFixed(2)} (at most $${worst.toFixed(2)} if every render needed two retries); the judge adds under a cent`
+  `estimate: about $${expected.toFixed(2)} (at most $${worst.toFixed(2)} if every render needed two retries); the checks add about half a cent a render`
 );
 if (body) console.log(`captures: ${[...new Set(items.map(it => it.capture))].join(', ')}`);
 if (!yes) {
@@ -451,7 +478,7 @@ async function worker() {
         usd: r.estimatedUsd,
         seconds: Math.round((Date.now() - t0) / 1000),
       });
-      const v = (r.head.verdicts ?? [r.head.verdict]).join(' → ');
+      const v = stepWords(r.head).join(' → ');
       const a = r.anatomy
         ? `  anatomy ${r.anatomy.verdict}${r.anatomy.flaws.length ? ` (${r.anatomy.flaws.length})` : ''}`
         : '';

@@ -1,6 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { Gemini, JUDGE_MODEL } from './gemini.js';
-import { HEAD_PROMPT, inBand, judgeHead, needsRetry, parseVerdict } from './head.js';
+import {
+  EYES_PROMPT,
+  HEAD_PROMPT,
+  headOk,
+  inBand,
+  judgeEyes,
+  judgeHead,
+  needsRetry,
+  parseEyes,
+  parseVerdict,
+} from './head.js';
 import { JUDGE_EXEMPLARS, loadExemplars, steerBust } from './heads.js';
 
 describe('parseVerdict', () => {
@@ -101,5 +111,46 @@ describe('judgeHead', () => {
       await judgeHead(g, Buffer.from('p'), [{ data: Buffer.from('e'), mimeType: 'image/png' }])
     ).toBe('right');
     expect(n).toBe(3);
+  });
+});
+
+describe('the eyes gate', () => {
+  it('reads EYES, NO-EYES and NO-FACE in any case, anything else as unclear', () => {
+    expect(parseEyes('EYES')).toBe('yes');
+    expect(parseEyes('eyes.')).toBe('yes');
+    expect(parseEyes('NO-EYES')).toBe('no');
+    expect(parseEyes('No eyes')).toBe('no');
+    expect(parseEyes('NO_EYES')).toBe('no');
+    expect(parseEyes('NO-FACE')).toBe('no-face');
+    expect(parseEyes('RIGHT')).toBe('unclear');
+    expect(parseEyes('')).toBe('unclear');
+  });
+
+  it('only a NO closes the band; the tilt still has to be in it', () => {
+    expect(headOk('right', 'yes')).toBe(true);
+    expect(headOk('down', 'unclear')).toBe(true);
+    expect(headOk('up', 'no-face')).toBe(true);
+    expect(headOk('right', 'no')).toBe(false);
+    expect(headOk('far-down', 'yes')).toBe(false);
+  });
+
+  it('asks about the eyes by name on the plate alone, with no exemplars', async () => {
+    let seen: { body: any } | undefined;
+    const fakeFetch = (async (_url: any, init: any) => {
+      seen = { body: JSON.parse(init.body) };
+      return new Response(
+        JSON.stringify({ candidates: [{ content: { parts: [{ text: 'NO-EYES' }] } }] }),
+        { status: 200 }
+      );
+    }) as typeof fetch;
+    const g = new Gemini({ apiKey: 'k', timeoutMs: 1000, fetch: fakeFetch });
+    expect(await judgeEyes(g, Buffer.from('plate'))).toBe('no');
+    const parts = seen?.body.contents[0].parts;
+    expect(parts).toHaveLength(2);
+    expect(Buffer.from(parts[0].inline_data.data, 'base64').toString()).toBe('plate');
+    expect(parts[1].text).toBe(EYES_PROMPT);
+    expect(EYES_PROMPT).toMatch(/both of its eyes read/);
+    expect(EYES_PROMPT).toMatch(/NO-EYES when the eyes are shut, hidden under the brow/);
+    expect(EYES_PROMPT).toMatch(/Judge nothing else/);
   });
 });

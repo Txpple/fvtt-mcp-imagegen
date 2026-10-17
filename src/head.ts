@@ -64,7 +64,7 @@ export const HEAD_PROMPT =
   'visor, a deep hood, the face turned away). Judge only how far the head is tipped ' +
   "toward the camera, never the figure's race, kit, art or pose. One word.";
 
-/** The judge's first word, as a verdict; anything else is unclear. */
+/** The check model's first word, as a verdict; anything else is unclear. */
 export function parseVerdict(text: string): HeadVerdict {
   const norm = text
     .trim()
@@ -75,15 +75,18 @@ export function parseVerdict(text: string): HeadVerdict {
 }
 
 export interface HeadReport {
-  /** The verdict on the delivered render. */
+  /** The tilt verdict on the delivered render. */
   verdict: HeadVerdict;
-  /** down, right or up: inside the owner's band. */
+  /** The eyes gate's word on the delivered render (yes, no, no-face, unclear). */
+  eyes: EyesVerdict;
+  /** Inside the owner's band: the tilt down, right or up, and the eyes not reported shut or hidden. */
   inBand: boolean;
   /** What the delivered render carried: a bust, the character head, both, or nothing. */
   anchorUsed: string;
   /** When a render was redone: the first verdict, every verdict in order, and the plates kept. */
   first?: HeadVerdict;
   verdicts?: HeadVerdict[];
+  eyesVerdicts?: EyesVerdict[];
   retried?: boolean;
   kept?: string[];
   /** A camera that dropped twice: the capture, not the words or the bust, is the cause. */
@@ -106,4 +109,48 @@ export async function judgeHead(
     images: [...exemplars, { data: plate, mimeType: 'image/png' }],
   });
   return parseVerdict(text);
+}
+
+// The eyes gate (owner rule 2026-10-17). The owner's criterion for a head is whether its eyes
+// read, and the tilt steps do not carry it: on stage 3 the owner rejected eleven heads, ten of
+// them "no eyes", and the tilt check passed ten of the eleven, three as right. A second,
+// eyes-only call on the plate, with no exemplars, caught twelve of the owner's thirteen eyeless
+// heads on both of two passes over 53 ruled plates and sent three of seventeen accepted heads
+// back (a two-word answer folded into the tilt call caught ten). Its NO is a rejection that
+// steers up the dial like far-down; NO-FACE and anything unparsed never reject.
+
+export const EYES_VERDICTS = ['yes', 'no', 'no-face', 'unclear'] as const;
+export type EyesVerdict = (typeof EYES_VERDICTS)[number];
+
+export const EYES_PROMPT =
+  'This is a virtual tabletop token: one figure on a flat coloured plate, seen from ' +
+  "directly above. Look only at the figure's face and say whether both of its eyes read. " +
+  'EYES when two open eyes are visible with their whites or irises showing under the ' +
+  'brow; NO-EYES when the eyes are shut, hidden under the brow, the hair, a hood or a ' +
+  'helmet, turned so far down that only the lids show, or reduced to dark lines; NO-FACE ' +
+  'when no face is visible at all (a lying figure seen from behind, a helmet with no ' +
+  'visor, the face turned away). Judge nothing else: not the angle of the head, the kit, ' +
+  'the art or the pose. One word.';
+
+/** EYES, NO-EYES or NO-FACE anywhere in the answer; anything else is unclear. */
+export function parseEyes(text: string): EyesVerdict {
+  const t = text.toLowerCase().replace(/[_\s]+/g, '-');
+  if (/no-face/.test(t)) return 'no-face';
+  if (/no-eyes/.test(t)) return 'no';
+  if (/(^|[^a-z])eyes([^a-z]|$)/.test(t)) return 'yes';
+  return 'unclear';
+}
+
+/** Delivered inside the owner's band: the tilt in band and the eyes not reported shut or hidden. */
+export function headOk(verdict: HeadVerdict, eyes: EyesVerdict): boolean {
+  return inBand(verdict) && eyes !== 'no';
+}
+
+/** One word on the eyes: the plate alone, then the prompt. */
+export async function judgeEyes(gemini: Gemini, plate: Buffer): Promise<EyesVerdict> {
+  const text = await gemini.judge({
+    prompt: EYES_PROMPT,
+    images: [{ data: plate, mimeType: 'image/png' }],
+  });
+  return parseEyes(text);
 }

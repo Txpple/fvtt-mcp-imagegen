@@ -22,8 +22,8 @@ the token changes of 2026-10-16:
 camera, a 90-degree orthographic body (the fifteen-degree pitch is retired), and the head of a
 mannequin token is carried by an image, never words: a bust the server attaches
 (`mannequins/heads/`, `src/heads.ts`, `headAnchor`) or the approved token head as `character`, a
-five-step head check on flash against the owner's ruled crops (`src/head.ts`), steered retries, and
-`npm run headtest` (`scripts/headtest.mjs`) as the measurement; and the anatomy check
+five-step head check on flash against the owner's ruled crops and an eyes gate (`src/head.ts`),
+steered retries, and `npm run headtest` (`scripts/headtest.mjs`) as the measurement; and the anatomy check
 (`src/anatomy.ts`): every token and portrait render counted by the head check against an optional
 `anatomy` line, a token's facing included, reported as `anatomy`. Open research, nothing
 ruled: whether one human male capture per setup can replace the library, tested together with
@@ -86,7 +86,10 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
   reference is the approved token head and carries the tilt. Then the plate is shown to
   `JUDGE_MODEL` (flash, temperature 0, a flat `JUDGE_USD` in the session total) beside five crops
   the owner ruled on (`mannequins/heads/band/`, one per step) for one of `far-down`, `down`, `right`, `up`,
-  `far-up`, `camera-dropped`, `unclear`; `down`, `right` and `up` deliver. `far-down` is redone
+  `far-up`, `camera-dropped`, `unclear`; `down`, `right` and `up` deliver. A second, eyes-only call
+  on the plate asks whether both eyes read (`EYES_PROMPT`, no exemplars): the owner's criterion is
+  the eyes and the tilt steps do not carry it, so `no` is a rejection steered up the dial like
+  `far-down`, and `head` reports `eyes`. `far-down` is redone
   with the next bust up, `far-up` with bust-1, a dropped camera once unchanged (then "change the
   capture"), at most two retries (`headRetries`), every call billed, then delivered flagged; the
   result reports `head`. A judge that cannot be reached never blocks a render. Tests mock the

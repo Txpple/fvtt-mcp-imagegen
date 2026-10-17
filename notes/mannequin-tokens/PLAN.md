@@ -689,6 +689,24 @@ front-and-above (stage-2 cells 1 and 7, stage-3 cell 7); the busts are not affec
 straight down with only the head tilted (the owner, 2026-10-17). For now the words set the camera and the captures give pose, proportions and grip. Something to look
 at later, not before the eyes are settled.
 
+**The eyes gate (2026-10-17; 212 check calls, $0.42, no renders; `headtest/recalibration-2026-10-17/eyes-gate.json`,
+filed in the review folder's `07-recalibration-of-the-checks`).** Two forms measured on the 53
+ruled plates of stages 1 to 3, two passes each, the test being the owner's 13 "no eyes" cells
+(stage 3's eleven, stage 2's cell 7, stage 1's cell 19) against the 17 heads the owner accepted
+in stages 2 and 3 (stage 1 reported, not scored: its blanket pass did not look at eyes). A second
+word folded into the tilt call ("FAR-DOWN NO-EYES") caught 10 of 13 on both passes and sent 0 of
+17 back on both; a separate eyes-only call on the plate, no exemplars, caught 12 of 13 on both
+passes (the miss is stage 3's cell 24, the bugbear's front view, where the eyes do show) and
+sent 3 of 17 back on both (stage 3's cells 4, 9 and 11), with 4 of 53 words changing between
+passes. **Adopted: the eyes-only call**, on the asymmetry again, and because it leaves the tilt
+call alone. It asks about the eyes by name (`EYES_PROMPT` in `src/head.ts`), answers EYES,
+NO-EYES or NO-FACE, and NO is a rejection steered up the dial like `far-down` (the kept plate
+named `-no-eyes`); `head` reports `eyes` and `eyesVerdicts`, `inBand` now means the tilt in band
+and the eyes not NO, the headtest sheet shows `down·no-eyes`, and a render costs two check calls.
+On stage 1's 19 originals the gate would send 11 back: the eye flaw was there all along, on the
+matched bodies too, unseen by the blanket ruling. The cost in retries: about one in six accepted
+heads re-rendered for nothing (3 of 17), against ten of eleven eyeless heads shipped before.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's

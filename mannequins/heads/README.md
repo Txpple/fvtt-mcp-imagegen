@@ -63,6 +63,14 @@ each, about 3.5 cents) and wobbled on three. The record is `notes/mannequin-toke
 | `up-s2-04-kartor-combat.png` | UP (the highest acceptable) | 4 | head maybe too high up |
 | `wrong-12-cecil-combat.png` | FAR-UP (wrong) | legacy 12 | the face lifted to the camera (2026-10-16) |
 
+**The eyes gate (2026-10-17).** The owner's criterion for a head is whether both eyes read, and
+the tilt steps do not carry it: on stage 3 the owner rejected eleven heads, ten of them "no eyes",
+and the tilt check passed ten of the eleven. So a second, eyes-only call on the plate
+(`EYES_PROMPT` in `src/head.ts`, no exemplars) answers EYES, NO-EYES or NO-FACE, and NO-EYES is
+sent back up the dial like far-down. Measured on 53 ruled plates over two passes: 12 of the
+owner's 13 eyeless heads caught on both passes (the miss a front view), 3 of 17 accepted heads
+sent back; a two-word answer folded into the tilt call caught 10.
+
 | File | Sheet | Source (Desktop `PC Tokens/prod/`) | Ruling |
 | --- | --- | --- | --- |
 | `right-05-tychon-stand.png` | 5 | `tychon-tessarin.png` | right: the eyes-down end of the band |

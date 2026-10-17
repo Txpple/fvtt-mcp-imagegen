@@ -26,7 +26,15 @@ import {
 } from '../gemini.js';
 import { type DriftReport, measureDrift, overlandDrifted } from '../drift.js';
 import { EDGE_BAND, EDGE_LIMIT, edgeContact } from '../edge.js';
-import { type HeadReport, type HeadVerdict, inBand, judgeHead, needsRetry } from '../head.js';
+import {
+  type EyesVerdict,
+  headOk,
+  type HeadReport,
+  type HeadVerdict,
+  judgeEyes,
+  judgeHead,
+  needsRetry,
+} from '../head.js';
 import { type Bust, bustBinding, type HeadAnchor, isBust, loadBust, steerBust } from '../heads.js';
 import { type Box, type Dimensions, dimensions, fitRect, postProcess } from '../post.js';
 import {
@@ -373,11 +381,13 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
   }
   // The head check (owner rule 2026-10-16): a mannequin token's head sits inside the owner's
   // band (down, right or up), never bowed with the eyes hidden, never the face lifted to the
-  // camera, never a dropped camera. The judge's word steers a re-render (head.ts, heads.ts):
+  // camera, never a dropped camera. The check's word steers a re-render (head.ts, heads.ts):
   // far-down goes up the bust dial, far-up to bust-1, a dropped camera is redone once unchanged
-  // and then blamed on the capture. At most `retries` re-renders, then the token is delivered
-  // flagged; it never refuses, since the judge can be wrong. A retry that clips is kept and
-  // counted, never delivered; the earlier clean plate stays.
+  // and then blamed on the capture. The eyes gate (2026-10-17) is a second word on the same
+  // plate: NO means the eyes do not read, the owner's own criterion, and is sent back up the
+  // dial like far-down. At most `retries` re-renders, then the token is delivered flagged; it
+  // never refuses, since the check can be wrong. A retry that clips is kept and counted, never
+  // delivered; the earlier clean plate stays.
   let head: HeadReport | undefined;
   if (cut && chromaKey && input.head) {
     const anchorName = (b: Bust | undefined) => {
@@ -386,21 +396,28 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     };
     let checked = await checkHead(deps, png);
     const verdicts: HeadVerdict[] = [checked.verdict];
+    const eyesVerdicts: EyesVerdict[] = [checked.eyes];
     const kept: string[] = [];
     let retries = 0;
     let drops = 0;
-    while (!checked.error && needsRetry(checked.verdict) && retries < input.head.retries) {
+    while (
+      !checked.error &&
+      (needsRetry(checked.verdict) || checked.eyes === 'no') &&
+      retries < input.head.retries
+    ) {
       const verdict = checked.verdict;
+      // A head the tilt accepts but the eyes gate rejects is steered like a bowed one.
+      const reason = needsRetry(verdict) ? verdict : 'no-eyes';
       let next = bust;
       if (verdict === 'camera-dropped') {
         if (drops) break; // twice: the capture is the cause, not the bust
         drops++;
       } else {
-        next = steerBust(verdict, bust);
+        next = steerBust(reason === 'no-eyes' ? 'far-down' : verdict, bust);
       }
       const keptPath = path.join(
         deps.outputDir,
-        `${input.kind}-${slugOf(input.slug)}-${id}-head${kept.length + 1}-${verdict}.png`
+        `${input.kind}-${slugOf(input.slug)}-${id}-head${kept.length + 1}-${reason}.png`
       );
       fs.writeFileSync(keptPath, png);
       kept.push(keptPath);
@@ -419,12 +436,16 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       bust = next;
       checked = await checkHead(deps, png);
       verdicts.push(checked.verdict);
+      eyesVerdicts.push(checked.eyes);
     }
     head = {
       verdict: checked.verdict,
-      inBand: inBand(checked.verdict),
+      eyes: checked.eyes,
+      inBand: headOk(checked.verdict, checked.eyes),
       anchorUsed: anchorName(bust),
-      ...(verdicts.length > 1 ? { first: verdicts[0], verdicts, retried: true, kept } : {}),
+      ...(verdicts.length > 1
+        ? { first: verdicts[0], verdicts, eyesVerdicts, retried: true, kept }
+        : {}),
       ...(checked.verdict === 'camera-dropped'
         ? {
             advice:
@@ -488,16 +509,21 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
 }
 
 /** Ask the judge about a plate's head; a judge that cannot be reached never blocks the render. */
+/** The tilt word, then the eyes word, each billed; a check that cannot be reached never blocks. */
 async function checkHead(
   deps: ToolDeps,
   plate: Buffer
-): Promise<{ verdict: HeadVerdict; error?: string }> {
+): Promise<{ verdict: HeadVerdict; eyes: EyesVerdict; error?: string }> {
+  let verdict: HeadVerdict = 'unclear';
+  let eyes: EyesVerdict = 'unclear';
   try {
-    const verdict = await judgeHead(deps.gemini, plate);
+    verdict = await judgeHead(deps.gemini, plate);
     deps.spend.recordJudge(JUDGE_USD);
-    return { verdict };
+    eyes = await judgeEyes(deps.gemini, plate);
+    deps.spend.recordJudge(JUDGE_USD);
+    return { verdict, eyes };
   } catch (e) {
-    return { verdict: 'unclear', error: e instanceof Error ? e.message : String(e) };
+    return { verdict, eyes, error: e instanceof Error ? e.message : String(e) };
   }
 }
 
