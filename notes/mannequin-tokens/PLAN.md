@@ -417,5 +417,8 @@ beside it. NPCs on bust-2: 17 of 18 first renders in the band, 18 of 18 after st
 `far-down`, landed `right` on bust-3; the knight's three, a guard, a dwarf woman and a goblin read
 `down`, the orcs, the bugbears and the rest `right`. No dropped camera, no clip, no refusal; two
 retries in 26 renders against the old judge's coin flips. Cecil, words-only on bust-2, landed
-`right` on both captures; his approved head for the `character` slot is the owner's to pick from
-this sheet.
+`right` on both captures. **The owner ruled the sheet passes (2026-10-17)** and picked Cecil's
+stand render as his approved head: its head-and-shoulders crop is filed beside the PC set in the
+campaign repo (`art/headtest/anchor-head-cecil-edmunds-stand.png`, with the render itself) and
+his two headtest entries now carry it as `character` with his portrait crop as `object`, like the
+other three. The fix is live in `dist/` after the owner's next Claude Code restart.
