@@ -41,7 +41,7 @@ mannequin render, no bust, no portrait, the instruction naming the green eyes, a
 of the loop (`headRetries: 0`, report-only; the owner: "don't burden yourself with the eye
 gates"). Tychon and Cecil, two lines each: eyes open and reading on 4 of 4, the head lifted past
 the capture's tilt on all four. The record is the plan's "The owner's new route" paragraph; the
-sheet is `Desktop\TokenImprovements2\02-chroma-green-eyes-on-the-new-pose`. The agenda below
+sheets are in subfolders of `Desktop\EyeColorTests` (`01-tychon-and-cecil`, `02-the-elders`), where every set on this route goes. The agenda below
 is the one from before the redirect and is superseded where the owner says so; steps 1 to 3 wait
 on the owner's word as before, and the busts with drawn eyes (`03-side-result-...`) were made
 but never rendered against. Then the bust pair (tokens 5 and 6): both at the capture's tilt with
