@@ -1032,6 +1032,22 @@ server process loaded the old `dist/` at session start, so an `edit-image` call 
 the old wording until Claude Code restarts; `npm run headtest` runs from the rebuilt `dist/` at
 once.
 
+**The campaign's recipe on the rebuilt server (2026-10-17, evening, after the owner's restart; 2
+renders, $0.09; tokens 7 and 8 in the same review folder).** The owner asked for Tychon and Cecil
+again "as if the campaign were calling the tool": the call built the way the illustration-builder
+skill builds a PC token, the shelf's identity anchor as the figure, the portrait's head-to-waist
+crop as `character` with `headAnchor: "bust-2"` (the crop bound to identity, the bust to the
+head), the shelf's tokens-and-portraits finish line with the key light from out of frame on the
+left, the bound green-eyes line added, `headRetries: 0` as the owner's standing word, on the
+green-eyed capture under the new lead line. *Result, by my eye:* **both bodies fully top-down at
+the capture's camera**, the feet beneath the body, the crown and shoulders the largest shapes, and
+Tychon's head in proportion this time (the big head of token 5 did not repeat). Tychon's head at
+the capture's tilt, both eyes reading under heavy brows (the check: `right`, eyes); Cecil's head a
+step lower than the capture's, both eyes present but narrow under the brow (the check:
+`far-down`, eyes). The portrait crop pulled the kit toward the portraits as the recipe says it
+does (Tychon's robe came back as the patched teal tunic of his portrait, Cecil's lute on his
+back). Nothing concluded from two renders; the owner's eye on the eight.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
