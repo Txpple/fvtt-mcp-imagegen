@@ -44,7 +44,12 @@ the capture's tilt on all four. The record is the plan's "The owner's new route"
 sheet is `Desktop\TokenImprovements2\02-chroma-green-eyes-on-the-new-pose`. The agenda below
 is the one from before the redirect and is superseded where the owner says so; steps 1 to 3 wait
 on the owner's word as before, and the busts with drawn eyes (`03-side-result-...`) were made
-but never rendered against.
+but never rendered against. Then the bust pair (tokens 5 and 6): both at the capture's tilt with
+eyes, Tychon's head big. **The owner's rule from it: every capture is shot straight down at 90
+degrees, the library of 312 will be re-shot, and the server's lead and keep lines bind the body
+to the capture's camera strictly (committed; the running MCP server sends the old wording until
+Claude Code restarts, `npm run headtest` the new).** The owner names every test from here; a
+"keep testing" is not a word to pick one.
 
 ## The agenda, in order, each step on the owner's word
 
