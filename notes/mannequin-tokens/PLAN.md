@@ -623,6 +623,22 @@ duplicate. Open from this: the wobble at the boundary (a majority of three per p
 it at three times a fifth of a cent); whether the owner minds a re-render on heads like guard-3
 and knight-3; and a grade for a camera leaning front-and-above, which neither check has.
 
+**Stage 3 rendered (2026-10-17, 14:08; 26 renders, $1.68 with eight steered items;
+`headtest/2026-10-17-14-08-universal-body-human-male/`, filed blind as
+`08-stage-3-one-body-human-male-captures` in the review folder with a pairs sheet, each token
+beside its matched-body render from run 1 or stage 2; awaiting the owner's ruling on head, build
+and likeness).** The same 26 subjects, words and busts on the human-male capture of each pose and
+setup, read by the recalibrated checks: 18 of 26 first renders in the band, 24 of 26 after
+steering (NPCs 14 of 18 then 17 of 18; PCs 4 of 8 then 7 of 8); every anatomy count ok and every
+facing top. Like for like under the new ruler (the recalibration's majority words on the earlier
+plates): run 1's NPC first renders on their own bodies score 15 of 18 and stage 2's PCs 5 of 8, so
+the head rate on one body sits in the same range as on the matched bodies, with more retries
+than the legacy ruler allowed anywhere. The two delivered out of band are both standing captures:
+the dwarf woman's second render on `human-male-stand-empty` stayed `far-down` through bust-3 and
+bust-4, and Cecil's stand on `human-male-stand-dagger-open` swung `far-up`, `far-down`, `far-up`
+as steering sent it to bust-1 and back to bust-3, a dial that overshoots on that capture. Build is
+the owner's call from the pairs sheet; nothing is concluded on it here.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
