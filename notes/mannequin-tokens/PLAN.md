@@ -574,6 +574,28 @@ bottom edge). Until the question is reworded and re-checked on these eight plate
 cents), `anatomy.verdict` reads `flawed` on every token, and the rotation it gives must not be
 followed. Not changed yet.
 
+**Stage 2 ruled (2026-10-17; the words and the score in `stage2-rulings.json` beside the run and
+in the review folder).** The owner, blind: 2 (Tychon combat), 3 (Kartor stand) and 6 (Lysandra
+combat) right with the likeness good; 1 (Tychon stand) "head too dropped" and 8 (Cecil combat)
+"too far down", the two heads the check had passed as `down`; 4 (Kartor combat) "maybe too high",
+the likeness inferior and stylistically off; 5 (Lysandra stand) "a bit down" where the check said
+`up`; 7 (Cecil stand) "OK head, no eyes". And a word the check does not have: 1 and 7, both
+standing captures, "need closer to the 90-degree ortho aspect, not fully top down". Side notes:
+Tychon's staff done badly (2), Cecil's combat pose not combat-like (8).
+
+What it says. *The head check's low end is below the owner's eye*: its `down` step took two
+heads the owner rejects, and both its `up` calls on Lysandra were low or right to the owner, so
+the exemplars want re-ruling on today's heads (a FAR-DOWN exemplar from 8 or 1, the DOWN one
+checked against 5 or 2) and every plate re-checked and scored against both rulings sets, cents,
+no renders. *The universal route sits low*: four of eight `down`, two of them rejected, with the
+portrait beside bust-2, which is the open bust-3 question made concrete (8 renders, $0.47).
+*The hair sentence did not deliver Cecil's eyes* on the stand (7) and left the other three
+alone; it is neither kept nor dropped on this run alone, and no per-character line follows from
+it. *The camera on the standing captures leans toward front-and-above* (1 and 7, both human-male
+`stand` captures, which were shot with the camera in front and above), which the check has no
+grade for between top-down and dropped; a capture-level cause that the one-body question
+inherits, since those are the captures it would keep. None of these is changed yet.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
