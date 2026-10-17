@@ -1189,6 +1189,48 @@ the pairs sheet; nothing is cut on this.
 really just down to variance of the model." A reading, not a word to cut the library; what follows
 from it waits on the owner.
 
+### The path from here (the owner, 2026-10-17, evening)
+
+The owner's word, verbatim, after the one-body pairs: "so the go forward path is to just use the
+human male, with variety of poses. racial/sex diversity doesnt really matter and is addressed in
+the text." Earlier the same evening: "this new mannequin is at 90 degree angle, which i think we
+need to use going forward. yes, that means i will have to recapture them all", and on the green
+marks, the no-green control's 12 of 18 against 17 of 18.
+
+**So the library going forward is one body, the human male, one capture per pose and setup, shot
+straight down at 90 degrees with the two eyes painted chroma green, bust-2 beside it on the
+render; race, sex, age and build come from the words and a portrait crop.** The evidence behind
+it, each a run of this evening: the green-eyed 90-degree capture at 27 of 30 first renders with
+eyes across the PCs, the Elders and twenty species of both sexes; the library's own captures with
+green marks scripted on at 27 of 30, and the same thirty on the human-male captures at 28 of 30
+with every pair near-twins in build ("the pairs mostly match, really just down to variance of the
+model"); the no-green control showing the marks worth about a third of the eyes on their own.
+
+What follows, in order, and what waits:
+
+1. **The recapture is the owner's**: the human-male captures of every standing and combat setup
+   (24 today, plus prone and dead, plus any new pose) re-shot in HeroForge at 90 degrees with the
+   eyes painted green, exported with alpha at 1024, one file per setup, under the capture rules
+   below. Until they exist the library of 312 stays as it is and the skill's route stays as it is;
+   nothing is cut ahead of the captures.
+2. **When a 90-degree green-eyed capture lands**, `scripts/mannequin.mjs take` files it (the
+   naming drops body and sex once the human male is the only body: `mannequin-<pose>-<setup>.png`,
+   with the old names kept until the last body goes), the shot list and the skill's capture pick
+   change with it, and a green capture is checked for its two marks the way the clip check reads
+   the plate edge.
+3. **The server as it stands carries the route**: `source: "mannequin"`, the green-eyes line in
+   the instruction (to move into the keep line once the captures all carry marks, so the skill
+   says nothing about the eyes), `headAnchor: "bust-2"` beside a portrait crop or the bust the
+   server attaches, the checks report-only until the owner says what the loop should do with a
+   miss on this route (one in ten, all bowed heads).
+4. **The eye marks on the captures that exist** can be scripted the `greenlib.mjs mark` way as a
+   stopgap for any human-male setup the owner has not re-shot yet; the review sheet stays the
+   gate on each placement.
+
+The capture rules change: every capture is the human male; the camera straight down at 90; the
+two eyes painted the owner's green (about `rgb(190,240,48)`), each a lens the width of about 4% of
+the figure's height; alpha, 1024 square; the weapon in a closed fist and wholly inside the frame.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
