@@ -940,6 +940,21 @@ token; (4) the painted busts made and shown; (5) the three-arm A/B only if (3) s
 is worth cutting, or the owner says run it regardless. The open question for the owner: park the
 painted bust, or run it.
 
+**The end-to-end run (2026-10-17, 16:10; 26 renders plus 10 edits and 7 re-renders, $1.94;
+`headtest/2026-10-17-16-10-universal/`, filed blind as `Desktop\TokenImprovements2\01-end-to-end-with-the-edit-in-the-loop`
+with a pairs sheet against run 1 and stage 2 and `SCORE.md`; awaiting the owner's ruling).** The
+full 26 through the pipeline as it stands: the tilt ruler, the eyes gate, the facing fix, the edit
+as the no-eyes remedy, bust-2 by default. By the checks: first renders in band (tilt and eyes) 12
+of 26 (PCs 4 of 8, NPCs 8 of 18); delivered in band 24 of 26 (NPCs 18 of 18; the PCs 6 of 8, both
+of Cecil's out, his stand `far-down` three times on busts 2 to 4, his combat swinging `far-down`,
+`far-up`, `far-down`); 10 edits for eyes, every one of which delivered eyes on the first try; 7
+re-renders for tilt; every anatomy count ok and every facing top; 8.1 cents per delivered in-band
+token, 7.5 per token rendered. Against the proposed stopping rule by the checks' words: first
+renders 46% against 80%, delivered 92% against 95%, cost 8.1 against 6 cents; none met, the
+delivered rate closest. The owner's rulings give the owner-measured numbers. This is the baseline
+the painted-eyes bust has to beat: p(no-eyes) on a first render is about 14 of 26 here, and the
+edit fixed all ten it was tried on, so the bust is worth its run only if it halves that.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's

@@ -18,9 +18,14 @@ file is the agenda and the working rules for the next session; it does not repea
   second NO re-renders on the next bust; a tilt outside the band re-renders as before. Ruled on
   fourteen edited tokens: 14 of 14 opened, the pose kept on every one, two opened too wide until
   the line softened. `head` reports `eyes`, `eyesVerdicts`, `eyesEdited`.
-- **The end-to-end run** with all of that in the loop is in `Desktop\TokenImprovements2\01-...`,
-  with `SCORE.md` against the stopping rule; the owner has not ruled on it yet. Its numbers are
-  the baseline any lever has to beat.
+- **The end-to-end run** with all of that in the loop (2026-10-17 16:10, $1.94) is in
+  `Desktop\TokenImprovements2\01-end-to-end-with-the-edit-in-the-loop` with `SCORE.md`: by the
+  checks, first renders in band 12 of 26, delivered 24 of 26 (both of Cecil's out), 10 edits for
+  eyes (all delivered eyes first try), 7 re-renders for tilt, 8.1 cents per delivered token; none
+  of the stopping rule's three numbers met by the checks (46% first, 92% delivered, 8.1 cents).
+  The owner has not ruled on it. Its numbers are the baseline any lever has to beat. The blind
+  sheet has 43 cells (26 delivered, 17 sent back), over the 14-cell rule: ask the owner to rule the
+  8 PCs first, then the 18 NPCs, from the pairs sheet; the sent-back renders are optional.
 - **Parked**: one body (the library stays at 312; the owner's leads are in the plan), further
   ruler work, majority-of-three, the open-eyes keep-line sentence, the face-crop A/B.
 - **Not done, on the owner's list for the real tokens**: the anatomy check's six-finger catch on
