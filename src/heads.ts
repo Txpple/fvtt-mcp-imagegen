@@ -19,8 +19,12 @@ export const HEADS_DIR = path.join(repoRoot, 'mannequins', 'heads');
 export const BUSTS = ['bust-1', 'bust-2', 'bust-3', 'bust-4'] as const;
 export type Bust = (typeof BUSTS)[number];
 
-/** What a caller may ask for: a bust, or no bust on the first render. */
-export const HEAD_ANCHOR_CHOICES = [...BUSTS, 'none'] as const;
+/**
+ * What a caller may ask for: a bust; no bust on the first render (the head then in words); or
+ * "capture", the capture's own head with nothing attached and nothing said about it (the owner's
+ * test of 2026-10-17: a capture shot fully top-down, crown only, the eyes not asked for).
+ */
+export const HEAD_ANCHOR_CHOICES = [...BUSTS, 'none', 'capture'] as const;
 
 /** What a render carries: a bust, the caller's `character` head, or nothing. */
 export type HeadAnchor = Bust | 'character' | 'none';

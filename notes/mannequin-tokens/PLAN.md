@@ -1086,6 +1086,32 @@ woman's level crossbow clipped the edge twice and was redone held upright. Acros
 the green-eyed capture with bust-2 (the Elders, the four PCs, the twenty): **eyes reading on 27 of
 30 first renders** by my eye, against about half on the grey captures; the owner's eye rules.
 
+**`headAnchor: "capture"` (2026-10-17, evening, for the owner's next test).** The owner's second
+capture is the same stance shot straight down with the head crown-only, no eyes and no green
+marks: "I want to test a method where we just do top down and not worry about the eyes so much."
+The server had no way to render it as shot: with no character reference it attaches a bust or
+writes the head-tilted-up words; with one it binds the crop to carry the tilt, or a bust beside
+it. So a third choice, `"capture"`: nothing attached and nothing said about the head, the
+capture's own head painted as it is, a character reference bound to identity only (`src/heads.ts`,
+`src/tools/edit.ts`, one test, 190 pass). `scripts/research/topdown.mjs` runs the eight (the four
+PCs on their headtest crops, the four Elders on the crops from the previous set) from the rebuilt
+`dist/` with `headRetries: 0`, copying each token to `EyeColorTests\05-fully-top-down-no-eyes`
+as it lands. The result follows.
+
+**The fully-top-down test ran (2026-10-17, 17:38; 8 renders, $0.38; `headtest/2026-10-17-17-38-topdown/`,
+the tokens in `EyeColorTests\05-fully-top-down-no-eyes` with a sheet beside the capture).** The
+four PCs and the four Elders on the crown-only capture with `headAnchor: "capture"`. *Result, by
+my eye:* **all eight painted as the capture is shot**: the crown of the head and the hair or cap
+the largest shape, the face hidden or a sliver of brow and nose showing (Tychon, Kartor, Brom), the
+body fully top-down with the shoulders and feet beneath, the kit from the portrait crops held
+(Kartor's axe and shield, Lysandra's flame and runed sword, Cecil's lute on his back, Ansel's
+ledger, Brom's blue chalk, Cassia's knife), every anatomy count clean. The tilt check called all
+eight `far-down` with no eyes, which is the capture's head described exactly, so on this route the
+check is not a gate but a description. No eyes were asked for and none are shown. Whether a
+crown-only head is what the owner wants at the table is the owner's call from the sheet; if it is,
+the route is one call per token with no bust, no green marks and no head check in the loop, and
+the eyes question dissolves.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's

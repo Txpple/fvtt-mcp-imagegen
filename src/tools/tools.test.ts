@@ -726,6 +726,39 @@ describe('edit-image', () => {
     expect(r.head.anchorUsed).toBe('none');
   });
 
+  it('mannequin source: "capture" attaches no bust, says nothing about the head, and binds a character crop to identity only', async () => {
+    const { dispatch } = build();
+    const r: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+      headAnchor: 'capture',
+      references: [{ path: refPng, role: 'character', label: 'Tobin' }],
+    });
+    const parts = sent[0].body.contents[0].parts;
+    expect(parts).toHaveLength(3); // source, character, text: no bust
+    const text = parts[2].text;
+    expect(text).not.toContain('grey clay head');
+    expect(text).not.toContain(MANNEQUIN_HEAD_WORDS);
+    expect(text).toMatch(/the camera straight down\. Any hair/);
+    expect(text).not.toMatch(/tilt of the head/); // identity only, not the token-head binding
+    expect(text).toMatch(/Image 2.*is a CHARACTER reference: paint the features/);
+    expect(r.head.anchorUsed).toBe('none + identity');
+    const r2: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+      headAnchor: 'capture',
+    });
+    expect(sent[1].body.contents[0].parts).toHaveLength(2);
+    expect(sent[1].body.contents[0].parts[1].text).not.toContain(MANNEQUIN_HEAD_WORDS);
+    expect(r2.head.anchorUsed).toBe('none');
+  });
+
   it('mannequin source: far-down is re-rendered with bust-3, the first plate kept, every verdict reported', async () => {
     const { dispatch } = build();
     verdicts = ['FAR-DOWN', 'UP'];

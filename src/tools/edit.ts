@@ -76,7 +76,9 @@ const editImageSchema = z.object({
         'character attached: unset, the reference is taken as the approved token head and ' +
         'carries the tilt itself (no bust); a bust named here rides beside the reference, which ' +
         'is then bound to identity only (features, hair, skin, build and kit), the route for a ' +
-        'portrait crop.'
+        'portrait crop. "capture": the capture\'s own head carries, nothing attached and nothing ' +
+        'said about the head (a crown-only capture is painted crown-only); a character reference ' +
+        'then binds identity only.'
     ),
   headRetries: z
     .number()
@@ -309,9 +311,15 @@ export class EditImageTool {
     // portrait crop, the universal route).
     let headAnchor: HeadAnchor | undefined;
     let identity = false;
+    // "capture": the capture's own head, nothing attached and no head words (owner, 2026-10-17).
+    let captureHead = false;
     if (p.source === 'mannequin') {
       const hasCharacter = refs.some(r => r.role === 'character');
-      if (hasCharacter && p.headAnchor && p.headAnchor !== 'none') {
+      if (p.headAnchor === 'capture') {
+        captureHead = true;
+        headAnchor = 'none';
+        identity = hasCharacter;
+      } else if (hasCharacter && p.headAnchor && p.headAnchor !== 'none') {
         headAnchor = p.headAnchor;
         identity = true;
       } else {
@@ -323,7 +331,7 @@ export class EditImageTool {
       p.instruction,
       refs,
       p.source,
-      headAnchor !== 'none',
+      captureHead || headAnchor !== 'none',
       !identity
     );
     // A prop comes back at its source's exact size, with the new art in the box the original
