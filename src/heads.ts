@@ -22,14 +22,16 @@ export const BUSTS = ['bust-1', 'bust-2', 'bust-3', 'bust-4'] as const;
  * "for fun" test): bound with the eyes named, outside the steering dial.
  */
 export const EYED_BUSTS = ['bust-2-eyes'] as const;
-export type Bust = (typeof BUSTS)[number] | (typeof EYED_BUSTS)[number];
+/** bust-2 with the capture's two green marks in its sockets (the owner, 2026-10-17): bound with the marks named. */
+export const GREEN_BUSTS = ['bust-2-green'] as const;
+export type Bust = (typeof BUSTS)[number] | (typeof EYED_BUSTS)[number] | (typeof GREEN_BUSTS)[number];
 
 /**
  * What a caller may ask for: a bust; no bust on the first render (the head then in words); or
  * "capture", the capture's own head with nothing attached and nothing said about it (the owner's
  * test of 2026-10-17: a capture shot fully top-down, crown only, the eyes not asked for).
  */
-export const HEAD_ANCHOR_CHOICES = [...BUSTS, ...EYED_BUSTS, 'none', 'capture'] as const;
+export const HEAD_ANCHOR_CHOICES = [...BUSTS, ...EYED_BUSTS, ...GREEN_BUSTS, 'none', 'capture'] as const;
 
 /** What a render carries: a bust, the caller's `character` head, or nothing. */
 export type HeadAnchor = Bust | 'character' | 'none';
@@ -38,7 +40,15 @@ export type HeadAnchor = Bust | 'character' | 'none';
 export const DEFAULT_BUST: Bust = 'bust-2';
 
 export function isBust(anchor: string): anchor is Bust {
-  return (BUSTS as readonly string[]).includes(anchor) || (EYED_BUSTS as readonly string[]).includes(anchor);
+  return (
+    (BUSTS as readonly string[]).includes(anchor) ||
+    (EYED_BUSTS as readonly string[]).includes(anchor) ||
+    (GREEN_BUSTS as readonly string[]).includes(anchor)
+  );
+}
+
+export function isGreenBust(bust: Bust): boolean {
+  return (GREEN_BUSTS as readonly string[]).includes(bust);
 }
 
 export function isEyedBust(bust: Bust): boolean {
@@ -58,6 +68,14 @@ export function loadBust(bust: Bust): InlineImage {
  * bust is attached last, so `n` is one past the caller's images.
  */
 export function bustBinding(n: number, bust?: Bust): string {
+  if (bust && isGreenBust(bust)) {
+    return (
+      `Image ${n} is a grey clay head with two bright green marks where its eyes are, showing only ` +
+      "how far a head is tipped toward this overhead camera and where the eyes sit: tip the figure's " +
+      'head exactly like it, so that the same amount of brow, eyes, nose and mouth shows, paint the ' +
+      "figure's two eyes open where this head's green marks sit, and take nothing else from it."
+    );
+  }
   if (bust && isEyedBust(bust)) {
     return (
       `Image ${n} is a grey clay head with two open eyes, showing only how far a head is tipped ` +

@@ -32,10 +32,15 @@ const CAMPAIGN = path.resolve(root, '..', '..', 'fvtt-campaign-echoesofhalruaa',
 const ELDER_CROPS = process.env.ELDER_CROPS ?? path.join(DESK, '..', '02-the-elders', 'portrait-crops-attached');
 
 // The eyes line of the green set, with the green gone: the same ask, at the mannequin's eyes.
+// EYES_LINE=green uses the green set's wording (the marks named) for a run on a green-eyed capture.
 const EYES = (pro, iris) =>
-  `The mannequin's two eyes are ${pro} eyes: paint them exactly where the mannequin's eyes are, at ` +
-  'the same size, the same slant and the same spacing, both open with the white and ' +
-  `${iris} showing beneath the brow.`;
+  process.env.EYES_LINE === 'green'
+    ? `The mannequin's two bright green eyes are ${pro} eyes: paint them exactly where the green is, at ` +
+      'the same size, the same slant and the same spacing, both open with the white and ' +
+      `${iris} showing beneath the brow, and leave no green marker.`
+    : `The mannequin's two eyes are ${pro} eyes: paint them exactly where the mannequin's eyes are, at ` +
+      'the same size, the same slant and the same spacing, both open with the white and ' +
+      `${iris} showing beneath the brow.`;
 const FINISH = (pronoun, accent = 'one glowing accent') =>
   'Semi-realistic fantasy character art in the style of modern Dungeons and Dragons sourcebook ' +
   'illustration and premium token packs, realistic proportions, smooth blended shading with ' +

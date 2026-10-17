@@ -1291,6 +1291,24 @@ rate is already about nine in ten, is a separate question and the one that matte
 ten species on the green-eyed capture with each bust would answer it for about 90 cents. The owner
 says whether to run it.
 
+**The green-eyed bust beside the green-eyed mannequin (2026-10-17, 19:51, the pairing the owner
+meant; 10 renders, $0.48; `headtest/2026-10-17-19-51-nogreen-bust-2-green/`, filed as
+`EyeColorTests\10-green-bust-on-green-capture` with each token beside its grey-bust twin from
+folder 04).** `bust-2-green` is bust-2 with the capture's two green lenses drawn into its sockets
+(`mannequins/heads/bust-2-green.png`), a `headAnchor` choice bound with the marks named ("paint
+the figure's two eyes open where this head's green marks sit, and take nothing else from it").
+The ten species of folder 04, the same words, the green-eyed capture, this bust for the grey one.
+*Result:* by the eyes check **10 of 10 against 10 of 10**; by my eye the same count, with the
+difference in the heads: the gnome man, whose eyes rolled up to the camera on the grey bust (the
+owner: "the weird look at the heavens eyes"), came back level on the green bust; the aasimar man,
+level on the grey bust, came back with the face lifted on the green one (the check: `far-up`).
+One gained, one lifted, eight the same, so on the green-eyed capture the green bust is a wash at
+ten a side, where on the no-green capture the eyed bust was worth three. The owner's reading
+before the sheet: "it doesn't hurt it seems, and can only help." On the evidence it neither helps
+nor hurts the count when the capture already carries marks, and the lifted aasimar is the one
+thing to watch if it goes in, since a lifted face is what the owner dislikes most. Whether
+`bust-2-green` becomes the pipeline's bust is the owner's call; the code carries both.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's

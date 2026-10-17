@@ -618,7 +618,7 @@ describe('edit-image', () => {
     const last = parts[parts.length - 2];
     if (!last?.inline_data) return undefined;
     const data = Buffer.from(last.inline_data.data, 'base64');
-    for (const b of ['bust-1', 'bust-2', 'bust-3', 'bust-4', 'bust-2-eyes'] as const) {
+    for (const b of ['bust-1', 'bust-2', 'bust-3', 'bust-4', 'bust-2-eyes', 'bust-2-green'] as const) {
       if (data.equals(fs.readFileSync(bustPath(b)))) return b;
     }
     return undefined;
@@ -713,6 +713,17 @@ describe('edit-image', () => {
     expect(text).toContain('grey clay head with two open eyes');
     expect(text).toContain('have both of its eyes open exactly as they are here');
     expect(r.head.anchorUsed).toBe('bust-2-eyes');
+    const g: any = await dispatch('edit-image', {
+      sourceImage: refPng,
+      instruction: 'a guard',
+      kind: 'token',
+      source: 'mannequin',
+      slug: 'guard',
+      headAnchor: 'bust-2-green',
+    });
+    expect(sentBust(1)).toBe('bust-2-green');
+    expect(sent[1].body.contents[0].parts.at(-1).text).toContain('two bright green marks where its eyes are');
+    expect(g.head.anchorUsed).toBe('bust-2-green');
   });
 
   it('mannequin source: headAnchor picks the bust, and "none" sends no bust with the head in words', async () => {
