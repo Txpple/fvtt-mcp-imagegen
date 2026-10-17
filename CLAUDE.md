@@ -10,7 +10,7 @@ a small set of **Foundry-specific** tools so Claude can author prompts, generate
 them, and hand the winners to the Foundry pipeline (`upload-asset` → `set-actor-art` /
 `add-journal-image` in `fvtt-mcp-dnd5e`).
 
-**State (2026-10-16).** At **1.3.1**, released: the server key is `imagegen`, and `imagegen-status`
+**State (2026-10-17).** At **1.3.1**, released: the server key is `imagegen`, and `imagegen-status`
 and `npm run doctor` check the setup; seven kinds (icon, token, prop, portrait, illustration,
 battlemap, overland), every one on flash by default. `main` carries, past 1.3.1: the mannequin
 library (`mannequins/`, 312 grey captures, `scripts/mannequin.mjs`), the `illustration-builder`
@@ -25,8 +25,10 @@ mannequin token is carried by an image, never words: a bust the server attaches
 five-step judge on flash against the owner's ruled crops (`src/head.ts`), steered retries, and
 `npm run headtest` (`scripts/headtest.mjs`) as the measurement; and the anatomy check
 (`src/anatomy.ts`): every token and portrait render counted by the judge against an optional
-`anatomy` line, a token's facing included, reported as `anatomy`. Release
-detail is the GitHub release notes; the dated journal is `docs/log/YYYY-MM.md`.
+`anatomy` line, a token's facing included, reported as `anatomy`. Next, on the owner's word,
+the single-body question, one human male capture per setup, measured by
+`npm run headtest -- --body human-male` (the plan is `notes/mannequin-tokens/PLAN.md`).
+Release detail is the GitHub release notes; the dated journal is `docs/log/YYYY-MM.md`.
 
 The server runs on the Gemini API. The first version of this server wrapped
 a local ComfyUI install with FLUX models and a trained house-style LoRA. That direction is dead:

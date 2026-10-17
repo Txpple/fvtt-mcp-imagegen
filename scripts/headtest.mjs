@@ -7,7 +7,8 @@
 // built server exactly as the MCP does (dist/), so build first.
 //
 //   node scripts/headtest.mjs [--pcs <pcs.json>] [--npcs-only | --pcs-only] [--repeat <n>]
-//                             [--bust <1-4>] [--universal] [--only <id,id>] [--yes]
+//                             [--bust <1-4>] [--universal] [--body <body>-<sex>]
+//                             [--only <id,id>] [--yes]
 //   node scripts/headtest.mjs --rejudge <run dir>          re-judge a run's plates, no renders
 //   node scripts/headtest.mjs --judge <image> [<image>...]  judge any plates or tokens, no renders
 //
@@ -21,6 +22,11 @@
 // instead (the portrait crop as character, bound to identity only, with the bust carrying the
 // head, bust-2 or --bust N): the route that needs no approved token head. An entry's own
 // "headAnchor" wins over the default. --only keeps the items whose id contains one of the names.
+// --body <body>-<sex> (say human-male) renders every item on that body's capture of the same
+// pose and setup instead of its own: the single-body question (2026-10-17), whether one human
+// male capture per setup carries every race and build with the words alone. Every token's
+// anatomy verdict (anatomy.ts) is on the sheet and in the report too, so a run calibrates
+// that judge as it goes.
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -125,6 +131,17 @@ const judgeAt = args.indexOf('--judge');
 const yes = flag('--yes');
 const universal = flag('--universal');
 const only = (opt('--only') ?? '').split(',').filter(Boolean);
+const body = opt('--body');
+if (body && !/^(human|dwarf|small|large|orc|elf)-(male|female)$/.test(body)) {
+  console.error(
+    '--body takes <body>-<sex>: human, dwarf, small, large, orc or elf; male or female'
+  );
+  process.exit(2);
+}
+/** The capture an item renders on: its own, or --body's capture of the same pose and setup. */
+const onBody = name =>
+  body ? name.replace(/^(human|dwarf|small|large|orc|elf)-(male|female)-/, `${body}-`) : name;
+const bodyTag = body ? ` on ${body}` : '';
 if (bust && !/^[1-4]$/.test(bust)) {
   console.error('--bust takes 1, 2, 3 or 4');
   process.exit(2);
@@ -151,7 +168,7 @@ if (judgeAt >= 0) {
 async function writeSheet(items, title, out) {
   const cols = 6;
   const cell = 352;
-  const labelH = 52;
+  const labelH = 72;
   const header = 44;
   const pad = 8;
   const rows = Math.ceil(items.length / cols);
@@ -189,12 +206,18 @@ async function writeSheet(items, title, out) {
       : `error: ${(it.error ?? '').slice(0, 40)}`;
     const line1 = `${it.id}  ${it.head?.anchorUsed ?? ''}`;
     const line2 = `${verdicts}${it.head?.advice ? '  (change the capture)' : ''}`;
+    const a = it.anatomy;
+    const line3 = a
+      ? `anatomy ${a.verdict}${a.facing ? `, facing ${a.facing}` : ''}${a.flaws.length ? `: ${a.flaws[0].slice(0, 36)}` : ''}`
+      : '';
+    const aColor = a?.verdict === 'ok' ? '#9e9' : a?.verdict === 'flawed' ? '#fc8' : '#ccc';
     layers.push({
       input: Buffer.from(
         `<svg width="${cell}" height="${cell + labelH}">` +
           `<rect x="2" y="2" width="${cell - 4}" height="${cell - 4}" fill="none" stroke="${ok ? '#4c4' : '#e44'}" stroke-width="4"/>` +
           `<text x="8" y="${cell + 20}" font-family="Arial" font-size="15" fill="#fff">${esc(line1)}</text>` +
           `<text x="8" y="${cell + 40}" font-family="Arial" font-size="14" fill="${ok ? '#9e9' : '#f99'}">${esc(line2)}</text>` +
+          `<text x="8" y="${cell + 60}" font-family="Arial" font-size="13" fill="${aColor}">${esc(line3)}</text>` +
           '</svg>'
       ),
       left: x,
@@ -226,6 +249,13 @@ function report(items, usd) {
   }
   const all = rate(items);
   lines.push(`all: first render ${all.first}/${all.n}, after steering ${all.final}/${all.n}`);
+  const counted = items.filter(it => it.anatomy);
+  if (counted.length) {
+    const n = v => counted.filter(it => it.anatomy.verdict === v).length;
+    lines.push(
+      `anatomy: ${n('ok')} ok, ${n('flawed')} flawed, ${n('unclear')} unclear of ${counted.length}`
+    );
+  }
   if (usd !== undefined) lines.push(`spent about $${usd.toFixed(2)}`);
   return lines;
 }
@@ -290,9 +320,10 @@ if (!npcsOnly) {
       }
       items.push({
         id: pc.id,
-        group: universal ? 'pc universal' : 'pc',
+        group: `${universal ? 'pc universal' : 'pc'}${bodyTag}`,
+        capture: onBody(entry.capture ?? pc.capture),
         args: {
-          sourceImage: mannequin(entry.capture ?? pc.capture),
+          sourceImage: mannequin(onBody(entry.capture ?? pc.capture)),
           instruction: entry.instruction,
           kind: 'token',
           source: 'mannequin',
@@ -323,9 +354,10 @@ if (!pcsOnly) {
     for (let k = 1; k <= repeat; k++) {
       items.push({
         id: `${npc.id}-${k}`,
-        group: bust ? `npc on bust-${bust}` : 'npc',
+        group: `${bust ? `npc on bust-${bust}` : 'npc'}${bodyTag}`,
+        capture: onBody(npc.capture),
         args: {
-          sourceImage: mannequin(npc.capture),
+          sourceImage: mannequin(onBody(npc.capture)),
           instruction: npc.instruction,
           kind: 'token',
           source: 'mannequin',
@@ -356,6 +388,7 @@ const expected = items.length * perRender * (retriesOn ? 1.35 : 1);
 const worst = items.length * perRender * (retriesOn ? 3 : 1);
 console.log(
   `headtest: ${items.length} renders (${pcCount} PC${universal ? ' universal' : ''}, ${items.length - pcCount} NPC)` +
+    (body ? ` on the ${body} captures` : '') +
     (bust
       ? ` on bust-${bust}, no retries (calibration)`
       : ` on the server's ${DEFAULT_BUST} anchor, steering on`)
@@ -363,6 +396,7 @@ console.log(
 console.log(
   `estimate: about $${expected.toFixed(2)} (at most $${worst.toFixed(2)} if every render needed two retries); the judge adds under a cent`
 );
+if (body) console.log(`captures: ${[...new Set(items.map(it => it.capture))].join(', ')}`);
 if (!yes) {
   console.log('Add --yes to run.');
   process.exit(0);
@@ -372,7 +406,7 @@ const stamp = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 16);
 const runDir = path.join(
   config.outputDir,
   'headtest',
-  `${stamp}${bust ? `-bust-${bust}` : ''}${universal ? '-universal' : ''}`
+  `${stamp}${bust ? `-bust-${bust}` : ''}${universal ? '-universal' : ''}${body ? `-body-${body}` : ''}`
 );
 fs.mkdirSync(runDir, { recursive: true });
 const spend = new SpendMeter();
@@ -388,7 +422,14 @@ const save = () =>
   fs.writeFileSync(
     manifestPath,
     JSON.stringify(
-      { runDir, bust: bust ?? null, started: stamp, spendUsd: spend.totalUsd, items },
+      {
+        runDir,
+        bust: bust ?? null,
+        body: body ?? null,
+        started: stamp,
+        spendUsd: spend.totalUsd,
+        items,
+      },
       null,
       2
     )
@@ -406,12 +447,16 @@ async function worker() {
         file: r.file,
         plate: r.plate,
         head: r.head,
+        anatomy: r.anatomy,
         usd: r.estimatedUsd,
         seconds: Math.round((Date.now() - t0) / 1000),
       });
       const v = (r.head.verdicts ?? [r.head.verdict]).join(' → ');
+      const a = r.anatomy
+        ? `  anatomy ${r.anatomy.verdict}${r.anatomy.flaws.length ? ` (${r.anatomy.flaws.length})` : ''}`
+        : '';
       console.log(
-        `${it.id.padEnd(16)} ${r.head.inBand ? 'in band ' : 'OUT     '} ${v.padEnd(36)} ${r.head.anchorUsed}  $${r.estimatedUsd.toFixed(3)}`
+        `${it.id.padEnd(16)} ${r.head.inBand ? 'in band ' : 'OUT     '} ${v.padEnd(36)} ${r.head.anchorUsed}  ${r.estimatedUsd.toFixed(3)}${a}`
       );
     } catch (e) {
       it.error = e instanceof Error ? e.message : String(e);
@@ -426,7 +471,7 @@ const lines = report(items, spend.totalUsd);
 const sheetPath = path.join(runDir, 'sheet.png');
 await writeSheet(
   items,
-  `headtest ${stamp}${bust ? ` on bust-${bust}` : ''}${universal ? ' (universal PCs)' : ''}: ${lines.join('; ')}`,
+  `headtest ${stamp}${bust ? ` on bust-${bust}` : ''}${universal ? ' (universal PCs)' : ''}${body ? ` on the ${body} captures` : ''}: ${lines.join('; ')}`,
   sheetPath
 );
 save();

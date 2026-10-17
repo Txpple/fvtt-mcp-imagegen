@@ -650,7 +650,8 @@ describe('edit-image', () => {
     expect(MANNEQUIN_EDIT_KEEP).toMatch(
       /hair lies back over the top of the head, leaving the brow/
     );
-    expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/head/);
+    // The only head in the keep line is where the hair lies on it: no word about its angle.
+    expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/tilt|tipped|lift|look|gaze|level|facing/);
     expect(MANNEQUIN_EDIT_KEEP).toMatch(/nothing left grey/);
     expect(MANNEQUIN_EDIT_KEEP).not.toMatch(/face, hair/);
   });

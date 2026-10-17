@@ -39,6 +39,7 @@ humanoid whose body is in the library starts from a mannequin.**
 | Six bodies (large, human, dwarf, small, orc, elf), each sex, made into its own race with one shared kit and finish (spear and shield combat pose, 2026-10-15) | 12 of 12 clean first pass; pose, grip and spear angle held (relative size does not carry: see the token-scale row under Prompting) | **Every body works.** The small and large bodies are proven. |
 | The same race on its own body and on the human body: dwarf, goliath, orc woman, elf woman | Elf: no difference. Goliath: near identical. Dwarf: the human body gave a taller dwarf with longer legs. Orc woman: the human body gave a slimmer, lighter orc | **A body earns its place by mass and proportion, not by face or ears.** Words carry ears, skin, tusks and hair on any body; they don't carry build. Keep the dwarf, orc and large bodies. The elf body is optional, like the female human body. |
 | A goblin on the small body, a bugbear on the large body | Both clean and strongly in character | The groupings hold: small for goblin-sized creatures, large for bugbear-sized ones. |
+| **Twenty characters, each on its matched body and on the human male** (the owner's own test, 2026-10-16: dwarves, a gnome, halflings, a goliath, humans of both sexes, a tiefling woman; the sheet is on the Desktop, `TestTokens5/compare-matched-vs-human-male.png`) | Side by side the human-male column reads as the same characters, builds included; the matched bodies bought nothing the owner wanted | **One body, the human male, is enough (owner ruling, 2026-10-17).** Words carry build as they carry ears, skin and tusks. Supersedes "keep the dwarf, orc and large bodies" above; the measured proof and the cut are in "Next: one body" below. |
 | Kicking, jumping, running, kneeling presets, looked at from above | Legs barely read top-down | Only the silhouette reads from above: arms and weapons, not legs. |
 
 ### Gear
@@ -468,3 +469,105 @@ eight PCs, Cecil on his portrait, about $0.47; the full 26 with the NPCs about $
 the sheet; one unit test fails after the keep-line change and has not been looked at (183 of 184
 pass); the skill's rule for a portrait with a fringe (words-only on the bust) is superseded by the
 tool's line and wants rewriting once the run confirms it.
+
+## Next: one body (2026-10-17)
+
+The owner's twenty-pair test (the Bodies table) says one human male capture per setup carries
+every race, sex and build with the words, so the library of 312 (six bodies, two sexes, 26
+setups) can be 26, and a new pose costs one HeroForge export instead of twelve. That is what
+lets the pose library grow. The session that made the test left no record here; this section
+is the plan to prove it the measured way (every change to the token path goes through
+`npm run headtest`, never one render at a time) and what follows when it holds. The three
+efforts of the last two days, the head anchored by an image, the anatomy count, and the
+mannequin library, were built apart; the runs below measure them together on one sheet.
+
+### The measurement (on the owner's word; about $2 in all)
+
+Two runs, in this order, each a sheet for the owner to rule on. `<pcs>` is the campaign's
+`art/headtest/pcs.json`.
+
+1. **Run A: `npm run headtest -- --pcs <pcs> --universal --pcs-only --yes`** (8 renders, about
+   $0.47). The open item from last night: the universal PC route with the universal hair
+   sentence in the keep line, Cecil on his portrait like the other three. Compare to the 02:16
+   universal run (6 of 8 first renders in the band, 8 of 8 after steering, heads at the low
+   end): the hair line must not lower the other three's hit rate, and Cecil's brow and eyes
+   must be clear under his hair. A pass retires the skill's "a portrait with a fringe goes
+   words-only" rule (the tool's line is universal); a fail sends the hair sentence back to the
+   drawing board, never to a per-character instruction.
+2. **Run B: `npm run headtest -- --pcs <pcs> --universal --body human-male --yes`** (26
+   renders, about $1.53). Every item on the human-male capture of its own pose and setup: the
+   dwarf woman, the orc, the goblin and the bugbear of the NPC set, Kartor's two dwarf captures,
+   Lysandra's two human-female ones (the dry run prints the captures; the manifest keeps them).
+   Compare to run 1 (NPCs on bust-2: 17 of 18 first, 18 of 18 after steering) and run A (the
+   PCs). Three things to rule on the sheet: the head band rate, first render and after
+   steering, no worse than on the matched bodies; the anatomy verdicts, on the sheet for the
+   first time, so this run is that judge's first calibration (every `flawed` checked by eye,
+   every real flaw the judge missed noted here); and the owner's eye on build with the body
+   gone and only the words to carry it: the dwarf woman broad and short, the goblin wiry, the
+   bugbear hulking, Kartor a dwarf.
+
+Pass: every pair reads as its race and build, and the head rate holds. Then the cut below. A
+fail on build alone keeps the one body whose race failed (the earlier rule, a body earns its
+place by mass) and cuts the rest; a fail on the head looks at the capture before the words,
+since the busts are the bald human head already.
+
+### The cut, when it holds
+
+- **The library becomes 26 files**, `mannequin-<pose>-<setup>.png`, the human male captures
+  renamed; the other 286 are deleted (git keeps them; the README records that they existed and
+  why they went). `scripts/mannequin.mjs` drops body and sex: `take <file> <pose> <setup>`,
+  `takeset` goes (one export per setup now), `grid` becomes a list of setups; the README's shot
+  list is one column. The busts stay as they are (the bald human mannequin's head).
+- **The skill's capture pick loses step (3), body and sex**, and "vary body and sex within the
+  race"; in their place, **build is always written** (short and broad, slight, hulking, wiry),
+  since nothing else carries it now, with the dwarf `dead` lesson as the warning. The recipe's
+  `<race, sex, age, build ...>` slot already holds it.
+- **The headtest NPC set and the campaign's `art/headtest/pcs.json`** point at the renamed
+  captures; `--body` goes once there is one body.
+- **One export per setup is the capture rule from here:** a new pose is one export, checked and
+  filed by `take`; the fixed twelve-file order is history.
+
+### Then: the pose library grows
+
+The reason for one body. What reads from the 90-degree camera is the silhouette of the arms and
+what they hold (legs barely read), so a new pose is a new arm-and-weapon shape or a new
+attitude, one export each. Candidates for the owner to pick from, none captured yet:
+
+| Pose | Covers | Notes |
+| --- | --- | --- |
+| `cast` (one arm thrust straight out, the other hand drawn back to the chest) | casters mid-spell, a captain pointing | dropped 2026-10-15 because `combat-empty` served; worth one export now that it costs one |
+| `guard` (at ease, a spear or staff planted upright, a shield resting on the ground) | gate guards, sentries, a watch post not fighting | the planted shaft is a new silhouette |
+| `sneak` (a low crouch, one hand on the ground, a dagger low) | rogues, scouts, a thief caught | a compact shape from above |
+| `carry` (a lantern or torch held up, the other hand on a satchel or hip) | villagers, explorers, a procession | the held light is the key light |
+| `sit` (seated, hands on the knees or a tankard raised) | tavern regulars, a prisoner, a councillor | the seat painted or omitted in words |
+| `kneel` (one knee down, a sword point on the ground, or a bow held) | a kneeling archer, a prayer, the wounded | the 2026-10-15 kneeling capture read as knocked down; this one kneels on purpose |
+| `shield-wall` (shield up and forward, a sword behind it) | drilled soldiers in a line | the one case the skill reuses a capture |
+| `dual-raised` (two blades up and crossed) | a berserker, a dervish | a different shape from `twodaggers` |
+| `polearm-lunge` (a spear thrust forward in both hands) | pikemen, a charging guard | the long diagonal silhouette |
+| `fallen-side` (lying on one side, curled) | unconscious, not dead | a second downed pose beside `dead` and `prone` |
+
+A pose comes in through `npm run mannequin -- check` and `take` like any capture, is proven on
+two or three renders across races (the words carry the race now), and joins the skill's pose
+list and the README's shot list.
+
+### And: a batch script
+
+Hundreds of tokens untended is a script, not a column of tool calls. `headtest.mjs` is most of
+it already: items from a JSON file (capture, instruction, references, `anatomy`), three
+workers, a manifest, a contact sheet with every head and anatomy verdict, `--only`. The
+tool-side step after the cut is `scripts/tokens.mjs <batch.json>` with that shape (headtest
+becomes a preset batch of it): the skill writes the batch file, the script renders, grades and
+sheets it, and the flaw pass starts from the sheet's flagged cells. Not before the body is
+settled, since the batch file's capture names change with the cut.
+
+### Open items, in order
+
+1. Run A; the owner rules on the sheet; the skill's fringe rule rewritten on a pass.
+2. Run B; the owner rules on the sheet; the anatomy judge's first calibration noted here.
+3. The cut (library, script, README, skill, headtest set, the campaign's `pcs.json`).
+4. New poses, one export each, from the table above or the owner's own.
+5. The batch script.
+6. Still open from before: whether the universal route should default to bust-3 (one
+   `--universal --bust 3` run, eight renders, about $0.35). Housekeeping: the stale worktree
+   `.claude/worktrees/elegant-franklin-bdff24` (detached at the cutout-haze commit, clean) can
+   go with `git worktree remove`.
