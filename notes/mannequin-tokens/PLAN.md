@@ -1138,6 +1138,31 @@ nineteen in twenty. So the recapture carries most of the gain, and the green mar
 painting on every capture (two slivers, by script or in HeroForge) for the rest. At eighteen a side
 this is one run, not a rate to three places; the owner's eye on the sheet.
 
+**Green eyes scripted onto the library, thirty across the board (2026-10-17, 18:32, on the owner's
+word: "copy the current mannequins, script them green eyes, and let's run 30 test samples using a
+variety of poses and weapons ... and sexes/races/genders"; 30 socket calls at a fifth of a cent and
+30 renders, $1.41; `headtest/2026-10-17-18-32-greenlib/`, filed as `EyeColorTests\07-library-green`
+with the marked captures, the placement review sheet and the thirty tokens).** Thirty captures of
+the library as it stands (the 2026-10-15 shots at the library's own camera), every one of the
+twelve bodies two or three times, twenty-four standing and combat setups, no body-and-setup pair
+twice. The marks: the check model asked for the two eye sockets as boxes on the figure crop
+(`scripts/research/greenlib.mjs mark`), two green lenses drawn at the box centres sized to the
+figure (3.8% of its height wide), the owner's green; I reviewed all thirty heads at 3x and
+overrode none, every pair sitting on the socket line either side of the nose. Then thirty
+words-only renders, an invented figure per body with the setup's weapon named, the bound
+green-eyes line, bust-2 attached by the server, checks report-only. *Result:* by the eyes check
+**27 of 30**, by my eye about 26 of 30, with the face and both eyes reading; the misses are the
+dwarf on `twohand-staff-level`, the goliath on `twohand-right`, the orc on `twohand-staff-diagonal`
+and, by my eye, the orc on `twohand-staff-level`: **every miss a two-handed staff or axe capture
+whose head is bowed toward the weapon**, where the green sits under a brow the model keeps.
+Build held per body (the dwarves broad, the halfling and gnome small, the goliaths huge, the orcs
+tusked), the weapons came out as named and inside the frame on all thirty, and the library's
+camera shows: several bodies lean front-of-above (the human man, the elf man), which the 90-degree
+recapture is for. So the green marks move the library's rate from about half to about nine in
+ten on their own, before any recapture; with the 90-degree camera the owner's capture gave 27 of
+30 in the same ballpark, and the bowed-head staff poses are the remaining class of miss. One run
+each; the owner's eye on the sheet.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's

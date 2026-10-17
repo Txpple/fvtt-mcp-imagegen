@@ -18,6 +18,7 @@ with `node scripts/research/<name>.mjs ...` after `npm run build`.
 | `stage3-template.mjs <stage folder> <key json>` | a three-word rulings template (head, build, likeness) for a one-body run |
 | `topdown.mjs [--yes] [--only id,id]` | the owner's fully-top-down test: the four PCs and the four Elders on a crown-only capture with `headAnchor: "capture"`, checks report-only, each token copied to the Desktop folder as it lands (`CAPTURE`, `DESK`, `ELDER_CROPS` override the paths) |
 | `nogreen.mjs [--yes] [--only id,id]` | the no-green control: the PCs, the Elders and ten species on the green-eyed capture with the marks painted out, the same words and bust, each token copied to the Desktop folder as it lands (`CAPTURE`, `DESK`, `ELDER_CROPS` override the paths) |
+| `greenlib.mjs mark | render [--yes]` | green eyes scripted onto thirty library captures (the check model places the sockets, a review sheet of the heads, `overrides.json` for a miss), then thirty words-only renders copied to the Desktop folder as they land |
 
 The rulings themselves live beside each run's manifest as `stage*-rulings.json` in the output
 folder, with copies in the review folders' `99-...` subfolders.
