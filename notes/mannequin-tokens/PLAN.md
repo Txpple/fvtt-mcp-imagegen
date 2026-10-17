@@ -1063,6 +1063,12 @@ the beard and the bald crown may be what the bust's tilt met there. Across the d
 renders with a bust beside the crop: eyes on 5 of 6 first renders (Tychon 7, Cecil 8 narrow, Ansel,
 Tobin, Cassia; Brom not), against about half on the grey captures. The owner's eye on the four.
 
+**Where the green-eyed route's outputs live (the owner, 2026-10-17, evening):** in subfolders of
+`DesktopEyeColorTests`, beside the capture: `01-tychon-and-cecil` (the eight tokens filed above as
+`TokenImprovements2-...`) and `02-the-elders` (filed above as `04-...`); both moved there on the
+owner's word, and every later set on this route goes there too. `TokenImprovements2` keeps the
+end-to-end run and the drawn-eyes busts.
+
 ### Scoring the checks
 
 Each stage's sheet is also a scored set: the owner's rulings per cell, recorded in the run's
