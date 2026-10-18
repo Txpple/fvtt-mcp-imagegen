@@ -10,34 +10,21 @@ a small set of **Foundry-specific** tools so Claude can author prompts, generate
 them, and hand the winners to the Foundry pipeline (`upload-asset` → `set-actor-art` /
 `add-journal-image` in `fvtt-mcp-dnd5e`).
 
-**State (2026-10-17).** At **1.3.1**, released: the server key is `imagegen`, and `imagegen-status`
+**State (2026-10-18).** At **1.3.1**, released: the server key is `imagegen`, and `imagegen-status`
 and `npm run doctor` check the setup; seven kinds (icon, token, prop, portrait, illustration,
-battlemap, overland), every one on flash by default. `main` carries, past 1.3.1: the mannequin
-library (`mannequins/`, 312 grey captures, `scripts/mannequin.mjs`), the `illustration-builder`
-skill's newer owner rules for maps, tiles and tokens, the `art-audit` skill (the batch-level
-second count of limbs, eyes, tendrils and token facing over an installed set, fixed in place), and
-the token changes of 2026-10-16:
-`edit-image` takes `source: "mannequin"`, references take role `object`, both render tools take
-`thinking` and report `thinkingTokens`, the token framing and the mannequin line bind the body to
-the owner's camera, a 90-degree orthographic top-down body, which every capture is shot at
-(the owner's rule of 2026-10-17; the library of 2026-10-15 is being re-shot), and the head of a
-mannequin token is carried by an image, never words: a bust the server attaches
-(`mannequins/heads/`, `src/heads.ts`, `headAnchor`) or the approved token head as `character`, a
-five-step head check on flash against the owner's ruled crops and an eyes gate (`src/head.ts`),
-steered retries, and `npm run headtest` (`scripts/headtest.mjs`) as the measurement; and the anatomy check
-(`src/anatomy.ts`): every token and portrait render counted by the head check against an optional
-`anatomy` line, a token's facing included, reported as `anatomy`; and the no-eyes remedy, one edit
-on the plate (`EYES_OPEN_PROMPT`), never a re-render first. The path the owner set on 2026-10-17: the library going
-forward is the human male alone, one capture per pose and setup, shot at 90 degrees with the eyes
-painted chroma green, the bust beside it on the render, race and sex from the words; the recapture
-is the owner's and nothing is cut until it exists; the pipeline is locked at one paint per token,
-`headRetries` defaulting to 0 with the retries and the eyes edit kept until the recapture holds; `headAnchor: "capture"` paints a capture's own
-head with nothing attached. The bust on record since 2026-10-17 (the owner's HeroForge
-head at 90 degrees, green eyes) is `mannequins/heads/bust.png`, the only one: the four-bust
-dial, its steering and the scripted busts are gone, the files in `mannequins/heads/archive/`. The record is `notes/mannequin-tokens/PLAN.md` ("The path from here"),
-the next session's start `notes/mannequin-tokens/HANDOFF.md` (the research scripts in
-`scripts/research/`). Release detail is the GitHub release notes; the
-dated journal is `docs/log/YYYY-MM.md`.
+battlemap, overland), every one on flash by default. `main` carries, past 1.3.1: the
+`illustration-builder` skill's newer owner rules for maps, tiles and tokens, the `art-audit`
+skill (the batch-level second count of limbs, eyes, tendrils and token facing over an installed
+set, fixed in place), references of role `object`, `thinking` on both render tools (reported as
+`thinkingTokens`), the token framing's 90-degree orthographic camera, and the anatomy check
+(`src/anatomy.ts`): every token and portrait render counted by a judge model against an optional
+`anatomy` line, a token's facing included, reported as `anatomy`. The mannequin pipeline of
+2026-10-15 to 17 (a grey HeroForge pose library, `source: "mannequin"`, a server-attached bust,
+a head check with steered retries and an eyes gate, `headtest`) was tried at length, did not work,
+and was removed on 2026-10-18, the owner's word: nothing of it remains in the server, the scripts,
+the skills or the notes, and the token pipeline is the restyle, `edit-image` on an existing token
+or capture. Release detail is the GitHub release notes; the dated journal is
+`docs/log/YYYY-MM.md`.
 
 The server runs on the Gemini API. The first version of this server wrapped
 a local ComfyUI install with FLUX models and a trained house-style LoRA. That direction is dead:
@@ -84,31 +71,17 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
 - Small server: `generate-image`, `edit-image`, `cutout-image`, `imagegen-status`. Resist tool
   sprawl. New work arrives as a `kind`, not a tool (props, battlemaps and overland maps all
   came that way).
-- **The head** (`src/heads.ts`, `src/head.ts`, owner rules): a mannequin token's head faces the
-  way the body faces, tipped just enough toward the overhead camera that brow, eyes, nose and
-  mouth read, never bowed with the eyes hidden, never the face lifted to the camera, never a
-  dropped camera. Words about the angle fail and a render leans toward the head tilt of any
-  reference that has a head (about 95 renders), so the head is an image: with no
-  `character` reference the server attaches `mannequins/heads/bust.png`, the one bust on
-  record, after the caller's references, bound with its green eye marks named (`headAnchor`
-  takes `bust`, `none` or `capture`; the retired dial is in `heads/archive/`); a `character`
-  reference is the approved token head and carries the tilt. Then the plate is shown to
-  `JUDGE_MODEL` (flash, temperature 0, a flat `JUDGE_USD` in the session total) beside five crops
-  the owner ruled on (`mannequins/heads/band/`, one per step) for one of `far-down`, `down`, `right`, `up`,
-  `far-up`, `camera-dropped`, `unclear`; `down`, `right` and `up` deliver. A second, eyes-only call
-  on the plate asks whether both eyes read (`EYES_PROMPT`, no exemplars): the owner's criterion is
-  the eyes and the tilt steps do not carry it. A `no` with the tilt in band is fixed by one edit
-  on the plate (`EYES_OPEN_PROMPT`: the eyes opened, nothing else changed) and re-checked; only a
-  second `no` re-renders; `head` reports `eyes` and `eyesEdited`. `far-down` and `far-up` are
-  redone on the same bust, a dropped camera once unchanged (then "change the capture"), at most
-  two retries (`headRetries`, 0 by default: one paint, the checks report only), every call
-  billed, then delivered flagged; the
-  result reports `head`. A judge that cannot be reached never blocks a render. Tests mock the
-  judge like every other call; `npm run headtest` is the live measurement, run only on the
-  owner's word (about $1.50 a run), and every change to the head path goes through it.
+- **The token pipeline is the restyle (owner rule).** An existing token or capture (the
+  actor's world token, a library token, a HeroForge screenshot of the owner's own) goes through
+  `edit-image` as kind `token`: the instruction, one keep line, the chroma plate, the cut.
+  Nothing is attached beside the source but the caller's references. There is no pose library,
+  no head anchor and no head judge: the mannequin pipeline that carried those was tried at
+  length, did not work, and was removed whole (the State block has the dates). Do not
+  reintroduce a grey-capture source, a server-attached head image or a head-angle check; a head
+  that reads wrong is a flaw pass on the finished token, by the skill.
 - **The anatomy** (`src/anatomy.ts`, owner rule): every token and portrait render is
-  shown to `JUDGE_MODEL` (the image at 1024 on its long side, one `JUDGE_USD` in the session
-  total) after the head is settled, and counted: heads, eyes, arms, legs, hands and fingers,
+  shown to `JUDGE_MODEL` (flash, temperature 0; the image at 1024 on its long side, one flat
+  `JUDGE_USD` in the session total) and counted: heads, eyes, arms, legs, hands and fingers,
   tails, tendrils, wings, held objects. With an `anatomy` line from the caller (the Monster
   Manual's: "two arms, two legs, one large eye") the judge flags every difference; without one,
   only what is wrong on any creature (a limb belonging to no body, six fingers, a weapon painted

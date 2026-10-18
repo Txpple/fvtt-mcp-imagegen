@@ -13,8 +13,8 @@
 // The facing question asks which edge the head is NEAREST (calibrated 2026-10-17): asked which
 // edge the head "points to", the check model read that as where the eyes look and answered
 // bottom on 30 of 34 top-down tokens whose heads sat at the top; asked which edge the head is
-// nearest, with the eyes expressly ignored, it answered top on 34 of 34 (the plates of the
-// 2026-10-17 headtest runs, scored in notes/mannequin-tokens/PLAN.md).
+// nearest, with the eyes expressly ignored, it answered top on 34 of 34 (34 top-down token
+// plates from the 2026-10-17 runs).
 
 import sharp from 'sharp';
 import type { Gemini } from './gemini.js';

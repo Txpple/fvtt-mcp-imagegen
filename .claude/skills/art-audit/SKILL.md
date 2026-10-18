@@ -78,8 +78,8 @@ because the judge can be wrong and the reports do not survive an install.
 4. **Facing, tokens only.** Foundry treats the top of the image as the token's front, and the
    house tokens have auto-rotate on, so a creature painted head-down walks tail-first and one
    painted side-on walks sideways. Decide where the head or front is on every token: at the top
-   is right; side-on wants a 90-degree turn; head-down wants 180. A mannequin token is a
-   90-degree overhead body with the head tilted up, so its head reads at the top. For a
+   is right; side-on wants a 90-degree turn; head-down wants 180. A restyled token keeps its
+   base's facing, so check the base too. For a
    quadruped seen from above, the forelimbs say where the front is (bent, splayed, claws
    forward) and the hind limbs trail. Fungi, a stalactite that hangs point-down, and a radial
    creature have no facing and are never rotated.

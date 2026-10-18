@@ -350,12 +350,11 @@ prompt can simply say the character's name and be understood:
   Flash in practice (spike 2026-09-19; the whole 2026-09-19 batch was Flash and held the look).
   Attach the standing style shelf (from `art/SHELF.md`) on every portrait and illustration
   call unless the owner asks for something deliberately different.
-- **Tokens take the world's own tokens as the style reference** (words-only and restyle routes
-  only; the mannequin route in Step 4 takes the character's portrait as a head-to-waist crop
-  for `character` with the bust beside it (the server attaches it), and crops of signature gear as
-  `object`, never a style image). They are top-down full-body
-  figures on transparency (`assets/tokens/<name>.png` in the world data). Attach one as
-  `role: "style"` and the new token comes out at the same angle and in the same look.
+- **Tokens drawn from words take the world's own tokens as the style reference.** They are
+  top-down full-body figures on transparency (`assets/tokens/<name>.png` in the world data).
+  Attach one as `role: "style"` and the new token comes out at the same angle and in the same
+  look. A restyle of an existing token (Step 4) attaches nothing beside the source unless a
+  crop of a signature piece of gear is needed as `object`.
   The tool appends the framing and the chroma plate sentence itself, picks a plate colour the
   subject will not share (it samples the references AND reads the prompt for colour words, so a
   green dragon prompted against a grey token gets a magenta plate), cuts the result to alpha on
@@ -378,11 +377,11 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
 - **Never say "book art", "cover", or "poster"** — that paints title typography and plate
   borders. Style lives in the shelf's finish line, never in a product word. The exception
   is a deliberate text prop (a real wanted poster), which is a Pro illustration.
-- **Tokens** (humanoids go the mannequin route in Step 4, whose recipe replaces this): describe
-  the creature and its pose only. Never write framing, angle, or
-  background words; the tool owns those and vaguer plate wording made Flash paint a green DISC
-  on white in the spike. The shelf's token finish words in the prompt reinforce the
-  world-token style reference.
+- **Tokens drawn from words**: describe the creature and its pose only. Never write framing,
+  angle, or background words; the tool owns those and vaguer plate wording made Flash paint a
+  green DISC on white in the spike. The shelf's token finish words in the prompt reinforce the
+  world-token style reference. An existing token is never drawn from words: it is restyled
+  (Step 4).
 - **Icons**: the tool appends "single subject centered, filling the frame, no text, no border";
   you supply the STYLE, or the render comes back photoreal. The set prefix is the shelf's icon
   finish line, in the proven shape `fantasy RPG inventory icon, <the shelf's finish>, <its light>,
@@ -502,209 +501,19 @@ dropped on 2026-09-19; re-earn phrasing lessons on the new backend before writin
    light polish on good art (the party's tokens barely changed, so do not spend on good art).
    One slip: a cream cat came back Siamese-coloured; name the colours explicitly when they
    matter.
-   **Default for every humanoid PC and NPC: the mannequin route (owner, 2026-10-15).** A
-   library of 312 grey HeroForge captures lives in this repo under `mannequins/` (its README is
-   the shot list; `npm run mannequin -- grid` lists it from the files). One `edit-image` call,
-   kind `token`, `source: "mannequin"`, flash, the capture as `sourceImage`, turns a capture
-   into a finished token at about 3 cents: the tool binds pose, proportions and grip to the
-   capture, sets the camera itself, the owner's standard (2026-10-16): a 90-degree
-   orthographic top-down body, and carries the head by a grey bust it attaches at the wanted
-   tilt, the same universal anchor for a PC and an NPC; the words supply race, sex, age, face,
-   kit, colours and finish, and never a word about the head. **A known character also gets
-   references: the portrait's head-to-waist crop as `character` with `headAnchor: "bust"`
-   on the call, and crops of its signature gear as `object`** (below). A new NPC with no
-   portrait is words alone. About 120 test renders
-   (2026-10-15) and the first real run on the four PCs (about 50 renders, 2026-10-16; the record
-   is `notes/mannequin-tokens/PLAN.md`) came out usable on the first pass almost every time;
-   the PC run is what added the reference and the guide sentence. The
-   words-only `generate-image` route stays for creatures with no humanoid body (a beast, a
-   flying sword, an ooze); a library restyle stays for the case where the owner wants one exact
-   library token kept.
-   *Picking the capture.* File names are `mannequin-<body>-<sex>-<pose>[-<setup>].png`. Choose
-   in this order:
-   (1) **Pose.** `combat` (a low lunge from steeply overhead, the fighting default), `stand`
-   (upright, camera in front and above, chest and face showing: idle, casters, civilians, worn
-   gear), `twohand` (both fists on one shaft), `dead` (on the back, arms out), `prone` (knocked
-   down on the knees). A set of condition tokens for one character is one capture per pose with
-   the same description reused; the character stays recognisably the same.
-   (2) **What the hands hold.** The setup is picked by grip, never by class. Combat:
-   `spear-shield`, `dagger-shield`, `sword-shield`, `longsword-kite`, `sword-open`,
-   `longsword-open`, `empty` (one fist low, one hand high: every caster, monk, unarmed),
-   `crossbow-hip`, `crossbow-down`, `bow`, `twodaggers`, `sword-dagger`. Stand: `dagger-shield`,
-   `dagger-open`, `empty` (closed fists), `open` (open spread hands), `bow`, `bow-draw`,
-   `shortbow-draw`. Twohand: `right` (blade at the right shoulder), `left` (at the left side,
-   body twisting), `staff-level`, `staff-diagonal`, `staff-brace`. Dead and prone have no
-   setup. Take the *shortest* blade that fits: a weapon grows in words (a dagger became a
-   longsword three times its length) but never shrinks. A shield capture also covers no shield:
-   remove it by naming its parts.
-   (3) **Body and sex.** `human` (every human-sized race: elf, tiefling, dragonborn, half-orc
-   all came out clean on it), `dwarf`, `small` (halfling, gnome, goblin, kobold), `large`
-   (goliath, bugbear, ogre), `orc`, `elf`; each `male` and `female`. The body sets build and
-   mass, which words cannot change (a dwarf on the human body came out tall); face, ears, tusks,
-   skin and hair come from words on any body. Scale does *not* carry: every token is fitted to
-   its square, so a halfling fills its cell like anyone; size on the map is `creatureSize` and
-   the actor's token size.
-   *The recipe.* One instruction, in this shape, with the campaign's finish line from its
-   `art/SHELF.md` at the end, and `source: "mannequin"` on the call: the tool then carries the
-   mannequin guide, the camera, the head anchor and the no-grey rule, so the instruction says
-   none of that, and nothing about the head, the angle or the camera, ever. For a known
-   character, attach the portrait's head-to-waist crop as `references: [{ role: "character",
-   label: "<Name>" }]` **and pass `headAnchor: "bust"`**: the bust then carries the head and
-   the crop is bound to identity only (features, hair, skin, build and kit). Add each signature
-   piece of gear as `{ role: "object", label: "<the axe>" }`, cropped from the approved art;
-   the tool binds each by its image number, so the instruction only names them. For a new NPC,
-   describe the face in full instead and attach nothing: the tool attaches the bust by itself.
-   `Paint it as <Name> (Image 2), <race, sex, age, build, skin, hair, eyes; horn shape if any>,
-   <anything the mannequin lacks: ONE tail curving out behind to the lower left only, wings
-   folded, a hood>, in <his|her> <clothing and armour, materials and colours, always the
-   footwear>. Replace
-   the entire <weapon> in <his|her> fist at the <lower left>, keeping only the fist's grip and
-   the line it points along: none of the old <blade, crossguard, pommel> remain. The new weapon
-   is <each part, grip to tip>. Replace the entire shield, keeping its exact position and angle
-   on the forearm, held naturally: none of the old round disc, round rim, studs or arm straps
-   remain, and nothing round is left. The new shield is <shape, material, emblem>. <Any held
-   light or magic, named as the key light>. <The finish line>; nothing left grey clay.`
-   The rules behind it, each one paid for:
-   - **A known character takes the portrait's head-to-waist crop as `character` beside the
-     bust (owner, 2026-10-16 and 17).** Sixteen words-only PC tokens came out 15 of 16 usable,
-     and the owner rejected them: the likeness drifted. A head-to-waist crop of the portrait as
-     `character` fixed every face and pulled the kit toward the portrait too (plate, shield
-     boss, leather, scarf, robe), and then the head review showed it was also the strongest
-     pull on the head: a render leans toward the head tilt of whatever reference carries a
-     head, and a frontal portrait crop bound on its own lifted faces to the camera. The fix is
-     not to anchor PCs to their old token heads (the owner ruled those were luck, not a
-     standard) but to put the bust beside the portrait: with `headAnchor: "bust"` on the
-     call the tool attaches the bust after the crop, binds the crop to identity only, and the
-     bust wins the head. The universal run (2026-10-17, 02:16; 8 renders, $0.51; `headtest/2026-10-17-02-16-universal/`,
-the sheet on the Desktop as `PC Tokens/headtest-2-universal-sheet.png`): 6 of 8 first renders in
-the band, 8 of 8 after steering, every face a clear likeness of its portrait and no camera drop.
-The heads sit at the low end of the band with the portrait beside bust-2 (six `down`, Lysandra's
-stand `up`): Kartor's stand came back `far-down` and landed `down` on bust-3, Lysandra's combat
-`far-down` twice and landed `up` on bust-4. The bust-2 NPC run centred on `right`, so a portrait
-beside the bust pulls the head a step lower. (That dial is history: since the evening of
-2026-10-17 there is one bust on record, `mannequins/heads/bust.png`, and no step to move to.)
-     Horns follow the crop rather than the words, so restate the horn shape when it matters. A
-     `character` reference with no `headAnchor` is bound as an approved token head instead (it
-     carries its own tilt, no bust); that route is kept for a head the owner has ruled on, and
-     is not the default. **A portrait with hair over the brow bows the head** (one PC,
-     2026-10-17: seven renders with his portrait beside bust-3 and bust-4 came back with the
-     hair over the eyes; words-only on bust-2 with "hair pushed back off his forehead so his
-     brow and both eyes are clear" landed first time). For such a face, drop the portrait,
-     describe the hair off the brow, and let the bust carry the head. **An instrument or a
-     large object cradled across the chest drops the camera** to a front-and-above view; sling
-     it on the back or hold it by the neck at the side.
-   - **Never attach a whole image beside the mannequin.** A full style token or a full portrait
-     gets its subject copied in (a wizard and a harpy came back as the attached drow). The crop
-     rule above is the only exception: a crop, bound to the face and kit, nothing else.
-   - **The mannequin's guide line lives in the tool (2026-10-16).** `source: "mannequin"` writes
-     it: pose, camera, proportions and grip bound to the capture, the head described, nothing
-     left grey. "Keep the mannequin's exact pose" and the softer guide sentence bought the same
-     pose side by side in the first real run; the tool's line is the firmer of the two, and the
-     instruction no longer says any of it.
-   - **The camera is the owner's standard, set by the tool and the capture (2026-10-16,
-     2026-10-17).** Tokens are seen from straight above at the table, so the standard is a
-     90-degree orthographic body (the shoulders and crown the largest shapes, feet beneath the
-     body). In the ortho test (Kartor and Cecil, stand and combat, sixteen renders) that wording
-     landed eight of eight and the owner called it perfect. Every mannequin capture is shot
-     straight down at that same camera, and the tool's `source: "mannequin"` lead sentence
-     binds the body to the capture's camera strictly; the words-only token framing carries the
-     same camera. The instruction says nothing about the camera, and a capture shot from any
-     other angle is re-shot, never corrected by words. Compare every render to the target in
-     the flaw pass anyway, and name the footwear: the mannequin is barefoot, and a figure
-     described without boots came back barefoot. On `prone` and `dead` the pose words win
-     ("knocked down onto the knees", "lying dead, eyes closed") and the camera line does no
-     harm.
-   - **The server carries the head; the recipe never mentions it (owner rule, 2026-10-16).**
-     The owner's standard for every standing or combat token: the head faces the way the body
-     faces, tipped just enough toward the camera that brow, eyes, nose and mouth read, hair
-     over the top half of the head, never the face lifted to the camera (chin underside,
-     throat), which the owner dislikes most. About 95 renders that day showed that words about
-     the angle (absolute lines, degrees, gaze targets, edits, "exactly as the mannequin's head")
-     fail, and that a render leans toward the head tilt of any reference that has a head. So
-     the head is an image: with no `character` reference the tool attaches a grey HeroForge
-     bust at the wanted tilt (`mannequins/heads/bust.png`, the one bust on record since
-     2026-10-17: the owner's HeroForge head at the middle of the band, shot at 90 degrees with the
-     two eyes painted chroma green; the old dial of four is in `heads/archive/`)
-     after your references and binds it with the marks named; with one, the reference is the approved
-     token head and carries the tilt itself. Then a check model grades the plate beside five
-     crops the owner ruled on (`mannequins/heads/band/`, one per step) on five steps, `far-down`, `down`,
-     `right`, `up`, `far-up`, plus `camera-dropped` and `unclear`; `down`, `right` and `up` are
-     the band and deliver, and a second, eyes-only call asks whether both eyes read, the owner's
-     criterion (2026-10-17): a `no` with the tilt in band is fixed by one edit on the plate, the
-     eyes opened and nothing else changed (14 of 14 opened on the fourteen it was ruled on, the
-     pose kept on every one), and only a second `no` re-renders; `head` reports
-     `eyes` and `eyesEdited`. Over-opened eyes ("bug eyes") pass the gate: look for them in the
-     flaw pass. With `headRetries` above its default of 0, `far-down` and `far-up` are rendered
-     again on the same bust, a dropped camera once unchanged, at most two retries, every
-     kept plate named `-head<n>-<verdict>.png`, and the result's `head` reports `verdict`,
-     `inBand`, `anchorUsed`, `first`, every verdict and the kept plates. Two bad verdicts still
-     deliver, flagged, because the check can be wrong (re-cut 2026-10-17 from the owner's blind rulings: every
-     rejected head caught over three passes, two accepted NPC heads sent for a re-render):
-     read `head` before the flaw pass; a delivered `far-up` or `far-down` is a re-render, not
-     an edit. `camera-dropped` twice comes with `advice`: change the capture, not the words
-     (Cecil's combat dropped the camera three times on `combat-empty` and landed first time on
-     `combat-dagger-shield` with the shield removed). `unclear` with an `error` means the judge
-     was not reached and the token went through unchecked; `unclear` without one is a lying,
-     hooded or helmeted figure, which is fine. `headAnchor` takes "bust" (the default), "none" or
-     "capture", and `headRetries` buys retries (0 by default); neither is needed in the ordinary
-     run. **Never put head wording in the instruction, and never attach a frontal head (a
-     portrait crop as `character`, a frontal token head as `pose`)**: both pull the face to the
-     camera. Every change to the head path runs through `npm run headtest` in the server repo
-     (a fixed set, a contact sheet with every verdict, the hit rate inside the band), never one
-     render at a time.
-   - **The dwarf `dead` capture loses the dwarf build**: twice it came back lean, older and grey,
-     with and without the crop. One flaw pass naming build, age and hair fixed it both times;
-     expect it.
-   - **Dropped gear on prone and dead**: "lying dropped on the ground beside the fist at the
-     <left|right>" landed every time. On the dwarf `prone` capture a haft clipped the frame twice
-     until written "tucked close under the fist, haft no longer than his forearm".
-   - **Name hands by where they sit in the image** ("the fist at the lower left"), never left
-     and right; the model reads those both ways, and even image sides are honoured only most of
-     the time (a mirror reads the same on a token, so let it go).
-   - **Repaint keeps what is not named; replace renames every part.** "Repaint the spear as an
-     ash shaft" kept the old grip and butt cap half the time; "replace the entire spear ... none
-     of the old butt cap, ring bands, wrapped grip or collar remain" left nothing. Repaint keeps
-     shape and ornament too: a curved dagger stays curved, a carved bow keeps its carving,
-     unless the old shape or ornament is named for removal.
-   - **A closed empty fist takes a written weapon; an open hand does not.** The standing
-     `empty` capture took a sword written into the fist first time; weapons written into open
-     hands gripped badly three times in four. An open hand is for a spell, a lantern, a torch, a
-     tankard, or nothing.
-   - **Shields change freely**: reshaped (heater, kite, tower, buckler), resized both ways,
-     removed, or added where a weapon was. Emblems read when the capture's shield faces the
-     camera (the standing captures, `longsword-kite`); edge-on shields hide their face.
-   - **Worn gear works from the standing camera**: a sheathed sword at the hip, a backpack with
-     its bedroll above the shoulders, a greatsword or a shield slung on the back. On the prone
-     capture, gear on the back rises over the bowed head; lay it on the ground instead.
-   - **Full-draw bows** render in character and never clip, but the string stays straight tip
-     to tip; a fix pass did not move it. Accept it.
-   - **The twohand `left` stance straightens on stocky and small bodies**; prefer `right` for
-     dwarves and small folk.
-   - **One render in about twelve loses the figure's scale** (a sickle came back at half size).
-     Compare figure size to the mannequin in the flaw pass; a shrunken figure is re-rendered,
-     since an edit cannot grow it back.
-   - **Fix a fault with one flaw pass on the render**, naming the one thing and ending "keep
-     everything else identical". Never re-roll a good pose. Variants (wounded, cloaked, darker)
-     are edits of the finished token, and the pose holds.
-   - **A batch spreads across poses (owner, 2026-10-16).** The extra poses and setups exist so
-     that several tokens made at once (a guard post, a goblin warband, a tavern's regulars, a
-     cult) do not share one capture. Read the intent, then pick a spread that matches it: a
-     watch post gets `stand-dagger-shield`, `stand-bow`, `combat-spear-shield` and
-     `twohand-staff-level`; a warband gets `combat-sword-open`, `combat-twodaggers`,
-     `combat-bow`, `combat-spear-shield` and a `twohand-right` champion; villagers get `stand-empty`,
-     `stand-open` and `stand-dagger-open` with tools written into the hands. Vary body and sex
-     within the race too. Reuse a capture only when the group is meant to look drilled and
-     identical (a line of the same soldiers), and say so.
-   - **`thinking: "high"` bought nothing on tokens (2026-10-16, two pairs).** Both render tools
-     take it and report `thinkingTokens`; Nano Banana 2.1 thinks at medium by default, about 600
-     to 1600 tokens a token render, under a cent. At high the counts stayed in the same band,
-     one PC came out the same and another's stance drifted into a lean the mannequin lacks. Leave
-     it unset for tokens.
+   **The restyle is the token pipeline (owner, 2026-10-18).** A token starts from an existing
+   image, the *base*: the actor's own world token, a library token (the owner's token packs),
+   or a capture the owner made themself (a HeroForge pose, a screenshot), and one `edit-image`
+   call, kind `token`, flash, turns it into the finished token with the base's pose and camera
+   kept and the words supplying race, face, kit, colours and finish. When the owner asks for a
+   reskin, a restyle or a rework of a token, this is the only route: never a grey pose library,
+   never a head anchor, never a judge of the head. The mannequin pipeline of 2026-10-15 to 17
+   (grey HeroForge captures, a bust attached by the server, a head check with steered retries)
+   was tried at length and retired on 2026-10-18; nothing of it remains in the server or here.
    **Drawing a token from words** (`generate-image` kind `token`, flash: the pose written as a
-   camera would see it, a face crop as `character`, one finished token as `style`) is now the
-   route only for non-humanoid bodies. It matched pro side by side, so pro is not the lever.
-   Library restyles are for the case where the owner wants one exact library pose kept;
-   everything below about bases applies to that case only.
+   camera would see it, a face crop as `character`, one finished token as `style`) is the route
+   for a creature with no usable base, or when the owner asks for a redesign. It matched pro
+   side by side, so pro is not the lever. Everything below about bases is the restyle route.
    **The camera angle is the base token's, and no edit changes it (owner, 2026-10-11).** When
    a library token becomes a campaign NPC, pick a base that is already steeply overhead (head
    and shoulders large, legs tucked under), because the restyle keeps whatever angle it has.

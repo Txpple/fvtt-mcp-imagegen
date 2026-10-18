@@ -11,13 +11,6 @@ fit walls and lights, and hand the LLM `.uvtt` / scene JSON plus teleporter pair
 through fvtt-mcp. Plan, lessons and proof-of-concept code in
 [notes/map-builder/PLAN.md](notes/map-builder/PLAN.md) (2026-10-05).
 
-## 0b · Tokens from a mannequin pose library (done 2026-10-15)
-
-312 grey HeroForge captures (six bodies in both sexes; combat, stand, twohand, dead and prone poses,
-26 setups) in this repo's `mannequins/`, turned into any humanoid token by one
-`edit-image` call. The `illustration-builder` skill carries the route as the default for humanoids.
-The record is [notes/mannequin-tokens/PLAN.md](notes/mannequin-tokens/PLAN.md).
-
 ## 1 · Icon sets as a first-class workflow
 
 A homebrew item, spell, or feature set with matching icons is a bigger visual upgrade to a
@@ -51,6 +44,15 @@ reference images or multi-turn editing. Only worth a `draft` tier if icon volume
   ever does: sharp Lanczos for a 2x with no install, or `realesrgan-ncnn-vulkan` (one 40 MB
   zip, runs on the GPU via Vulkan, no CUDA) spawned like the cutout script. Never `edit-image`;
   it regenerates the pixels.
+
+## Retired
+
+- **Tokens from a mannequin pose library** (built 2026-10-15 to 17, removed 2026-10-18). A
+  library of grey HeroForge captures painted into tokens by `edit-image`, with a bust the server
+  attached to carry the head and a judge grading the tilt. It did not work: the head never held
+  across races and references, and the steering cost renders without buying a standard. The
+  owner's call was to drop it whole; the token pipeline is the restyle of an existing token or
+  capture. The history is in `docs/log/2026-10.md` and the git log before this date.
 
 ## Done
 

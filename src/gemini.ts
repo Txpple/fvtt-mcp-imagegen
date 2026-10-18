@@ -31,13 +31,12 @@ export const PRICE: Record<Tier, Record<ImageSize, number>> = {
 export const TEXT_OUT_PRICE: Record<Tier, number> = { flash: 7.5, pro: 12 };
 
 /**
- * The vision text model the head check asks. Flash, not flash-lite (2026-10-16): on the owner's
- * ruled set of 21 heads, flash-lite hit the band 16 times and called a bowed guard
- * camera-dropped, flash 19 with every step the owner ruled matched; a checklist prompt and a
- * locate-then-crop step bought nothing on top.
+ * The vision text model the anatomy check asks (anatomy.ts). Flash, not flash-lite (2026-10-16):
+ * on a ruled set of 21 renders flash-lite misread five where flash matched the owner on every one;
+ * a checklist prompt and a locate-then-crop step bought nothing on top.
  */
 export const JUDGE_MODEL = 'gemini-3.5-flash';
-/** A flat estimate per judge call: four 512 crops and a 1024 plate in, one word out, a fifth of a cent. */
+/** A flat estimate per judge call: a 1024 image in, a short count out, a fifth of a cent. */
 export const JUDGE_USD = 0.002;
 
 export interface JudgeRequest {
@@ -188,8 +187,8 @@ export class Gemini {
 
   /**
    * One short text answer about some images from the judge model, for a check no pixel measure
-   * can make (the head check, head.ts: four ruled crops and the plate). Temperature 0 so the
-   * same plate gets the same word.
+   * can make (the anatomy count, anatomy.ts). Temperature 0 so the same plate gets the same
+   * answer.
    */
   async judge(req: JudgeRequest): Promise<string> {
     if (!this.hasKey) throw new Error('GEMINI_API_KEY is not set in .env');

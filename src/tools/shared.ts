@@ -26,24 +26,6 @@ import {
 } from '../gemini.js';
 import { type DriftReport, measureDrift, overlandDrifted } from '../drift.js';
 import { EDGE_BAND, EDGE_LIMIT, edgeContact } from '../edge.js';
-import {
-  EYES_OPEN_PROMPT,
-  type EyesVerdict,
-  headOk,
-  type HeadReport,
-  type HeadVerdict,
-  judgeEyes,
-  judgeHead,
-  needsRetry,
-} from '../head.js';
-import {
-  type Bust,
-  bustBinding,
-  DEFAULT_BUST,
-  type HeadAnchor,
-  isBust,
-  loadBust,
-} from '../heads.js';
 import { type Box, type Dimensions, dimensions, fitRect, postProcess } from '../post.js';
 import {
   CREATURE_SIZES,
@@ -133,7 +115,7 @@ export const thinkingSchema = z
     'How much the model thinks before it draws (Nano Banana 2.1: minimal, medium, high; the ' +
       'default is medium). Thinking is billed at the text rate, from a fraction of a cent to a ' +
       'few cents a render; the result reports thinkingTokens. Try "high" on a prompt that ' +
-      'carries many constraints at once (a mannequin token with a face and gear to match).'
+      'carries many constraints at once (a token with a face and several pieces of gear to match).'
   );
 
 export const anatomySchema = z
@@ -189,23 +171,13 @@ export function loadImage(p: string): InlineImage {
  * A battlemap's style reference lends its finish only: "match its camera angle" would tilt a
  * straight-down map, and its subject is another map whose layout must not leak in.
  */
-export function referencePreamble(refs: Reference[], kind?: Kind, source?: string): string {
+export function referencePreamble(refs: Reference[], kind?: Kind): string {
   if (refs.length === 0) return '';
   const lines: string[] = [];
   refs.forEach((r, i) => {
     const n = i + 1;
     const who = r.label ? ` (${r.label})` : '';
-    if (r.role === 'character' && source === 'mannequin') {
-      // On a mannequin edit the character reference is the approved token head (owner rule
-      // 2026-10-16): a head-and-shoulders crop at the token camera held the band four of four
-      // and carries its own tilt, where a frontal portrait crop pulled the face to the camera.
-      lines.push(
-        `Image ${n}${who} is a CHARACTER reference: this figure's head as it appears on its ` +
-          'approved tokens, seen from this same overhead token camera. Take the face, hair, ' +
-          'skin, eyes and the tilt of the head from it, the head tipped exactly as it is there, ' +
-          'and nothing of its framing, lighting or background.'
-      );
-    } else if (r.role === 'character') {
+    if (r.role === 'character') {
       // "keep this exact face" carried a frontal portrait crop's angle onto top-down tokens
       // (two campaign tokens, 2026-10-11 to 16): identity is bound here, pose and camera are not.
       lines.push(
@@ -264,13 +236,6 @@ export interface RenderInput {
   /** Thinking level for the render; unset leaves the model's default (medium on flash). */
   thinking?: ThinkingLevel;
   /**
-   * Tokens from a mannequin: the head anchor the render carries (a bust render() attaches after
-   * the images, the caller's character head, or none) and how many steered retries a verdict
-   * outside the band may buy; `identity` says a character reference rides beside the bust,
-   * bound to identity only.
-   */
-  head?: { anchor: HeadAnchor; retries: number; identity?: boolean };
-  /**
    * Tokens and portraits: what the creature should have, for the anatomy check. The check runs
    * on every token and portrait render, with or without a line (anatomy.ts).
    */
@@ -297,8 +262,6 @@ export interface RenderOutput {
   cutout?: Omit<CutoutResult, 'file' | 'width' | 'height'>;
   /** Tokens and props: the first render clipped the subject at the edge and was redone. */
   edgeRetried?: boolean;
-  /** Mannequin tokens: the judge's word on the head, the anchor used, and any steered retries. */
-  head?: HeadReport;
   /** Tokens and portraits: the judge's count, each flaw placed, and a token's facing. */
   anatomy?: AnatomyReport;
   /** Battlemaps: the source's pixel size and the whole-number scale the map was delivered at. */
@@ -325,24 +288,17 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       input.prompt
     );
   }
-  // A mannequin token's bust goes last, bound by its number; the plate sentence closes the prompt.
-  const promptWith = (bust: Bust | undefined) =>
-    [
-      input.prompt,
-      bust ? bustBinding(input.images.length + 1, bust) : '',
-      chromaKey ? chromaSuffix(chromaKey) : '',
-    ]
-      .filter(Boolean)
-      .join(' ');
+  // The plate sentence closes the prompt.
+  const prompt = [input.prompt, chromaKey ? chromaSuffix(chromaKey) : ''].filter(Boolean).join(' ');
 
   fs.mkdirSync(deps.outputDir, { recursive: true });
   const id = newId();
   if (input.kind === 'battlemap' || input.kind === 'overland') return renderMap(deps, input, id);
-  const once = async (bust?: Bust) => {
+  const once = async () => {
     const result = await deps.gemini.generate({
       tier: input.tier,
-      prompt: promptWith(bust),
-      images: bust ? [...input.images, loadBust(bust)] : input.images,
+      prompt,
+      images: input.images,
       aspect: input.aspect ?? preset.aspect,
       size: preset.size,
       ...(input.thinking ? { thinking: input.thinking } : {}),
@@ -357,33 +313,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     return { result, png, usd };
   };
 
-  // The eyes remedy (owner rule 2026-10-17): the plate alone goes back with the eyes line and the
-  // plate sentence; the mannequin, the references and the bust stay out, so nothing but the eyes
-  // is asked for and the pose survives (14 of 14 on the fourteen eyeless tokens it was ruled on).
-  const onceEdit = async (plate: Buffer) => {
-    const result = await deps.gemini.generate({
-      tier: input.tier,
-      prompt: [EYES_OPEN_PROMPT, chromaKey ? chromaSuffix(chromaKey) : '']
-        .filter(Boolean)
-        .join(' '),
-      images: [{ data: plate, mimeType: 'image/png' }],
-      aspect: input.aspect ?? preset.aspect,
-      size: preset.size,
-      ...(input.thinking ? { thinking: input.thinking } : {}),
-    });
-    const png = await postProcess(result.image.data, preset.post);
-    const usd = deps.spend.record(
-      input.tool,
-      input.tier,
-      preset.size,
-      thinkingUsd(input.tier, result.usage?.thinking)
-    );
-    return { result, png, usd };
-  };
-
-  let bust: Bust | undefined =
-    input.head && isBust(input.head.anchor) ? input.head.anchor : undefined;
-  let { result, png, usd: estimatedUsd } = await once(bust);
+  let { result, png, usd: estimatedUsd } = await once();
   let thinkingTokens = result.usage?.thinking;
   let edgeRetried: boolean | undefined;
   const clippedPath = (n: number) =>
@@ -394,7 +324,7 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     let contact = await edgeContact(png, chromaKey);
     if (contact > EDGE_LIMIT) {
       fs.writeFileSync(clippedPath(1), png);
-      const again = await once(bust);
+      const again = await once();
       ({ result, png } = again);
       estimatedUsd += again.usd;
       if (again.result.usage) thinkingTokens = (thinkingTokens ?? 0) + again.result.usage.thinking;
@@ -411,97 +341,10 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
       }
     }
   }
-  // The head check (owner rule 2026-10-16): a mannequin token's head sits inside the owner's
-  // band (down, right or up), never bowed with the eyes hidden, never the face lifted to the
-  // camera, never a dropped camera. The check's word buys a re-render (head.ts): far-down and
-  // far-up are redone on the same bust (there is one bust on record since 2026-10-17; the dial
-  // that steered between four is archived), a dropped camera is redone once unchanged and then
-  // blamed on the capture. The eyes gate (2026-10-17) is a second word on the same plate: NO
-  // means the eyes do not read, the owner's own criterion. With the tilt in band it is fixed by
-  // one edit on the plate (EYES_OPEN_PROMPT: the eyes opened, nothing else changed) and
-  // re-checked; only a second NO re-renders, like a bowed head. At most `retries` re-renders or
-  // edits (0 by default: one paint, the checks report only), then the token is delivered
-  // flagged; it never refuses, since the check can be wrong. A retry that clips is kept and
-  // counted, never delivered; the earlier clean plate stays.
-  let head: HeadReport | undefined;
-  if (cut && chromaKey && input.head) {
-    const anchorName = (b: Bust | undefined) => {
-      if (input.head?.anchor === 'character') return b ? `character + ${b}` : 'character';
-      return `${b ?? 'none'}${input.head?.identity ? ' + identity' : ''}`;
-    };
-    let checked = await checkHead(deps, png);
-    const verdicts: HeadVerdict[] = [checked.verdict];
-    const eyesVerdicts: EyesVerdict[] = [checked.eyes];
-    const kept: string[] = [];
-    let retries = 0;
-    let drops = 0;
-    let eyesEdited = false;
-    while (
-      !checked.error &&
-      (needsRetry(checked.verdict) || checked.eyes === 'no') &&
-      retries < input.head.retries
-    ) {
-      const verdict = checked.verdict;
-      // A head the tilt accepts but the eyes gate rejects is fixed first by one edit on the plate
-      // (the owner's rule: a flaw pass keeps the pose); only a second NO is re-rendered like a
-      // bowed head, on the same bust. A render that carried no bust (a character head, or the
-      // head in words) takes the bust on its retry, beside what it had.
-      const reason = needsRetry(verdict) ? verdict : 'no-eyes';
-      const edit = reason === 'no-eyes' && !eyesEdited;
-      let next = bust;
-      if (verdict === 'camera-dropped') {
-        if (drops) break; // twice: the capture is the cause, not the bust
-        drops++;
-      } else if (!edit) {
-        next = bust ?? DEFAULT_BUST;
-      }
-      const keptPath = path.join(
-        deps.outputDir,
-        `${input.kind}-${slugOf(input.slug)}-${id}-head${kept.length + 1}-${reason}.png`
-      );
-      fs.writeFileSync(keptPath, png);
-      kept.push(keptPath);
-      if (edit) eyesEdited = true;
-      const again = edit ? await onceEdit(png) : await once(next);
-      estimatedUsd += again.usd;
-      if (again.result.usage) thinkingTokens = (thinkingTokens ?? 0) + again.result.usage.thinking;
-      retries++;
-      if ((await edgeContact(again.png, chromaKey)) > EDGE_LIMIT) {
-        // Never delivered; the verdict and the plate stand as they were, so the loop may try again.
-        fs.writeFileSync(clippedPath(kept.length + 1), again.png);
-        kept.pop();
-        fs.rmSync(keptPath, { force: true });
-        continue;
-      }
-      ({ result, png } = again);
-      if (!edit) bust = next;
-      checked = await checkHead(deps, png);
-      verdicts.push(checked.verdict);
-      eyesVerdicts.push(checked.eyes);
-    }
-    head = {
-      verdict: checked.verdict,
-      eyes: checked.eyes,
-      inBand: headOk(checked.verdict, checked.eyes),
-      anchorUsed: anchorName(bust),
-      ...(verdicts.length > 1
-        ? { first: verdicts[0], verdicts, eyesVerdicts, retried: true, kept }
-        : {}),
-      ...(eyesEdited ? { eyesEdited: true } : {}),
-      ...(checked.verdict === 'camera-dropped'
-        ? {
-            advice:
-              'The camera dropped (the body seen from the front) on this capture; change the ' +
-              'capture rather than the words or the bust.',
-          }
-        : {}),
-      ...(checked.error ? { error: checked.error } : {}),
-    };
-  }
   // The anatomy check (owner rule 2026-10-16): every token and portrait is counted by the judge
-  // on the plate it delivers, after the head is settled, against the caller's line from the
-  // book when there is one (anatomy.ts). Reported, never refused and never re-rendered: a flaw
-  // is one edit away and the owner approves the fix; a mis-facing token is a rotation.
+  // on the plate it delivers, against the caller's line from the book when there is one
+  // (anatomy.ts). Reported, never refused and never re-rendered: a flaw is one edit away and
+  // the owner approves the fix; a mis-facing token is a rotation.
   let anatomy: AnatomyReport | undefined;
   if (isAnatomyKind(input.kind)) {
     anatomy = await checkAnatomy(deps, png, input.kind, input.anatomy);
@@ -514,7 +357,6 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
     sessionEstimatedUsd: deps.spend.totalUsd,
     ...(thinkingTokens !== undefined ? { thinkingTokens } : {}),
     ...(edgeRetried ? { edgeRetried } : {}),
-    ...(head ? { head } : {}),
     ...(anatomy ? { anatomy } : {}),
   };
 
@@ -548,25 +390,6 @@ export async function render(deps: ToolDeps, input: RenderInput): Promise<Render
   const file = path.join(deps.outputDir, filename(input.kind, input.slug, id));
   fs.writeFileSync(file, png);
   return { ...base, file, width: dims.width, height: dims.height };
-}
-
-/** Ask the judge about a plate's head; a judge that cannot be reached never blocks the render. */
-/** The tilt word, then the eyes word, each billed; a check that cannot be reached never blocks. */
-async function checkHead(
-  deps: ToolDeps,
-  plate: Buffer
-): Promise<{ verdict: HeadVerdict; eyes: EyesVerdict; error?: string }> {
-  let verdict: HeadVerdict = 'unclear';
-  let eyes: EyesVerdict = 'unclear';
-  try {
-    verdict = await judgeHead(deps.gemini, plate);
-    deps.spend.recordJudge(JUDGE_USD);
-    eyes = await judgeEyes(deps.gemini, plate);
-    deps.spend.recordJudge(JUDGE_USD);
-    return { verdict, eyes };
-  } catch (e) {
-    return { verdict, eyes, error: e instanceof Error ? e.message : String(e) };
-  }
 }
 
 /** Count a render's anatomy; a judge that cannot be reached never blocks the render. */

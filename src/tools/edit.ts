@@ -6,7 +6,6 @@ import { toInputSchema } from '../utils/schema.js';
 import sharp from 'sharp';
 import { isAnatomyKind } from '../anatomy.js';
 import { padPlan, padSource } from '../battlemap.js';
-import { DEFAULT_BUST, HEAD_ANCHOR_CHOICES, type HeadAnchor } from '../heads.js';
 import { alphaBox } from '../post.js';
 import { type Kind, nearestAspect, PRESETS } from '../presets.js';
 import {
@@ -25,20 +24,6 @@ import {
   type ToolDeps,
 } from './shared.js';
 
-export const EDIT_SOURCES = ['mannequin'] as const;
-export type EditSource = (typeof EDIT_SOURCES)[number];
-
-/** Steered head re-renders a mannequin token may buy by default (owner rule: at most two). */
-/** The most steered re-renders a call may ask for. */
-export const HEAD_RETRIES = 2;
-/**
- * The default since the owner locked the pipeline (2026-10-17): one paint, the head and eyes
- * checks report only, nothing steered or edited. On the green-eyed 90-degree captures the first
- * render carries eyes about nine times in ten and the miss is a bowed head a re-roll fixes; the
- * steering loop stays available by asking for it and is slated to go once the recapture holds.
- */
-export const HEAD_RETRIES_DEFAULT = 0;
-
 const editImageSchema = z.object({
   sourceImage: z.string().min(1).describe('Absolute path of the image to edit (PNG/JPEG/WebP).'),
   instruction: z
@@ -52,17 +37,6 @@ const editImageSchema = z.object({
         'own wording.'
     ),
   kind: kindSchema,
-  source: z
-    .enum(EDIT_SOURCES)
-    .optional()
-    .describe(
-      'Tokens only. "mannequin": the source is a grey pose capture (a HeroForge mannequin), not ' +
-        'a token. The keep line then binds pose, camera, proportions and grip to the capture and ' +
-        'asks for nothing grey to remain; the head is carried by an image the tool attaches (a ' +
-        'grey bust, see headAnchor) or by a character reference (the approved token head), never ' +
-        'by words, so the instruction says nothing about the head or the camera: it describes the ' +
-        'figure and its kit, with gear crops as object references.'
-    ),
   slug: z.string().min(1).describe('Kebab-cased into the filename: <kind>-<slug>-<id>.png.'),
   references: z
     .array(referenceSchema)
@@ -73,32 +47,6 @@ const editImageSchema = z.object({
   confirmPro: confirmProSchema,
   creatureSize: creatureSizeSchema,
   thinking: thinkingSchema,
-  headAnchor: z
-    .enum(HEAD_ANCHOR_CHOICES)
-    .optional()
-    .describe(
-      'Mannequin tokens only. "bust" (the default) attaches the one bust on record after your ' +
-        "references as the head-angle anchor: the owner's HeroForge head at the pipeline's " +
-        'tilt with the two eyes painted chroma green, bound with the marks named. "none" ' +
-        'attaches no bust on the first render (a retry still adds one). With a reference of role ' +
-        'character attached: unset, the reference is taken as the approved token head and ' +
-        'carries the tilt itself (no bust); a bust named here rides beside the reference, which ' +
-        'is then bound to identity only (features, hair, skin, build and kit), the route for a ' +
-        'portrait crop. "capture": the capture\'s own head carries, nothing attached and nothing ' +
-        'said about the head (a crown-only capture is painted crown-only); a character reference ' +
-        'then binds identity only.'
-    ),
-  headRetries: z
-    .number()
-    .int()
-    .min(0)
-    .max(HEAD_RETRIES)
-    .optional()
-    .describe(
-      'Mannequin tokens only. How many steered re-renders a head verdict outside the band may ' +
-        "buy. Default 0: one paint, the head and eyes checks report only (the owner's pipeline, " +
-        '2026-10-17); up to 2 turns the steering and the eyes edit back on.'
-    ),
   anatomy: anatomySchema,
 });
 
@@ -116,46 +64,6 @@ export const EDIT_PREAMBLE =
 export const TOKEN_EDIT_KEEP =
   'Keep the face, hair, and the top-down token angle. Remove any cast shadow. Keep the whole ' +
   'figure, weapons included, inside the frame with a margin on every side; nothing crosses the edge.';
-
-/**
- * Mannequin edits (owner rule 2026-10-16). The source is a grey HeroForge capture, so "keep the
- * face, hair" is noise. The capture binds pose, camera, proportions and grip: every capture is
- * shot straight down, a 90-degree orthographic top-down camera, the owner's standard, and the
- * words bind the body to that camera strictly (the owner's rule of 2026-10-17; a capture shot
- * from any other angle is re-shot, never corrected by words). The head is carried by
- * an image (a bust the tool attaches, or the approved token head as `character`), never by
- * words: about 95 renders on 2026-10-16 showed a render leans toward the head tilt of whatever
- * reference carries a head and that every head sentence tried failed. Said as presence
- * throughout: a negation draws the thing. The hair sentence is universal (2026-10-17): a
- * portrait whose hair frames the face from the front came back with the hair over the eyes on
- * nine top-down renders in a row, which no bust could lift, and the route must hold for hundreds
- * of tokens with nobody tuning an instruction; it is a description of the figure, not of the
- * head's angle, and a no-op for short or swept-back hair. The instruction supplies everything
- * else, and no grey may remain.
- */
-export const MANNEQUIN_EDIT_SOURCE =
-  'Image 1 is a grey mannequin captured from directly above in a 90-degree orthographic ' +
-  'top-down view: the guide for the pose, the camera, the body proportions and the grip. ' +
-  'Paint it under exactly that camera, looking straight down onto the tops of the shoulders, ' +
-  'the feet directly beneath the body, the body never leaning or turned toward the viewer. ';
-export const MANNEQUIN_EDIT_KEEP =
-  'Paint the figure in exactly this stance, every limb and weapon where the mannequin has them, ' +
-  "under the mannequin's own 90-degree top-down camera, the camera straight down. Any hair lies " +
-  'back over the top of the head, leaving the brow and ' +
-  'both eyes clear of it. The grey clay is replaced entirely by the described figure, with ' +
-  'nothing left grey. Remove any cast shadow. Keep the whole figure, weapons included, inside ' +
-  'the frame with a margin on every side; nothing crosses the edge.';
-
-/**
- * The head in words, used only when no anchor is attached (headAnchor: "none" with no character
- * reference): the wording that landed eight of eight in the ortho test (2026-10-16) and drifted
- * on the real tokens afterwards. An anchor image replaces it.
- */
-export const MANNEQUIN_HEAD_WORDS =
-  'The head is tilted up a little so that, even from straight above, the brow, both eyes and ' +
-  'the nose show in front of the crown of the head. ';
-export const MANNEQUIN_KEEP_HEAD_WORDS =
-  'the camera straight down and the head tilted up as described.';
 
 /**
  * Prop edits: the token keep line's "face, hair" grew people on an armchair, a tree, and a crate
@@ -205,35 +113,14 @@ export const OVERLAND_EDIT_KEEP =
 export const PROP_EDIT_PAD = 0.12;
 
 /**
- * Assemble the edit prompt for a kind. The token plate sentence is appended later by render(),
- * and so is a mannequin token's bust binding (render attaches the bust, and adds it to a
- * character head on a retry). `headAnchored` says an image carries the head, so the head words are left out;
- * `characterIsHead` says a character reference is the approved token head (bound to carry the
- * tilt) rather than a portrait beside a bust (bound to identity only).
+ * Assemble the edit prompt for a kind. The token plate sentence is appended later by render().
  */
-export function editPrompt(
-  kind: Kind,
-  instruction: string,
-  refs: Reference[],
-  source?: EditSource,
-  headAnchored = true,
-  characterIsHead = true
-): string {
+export function editPrompt(kind: Kind, instruction: string, refs: Reference[]): string {
   // Shift reference numbering past the source image.
-  const preamble = referencePreamble(
-    refs,
-    kind,
-    source === 'mannequin' && characterIsHead ? source : undefined
-  ).replace(/Image (\d+)/g, (_, n) => `Image ${Number(n) + 1}`);
-  if (source === 'mannequin') {
-    const body = instruction.trim().replace(/[.\s]+$/, '');
-    if (headAnchored) return `${MANNEQUIN_EDIT_SOURCE}${preamble}${body}. ${MANNEQUIN_EDIT_KEEP}`;
-    const keep = MANNEQUIN_EDIT_KEEP.replace(
-      'the camera straight down.',
-      MANNEQUIN_KEEP_HEAD_WORDS
-    );
-    return `${MANNEQUIN_EDIT_SOURCE}${MANNEQUIN_HEAD_WORDS}${preamble}${body}. ${keep}`;
-  }
+  const preamble = referencePreamble(refs, kind).replace(
+    /Image (\d+)/g,
+    (_, n) => `Image ${Number(n) + 1}`
+  );
   const map = kind === 'battlemap' || kind === 'overland';
   if (kind === 'token' || kind === 'prop' || map) {
     const source = refs.length ? `Image 1 is the ${map ? 'map' : kind} to edit. ` : '';
@@ -264,34 +151,22 @@ export class EditImageTool {
           'Tokens are prompted light (your instruction as you would type it in the Gemini app, ' +
           'plus a keep-face/hair/angle line and "remove any cast shadow"), put back on a chroma ' +
           "plate keyed to the token's own colours, and cut to alpha on the 512 square in the " +
-          'same call. "give this an updated painterly style" restyles a world token in place. ' +
-          'source: "mannequin" paints a grey pose capture into a token with the pose, camera and ' +
-          'grip bound to the capture, and carries the head by an image, never by words: with no ' +
-          'character reference the tool attaches the bust on record, a grey head at the wanted ' +
-          'tilt with green eye marks (headAnchor "bust", the default); a character reference is ' +
-          'taken as the approved token head and carries the tilt itself, or, with headAnchor ' +
-          'named too, binds identity only while the bust carries the head. A check model then ' +
-          'grades the plate against five ruled head crops (far-down, down, right, up, far-up) ' +
-          "plus camera-dropped and unclear; down, right and up are inside the owner's band and " +
-          'deliver, and a second call asks whether both eyes read. By default (headRetries 0) ' +
-          'one paint is delivered and the checks report only; with retries, far-down and ' +
-          'far-up are re-rendered on the same bust, a dropped camera once unchanged (twice ' +
-          'means change the capture), eyes shut fixed by one edit on the plate, at most two, ' +
-          'then delivered flagged; every kept plate and verdict is in `head` (read it). Every token ' +
-          'and portrait edit is counted by the judge as well (heads, eyes, limbs, hands and ' +
-          "fingers, tails, tendrils, held objects, and a token's facing) against an optional " +
-          '`anatomy` line from the book; the result reports `anatomy`: what it found, each flaw ' +
-          'placed in the picture, and for a token the rotation that brings its front to the top. ' +
-          'Props (kind "prop") get object-only wording (no figures added) and come back cut at ' +
-          "the source file's exact pixel size, ready for the same tile slot. Battlemaps " +
-          '(kind "battlemap") restyle a bought map with the layout locked: the result lands on ' +
-          "the source's pixel grid (a whole-number upscale when the source is small), is checked " +
-          'for drift against the source (a drifted render is redone once, then refused), and ' +
-          'comes with a checkerboard image of source and result to eyeball. Overland maps ' +
-          '(kind "overland") repaint a regional or world map the same way, painted bare of every ' +
-          'name, marker, road, compass rose and scale bar (letter them on afterwards), with a ' +
-          'looser drift check that refuses only a grossly moved geography. Returns the new ' +
-          'file path, dimensions, and estimated spend.',
+          'same call. "give this an updated painterly style" restyles a world token in place; a ' +
+          'token from any library or a capture of your own is restyled the same way, its pose ' +
+          'and camera kept. Every token and portrait edit is counted by a judge model (heads, ' +
+          "eyes, limbs, hands and fingers, tails, tendrils, held objects, and a token's facing) " +
+          'against an optional `anatomy` line from the book; the result reports `anatomy`: what ' +
+          'it found, each flaw placed in the picture, and for a token the rotation that brings ' +
+          'its front to the top. Props (kind "prop") get object-only wording (no figures added) ' +
+          "and come back cut at the source file's exact pixel size, ready for the same tile " +
+          'slot. Battlemaps (kind "battlemap") restyle a bought map with the layout locked: the ' +
+          "result lands on the source's pixel grid (a whole-number upscale when the source is " +
+          'small), is checked for drift against the source (a drifted render is redone once, ' +
+          'then refused), and comes with a checkerboard image of source and result to eyeball. ' +
+          'Overland maps (kind "overland") repaint a regional or world map the same way, painted ' +
+          'bare of every name, marker, road, compass rose and scale bar (letter them on ' +
+          'afterwards), with a looser drift check that refuses only a grossly moved geography. ' +
+          'Returns the new file path, dimensions, and estimated spend.',
         inputSchema: toInputSchema(editImageSchema),
       },
     ];
@@ -299,12 +174,6 @@ export class EditImageTool {
 
   async handleEditImage(args: unknown) {
     const p = editImageSchema.parse(args);
-    if (p.source && p.kind !== 'token') {
-      throw new Error(
-        `source: "${p.source}" is for kind "token" only: a mannequin is painted into a token. ` +
-          `Omit source for a ${p.kind} edit.`
-      );
-    }
     if (p.anatomy && !isAnatomyKind(p.kind)) {
       throw new Error(
         'anatomy is for kind "token" or "portrait" only: one creature counted against its ' +
@@ -315,36 +184,7 @@ export class EditImageTool {
     const tier = resolveTier(p.kind, p.tier ?? 'flash', p.confirmPro);
     const refs = (p.references ?? []).map(r => ({ ...r }));
     const images = [loadImage(p.sourceImage), ...refs.map(r => loadImage(r.path))];
-    // A mannequin token's head anchor: the caller's character head, else a bust render() attaches.
-    // A mannequin token's head anchor: with no character reference, a bust render() attaches;
-    // with one, the reference is the approved token head and carries the tilt, unless the caller
-    // names a bust too, when the bust carries the head and the reference binds identity only (a
-    // portrait crop, the universal route).
-    let headAnchor: HeadAnchor | undefined;
-    let identity = false;
-    // "capture": the capture's own head, nothing attached and no head words (owner, 2026-10-17).
-    let captureHead = false;
-    if (p.source === 'mannequin') {
-      const hasCharacter = refs.some(r => r.role === 'character');
-      if (p.headAnchor === 'capture') {
-        captureHead = true;
-        headAnchor = 'none';
-        identity = hasCharacter;
-      } else if (hasCharacter && p.headAnchor && p.headAnchor !== 'none') {
-        headAnchor = p.headAnchor;
-        identity = true;
-      } else {
-        headAnchor = hasCharacter ? 'character' : (p.headAnchor ?? DEFAULT_BUST);
-      }
-    }
-    const prompt = editPrompt(
-      p.kind,
-      p.instruction,
-      refs,
-      p.source,
-      captureHead || headAnchor !== 'none',
-      !identity
-    );
+    const prompt = editPrompt(p.kind, p.instruction, refs);
     // A prop comes back at its source's exact size, with the new art in the box the original
     // occupied, so it drops into the same tile slot at the same scale. The model is shown the
     // source with a transparent margin: a crate drawn edge to edge on its tile was otherwise
@@ -390,15 +230,6 @@ export class EditImageTool {
       ...(p.creatureSize ? { creatureSize: p.creatureSize } : {}),
       ...(p.thinking ? { thinking: p.thinking } : {}),
       ...(p.anatomy ? { anatomy: p.anatomy } : {}),
-      ...(headAnchor
-        ? {
-            head: {
-              anchor: headAnchor,
-              retries: p.headRetries ?? HEAD_RETRIES_DEFAULT,
-              ...(identity ? { identity: true } : {}),
-            },
-          }
-        : {}),
       ...propFit,
     });
   }

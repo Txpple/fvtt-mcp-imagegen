@@ -25,7 +25,7 @@ export class SpendMeter {
     return usd;
   }
 
-  /** A judge call (the head check): no image, a flat estimate, counted in the total only. */
+  /** A judge call (the anatomy check): no image, a flat estimate, counted in the total only. */
   recordJudge(usd: number): void {
     this.judgeUsd += usd;
   }
