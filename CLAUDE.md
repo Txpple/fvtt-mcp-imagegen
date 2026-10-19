@@ -20,7 +20,9 @@ set, fixed in place), references of role `object`, `thinking` on both render too
 (`src/anatomy.ts`): every token and portrait render counted by a judge model against an optional
 `anatomy` line, a token's facing included, reported as `anatomy`; and, of 2026-10-19, the
 `character` reference bound to identity alone (never its lighting, palette, glow or background)
-and `dressing` on battlemap edits (the drift check advisory). The mannequin pipeline of
+and `dressing` on battlemap edits (the drift check advisory); the `illustration-builder` skill
+rewritten as one recipe per kind (286 lines, its dated lessons in `lessons.md` beside it) and
+`scripts/token_fit.py`, the pixel passes a cut token gets. The mannequin pipeline of
 2026-10-15 to 17 (a grey HeroForge pose library, `source: "mannequin"`, a server-attached bust,
 a head check with steered retries and an eyes gate, `headtest`) was tried at length, did not work,
 and was removed on 2026-10-18, the owner's word: nothing of it remains in the server, the scripts,
