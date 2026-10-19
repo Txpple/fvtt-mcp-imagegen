@@ -94,7 +94,9 @@ export const referenceSchema = z.object({
     .describe(
       'character: hold the features, hair, skin, build and kit of this person (up to 4 on flash, ' +
         '5 on pro); the pose, head angle and camera come from the prompt and the source image, so ' +
-        'a crop already at the angle you want beats a frontal portrait. object: reproduce this ' +
+        'a crop already at the angle you want beats a frontal portrait. Identity only: the ' +
+        "reference's lighting, palette, glow, background and camera are never taken, so a token " +
+        "made from a portrait crop is lit by its own scene, not the portrait's. object: reproduce this " +
         'exact object (a crop of a weapon head, a shield face, a garment) in shape, materials, ' +
         'colours and markings (up to 10 on flash, 6 on pro). style: match palette, brushwork, ' +
         'light, camera angle; never copy the subject (works on both tiers in practice). pose: ' +
@@ -180,9 +182,14 @@ export function referencePreamble(refs: Reference[], kind?: Kind): string {
     if (r.role === 'character') {
       // "keep this exact face" carried a frontal portrait crop's angle onto top-down tokens
       // (two campaign tokens, 2026-10-11 to 16): identity is bound here, pose and camera are not.
+      // Nor is light: tokens made from a portrait crop came back with the portrait's light baked
+      // on (a blue-green fungus rim, a campaign's whole Hearth set), so the reference lends its
+      // identity only (owner rule, 2026-10-19); a token is lit by what it carries itself.
       lines.push(
         `Image ${n}${who} is a CHARACTER reference: paint the features, hair, skin, build and ` +
-          'kit of this person faithfully, posed and framed as the prompt and the source image say.'
+          'kit of this person faithfully, posed and framed as the prompt and the source image say. ' +
+          'Take nothing else from it: not its lighting, palette, glow, rim light, background or ' +
+          'camera; the figure is lit only by the light of its own scene.'
       );
     } else if (r.role === 'object') {
       // Gemini treats object references as their own category (up to 10 on flash, 6 on pro):

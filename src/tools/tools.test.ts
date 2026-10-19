@@ -15,7 +15,7 @@ import {
   PROP_EDIT_KEEP,
   TOKEN_EDIT_KEEP,
 } from './edit.js';
-import { referencePreamble, resolveTier } from './shared.js';
+import { referencePreamble, referenceSchema, resolveTier } from './shared.js';
 
 let tmp: string;
 let refPng: string;
@@ -303,6 +303,20 @@ describe('referencePreamble', () => {
     expect(s).toMatch(/features, hair, skin, build and kit of this person/);
     expect(s).toMatch(/posed and framed as the prompt and the source image say/);
     expect(s).not.toMatch(/exact face/);
+  });
+
+  it('binds a character to identity only: its lighting, palette, glow and background stay behind', () => {
+    // Tokens made from a portrait crop came back with the portrait's light baked on (a blue-green
+    // fungus rim across a campaign's set); the owner's rule (2026-10-19): a token is lit by what
+    // it carries itself, and the reference lends nothing but the person.
+    const s = referencePreamble([{ path: 'a', role: 'character' }]);
+    expect(s).toMatch(
+      /Take nothing else from it: not its lighting, palette, glow, rim light, background or camera/
+    );
+    expect(s).toMatch(/lit only by the light of its own scene/);
+    expect(referenceSchema.shape.role.description).toMatch(
+      /lighting, palette, glow, background and camera are never taken/
+    );
   });
 
   it('binds an object reference to the thing itself, reproduced, not described', () => {
