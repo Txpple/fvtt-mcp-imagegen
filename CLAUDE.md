@@ -81,7 +81,7 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
   40 px speck drop), `hue` (a hue range rebuilt as a colour by brightness: blood painted olive on
   a green plate), `derim` (a cool rim light recoloured from its warm neighbours) and `headmatch`
   (two tokens of one PC matched by the hair blob's width). These were done one-off on the
-  Halruaa PC tokens on 2026-10-16 to 18 and described in prose on that campaign's shelf; the
+  Halruaa PC tokens over three days and described in prose on that campaign's shelf; the
   script is the record. Pillow and numpy only; `scripts/test_token_fit.py` runs on synthetic
   figures (`python -m unittest scripts/test_token_fit.py`).
 - Small server: `generate-image`, `edit-image`, `cutout-image`, `imagegen-status`. Resist tool
@@ -168,7 +168,7 @@ strokes, floor grain), never moved structure. The two kinds of real failure (res
 one render; a map used as a style reference swapping in its whole layout, twice) scored 8% and
 50 to 90%.
 
-**A dressing pass is advisory (owner rule, 2026-10-19).** A repaint that adds furniture, props,
+**A dressing pass is advisory (owner rule).** A repaint that adds furniture, props,
 debris or foliage on purpose reads to the drift check as moved layout, piece by piece, so nearly
 every such pass billed two renders and then refused, while the session kept the `-drifted` draft
 and checked the walls by eye anyway. `edit-image` takes `dressing: true` on kind `battlemap`
