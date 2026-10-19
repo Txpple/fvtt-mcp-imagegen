@@ -70,6 +70,18 @@ Claude ──MCP──> fvtt-mcp-imagegen ──HTTPS──> Gemini image API
 - `package.json` `allowScripts` names the two install scripts `npm ci` runs (esbuild, via vitest;
   classic-level, via the Foundry CLI). A new dependency with an install script shows as an npm
   `allow-scripts` warning; judge it and add it there.
+- `scripts/token_fit.py` is the finish a cut token gets in pixels, beside `token_cutout.py`
+  and run by hand (`python scripts/token_fit.py <sub> IN OUT`, never in place): `fit` (the PC
+  body fit: the body is the largest blob after a 14 px opening with the glow set aside, scaled to
+  a 245 px root area, capped inside a 10 px margin, centred between body and figure, the alpha
+  faded at the edge; `--shrink PCT` for the dwarf's 79%), `squash` (a steeper camera: the head
+  at 97%, the body eased to 90%), `despill` (edge despill, edge rebuild from the interior, the
+  40 px speck drop), `hue` (a hue range rebuilt as a colour by brightness: blood painted olive on
+  a green plate), `derim` (a cool rim light recoloured from its warm neighbours) and `headmatch`
+  (two tokens of one PC matched by the hair blob's width). These were done one-off on the
+  Halruaa PC tokens on 2026-10-16 to 18 and described in prose on that campaign's shelf; the
+  script is the record. Pillow and numpy only; `scripts/test_token_fit.py` runs on synthetic
+  figures (`python -m unittest scripts/test_token_fit.py`).
 - Small server: `generate-image`, `edit-image`, `cutout-image`, `imagegen-status`. Resist tool
   sprawl. New work arrives as a `kind`, not a tool (props, battlemaps and overland maps all
   came that way).
