@@ -10,7 +10,7 @@ a small set of **Foundry-specific** tools so Claude can author prompts, generate
 them, and hand the winners to the Foundry pipeline (`upload-asset` → `set-actor-art` /
 `add-journal-image` in `fvtt-mcp-dnd5e`).
 
-**State (2026-10-18).** At **1.3.1**, released: the server key is `imagegen`, and `imagegen-status`
+**State (2026-10-19).** At **1.3.1**, released: the server key is `imagegen`, and `imagegen-status`
 and `npm run doctor` check the setup; seven kinds (icon, token, prop, portrait, illustration,
 battlemap, overland), every one on flash by default. `main` carries, past 1.3.1: the
 `illustration-builder` skill's newer owner rules for maps, tiles and tokens, the `art-audit`
@@ -18,7 +18,9 @@ skill (the batch-level second count of limbs, eyes, tendrils and token facing ov
 set, fixed in place), references of role `object`, `thinking` on both render tools (reported as
 `thinkingTokens`), the token framing's 90-degree orthographic camera, and the anatomy check
 (`src/anatomy.ts`): every token and portrait render counted by a judge model against an optional
-`anatomy` line, a token's facing included, reported as `anatomy`. The mannequin pipeline of
+`anatomy` line, a token's facing included, reported as `anatomy`; and, of 2026-10-19, the
+`character` reference bound to identity alone (never its lighting, palette, glow or background)
+and `dressing` on battlemap edits (the drift check advisory). The mannequin pipeline of
 2026-10-15 to 17 (a grey HeroForge pose library, `source: "mannequin"`, a server-attached bust,
 a head check with steered retries and an eyes gate, `headtest`) was tried at length, did not work,
 and was removed on 2026-10-18, the owner's word: nothing of it remains in the server, the scripts,
@@ -127,7 +129,7 @@ default tier, and its post-processing:
 | `prop` | flash | nearest API aspect to the footprint (generate) or the source (edit), object-only wording, chroma plate | edge-clip check, cutout, fitted to the exact tile size: 300 px per cell for a new prop, the source's own pixel size and subject box for an edit | map dressing tile (furniture, barrels, trees) |
 | `portrait` | flash | 3:4 at 2K | none beyond naming | actor sheet portrait |
 | `illustration` | flash | 16:9 at 4K, style refs attached | crop to 16:10, downsample to 2560×1600 | journal image / player handout |
-| `battlemap` | flash, **edit-image only** | the source padded (mirrored margin) to the nearest API aspect, sent at most 4096 px on the long side, rendered at 4K, layout-locking keep line | mapped back onto the source's pixel grid at a whole-number scale (1 for an HD source, more for a small one), shipped as WebP, drift check (layout moved ⇒ one re-render, then refuse), checkerboard of source and result written beside it | restyled scene background for a bought map |
+| `battlemap` | flash, **edit-image only** | the source padded (mirrored margin) to the nearest API aspect, sent at most 4096 px on the long side, rendered at 4K, layout-locking keep line | mapped back onto the source's pixel grid at a whole-number scale (1 for an HD source, more for a small one), shipped as WebP, drift check (layout moved ⇒ one re-render, then refuse; with `dressing: true` measured and reported only, one render, never refused), checkerboard of source and result written beside it | restyled scene background for a bought map; a dressing pass adds furniture and props to one |
 | `overland` | flash, **edit-image only** | the battlemap geometry, with a keep line that locks the geography and paints out every name, marker, road, compass rose and scale bar | as battlemap, but the drift check refuses only gross drift (over 25% of tiles, or under a quarter locking on) | a regional or world map, painted bare; names are lettered on afterwards by script |
 
 **Nothing ever clips off a token or a prop (owner rule).** A sword, wing, or foot
@@ -151,6 +153,15 @@ passes sit at a median of 0.1‰ with 0 to 3 outlier tiles, all of them repainte
 strokes, floor grain), never moved structure. The two kinds of real failure (reshaped cliffs on
 one render; a map used as a style reference swapping in its whole layout, twice) scored 8% and
 50 to 90%.
+
+**A dressing pass is advisory (owner rule, 2026-10-19).** A repaint that adds furniture, props,
+debris or foliage on purpose reads to the drift check as moved layout, piece by piece, so nearly
+every such pass billed two renders and then refused, while the session kept the `-drifted` draft
+and checked the walls by eye anyway. `edit-image` takes `dressing: true` on kind `battlemap`
+(refused on every other kind, before any network call): one render, delivered under its normal
+name, `drift` and the checkerboard reported as ever, `dressing: true` in the result so the caller
+knows the check decided nothing. The eye checks the walls on the checkerboard. Plain restyles and
+overland maps are unchanged.
 
 The drift check guards geometry, not content. The model reinterprets things in place: dirt
 became cobblestones, a dome or glass roof appeared over a conservatory, an unlit hearth was lit,

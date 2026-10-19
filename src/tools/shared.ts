@@ -184,12 +184,14 @@ export function referencePreamble(refs: Reference[], kind?: Kind): string {
       // (two campaign tokens, 2026-10-11 to 16): identity is bound here, pose and camera are not.
       // Nor is light: tokens made from a portrait crop came back with the portrait's light baked
       // on (a blue-green fungus rim, a campaign's whole Hearth set), so the reference lends its
-      // identity only (owner rule, 2026-10-19); a token is lit by what it carries itself.
+      // identity only (owner rule, 2026-10-19); a token is lit by what it carries itself. The
+      // wording avoids every glow word: the plate picker reads the whole prompt (chroma.ts), and
+      // "glow" here switched a green goblin's plate from magenta to blue.
       lines.push(
         `Image ${n}${who} is a CHARACTER reference: paint the features, hair, skin, build and ` +
           'kit of this person faithfully, posed and framed as the prompt and the source image say. ' +
-          'Take nothing else from it: not its lighting, palette, glow, rim light, background or ' +
-          'camera; the figure is lit only by the light of its own scene.'
+          'Take nothing else from it: not its lighting, palette, coloured sheen, rim light, ' +
+          'background or camera; the figure is lit only by the light of its own scene.'
       );
     } else if (r.role === 'object') {
       // Gemini treats object references as their own category (up to 10 on flash, 6 on pro):
@@ -240,6 +242,12 @@ export interface RenderInput {
   box?: Box;
   /** Battlemaps only: the unpadded source and how it was padded for the API. */
   map?: { source: Buffer; plan: PadPlan };
+  /**
+   * Battlemaps only: a dressing pass adds furniture and props, which the drift check reads as
+   * moved layout, so the check is advisory: one render, measured and reported, never retried
+   * or refused (owner rule, 2026-10-19).
+   */
+  dressing?: boolean;
   /** Thinking level for the render; unset leaves the model's default (medium on flash). */
   thinking?: ThinkingLevel;
   /**
@@ -278,6 +286,8 @@ export interface RenderOutput {
   drift?: DriftReport;
   /** Battlemaps: the first render drifted and was redone. */
   driftRetried?: boolean;
+  /** Battlemaps: a dressing pass; `drift` was measured and reported but never acted on. */
+  dressing?: boolean;
   /** Battlemaps: source and result in alternating squares, for the eye to check alignment. */
   check?: string;
 }
@@ -442,6 +452,10 @@ function driftSummary(d: DriftReport): DriftReport {
  * A battlemap: render the padded source, map the result back onto the source's pixel grid, and
  * check the layout did not move (owner rule 2026-10-02: Foundry walls and lights are traced over
  * it). A drifted render is redone once (both billed); a second drift is refused, both kept.
+ * A dressing pass (owner rule, 2026-10-19) is the exception: furniture and props added on purpose
+ * read as moved layout, and nearly every such pass billed two renders and then refused while the
+ * caller kept the drifted draft and checked the walls by eye anyway. So it renders once, reports
+ * the drift and the checkerboard, and delivers.
  */
 async function renderMap(deps: ToolDeps, input: RenderInput, id: string): Promise<RenderOutput> {
   const kind = input.kind;
@@ -481,7 +495,7 @@ async function renderMap(deps: ToolDeps, input: RenderInput, id: string): Promis
   };
   let estimatedUsd = r.usd;
   let driftRetried: boolean | undefined;
-  if (r.drift.failed) {
+  if (r.drift.failed && !input.dressing) {
     const kept1 = await keep(1);
     const first = driftSummary(r.drift);
     r = await once();
@@ -520,6 +534,7 @@ async function renderMap(deps: ToolDeps, input: RenderInput, id: string): Promis
     scale: r.scale,
     drift: driftSummary(r.drift),
     ...(driftRetried ? { driftRetried } : {}),
+    ...(input.dressing ? { dressing: true } : {}),
     check,
   };
 }

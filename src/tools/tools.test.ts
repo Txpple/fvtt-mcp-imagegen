@@ -3,6 +3,7 @@ import * as os from 'node:os';
 import * as path from 'node:path';
 import sharp from 'sharp';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { scorePrompt } from '../chroma.js';
 import type { CutoutFn, CutoutOptions } from '../cutout.js';
 import { Gemini, JUDGE_MODEL } from '../gemini.js';
 import { buildToolRegistry } from '../registry.js';
@@ -311,9 +312,11 @@ describe('referencePreamble', () => {
     // it carries itself, and the reference lends nothing but the person.
     const s = referencePreamble([{ path: 'a', role: 'character' }]);
     expect(s).toMatch(
-      /Take nothing else from it: not its lighting, palette, glow, rim light, background or camera/
+      /Take nothing else from it: not its lighting, palette, coloured sheen, rim light, background or camera/
     );
     expect(s).toMatch(/lit only by the light of its own scene/);
+    // The plate picker reads the whole prompt: the exclusion must not read as a glowing subject.
+    expect(scorePrompt(s).every(k => k.risk === 0)).toBe(true);
     expect(referenceSchema.shape.role.description).toMatch(
       /lighting, palette, glow, background and camera are never taken/
     );
@@ -844,6 +847,73 @@ describe('battlemaps', () => {
         slug: 'tavern5',
       })
     ).rejects.toThrow(/never delivered/);
+  });
+
+  it('edit: a dressing pass renders once and reports a failing drift without retrying or refusing', async () => {
+    // Added furniture reads as moved layout (owner rule, 2026-10-19): the check is advisory here.
+    const { dispatch, spend } = build(mapGemini(['slid', 'faithful']));
+    const r: any = await dispatch('edit-image', {
+      sourceImage: mapSrc,
+      instruction: 'add a long table, benches and barrels to the common room',
+      kind: 'battlemap',
+      slug: 'tavern6',
+      dressing: true,
+    });
+    expect(sent).toHaveLength(1);
+    expect(spend.calls).toBe(1);
+    expect(r.dressing).toBe(true);
+    expect(r.drift.failed).toBe(true);
+    expect(r.drift.drifted).toBeGreaterThan(0);
+    expect(r.driftRetried).toBeUndefined();
+    expect(path.basename(r.file)).toMatch(/^battlemap-tavern6-[0-9a-f]{8}\.webp$/);
+    expect(fs.existsSync(r.file)).toBe(true);
+    expect(fs.existsSync(r.check)).toBe(true);
+    expect(fs.readdirSync(tmp).some(f => /^battlemap-tavern6-.*-drifted/.test(f))).toBe(false);
+  });
+
+  it('edit: a clean dressing pass is delivered the same way, flagged as advisory', async () => {
+    const { dispatch } = build(mapGemini(['faithful']));
+    const r: any = await dispatch('edit-image', {
+      sourceImage: mapSrc,
+      instruction: 'add barrels',
+      kind: 'battlemap',
+      slug: 'tavern7',
+      dressing: true,
+    });
+    expect(sent).toHaveLength(1);
+    expect(r).toMatchObject({ dressing: true, drift: { failed: false } });
+    expect(r.driftRetried).toBeUndefined();
+  });
+
+  it('edit: dressing is refused on any kind but battlemap, before any network call', async () => {
+    const { dispatch } = build(mapGemini(['faithful']));
+    for (const kind of ['token', 'prop', 'portrait', 'overland'] as const) {
+      await expect(
+        dispatch('edit-image', {
+          sourceImage: mapSrc,
+          instruction: 'add barrels',
+          kind,
+          slug: 'x',
+          dressing: true,
+        })
+      ).rejects.toThrow(/dressing is for kind "battlemap" only/);
+    }
+    expect(sent).toHaveLength(0);
+  });
+
+  it('edit: a plain battlemap pass still retries a drifted render and refuses a second', async () => {
+    const { dispatch, spend } = build(mapGemini(['slid', 'slid']));
+    await expect(
+      dispatch('edit-image', {
+        sourceImage: mapSrc,
+        instruction: 'repaint',
+        kind: 'battlemap',
+        slug: 'tavern8',
+        dressing: false,
+      })
+    ).rejects.toThrow(/Both renders moved the map's layout/);
+    expect(sent).toHaveLength(2);
+    expect(spend.calls).toBe(2);
   });
 
   it('edit: the keep line locks the layout and the contents, and leaves palette to the instruction', () => {

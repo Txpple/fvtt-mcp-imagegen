@@ -48,6 +48,16 @@ const editImageSchema = z.object({
   creatureSize: creatureSizeSchema,
   thinking: thinkingSchema,
   anatomy: anatomySchema,
+  dressing: z
+    .boolean()
+    .optional()
+    .describe(
+      'Battlemaps only: this pass adds dressing (furniture, props, debris, foliage) rather than ' +
+        'restyling the paint, so the drift check is advisory: one render, delivered under its ' +
+        'normal name with `drift` and the checkerboard reported, never redone and never refused ' +
+        '(every added piece reads to the check as moved layout). Check the walls by eye on the ' +
+        'checkerboard. The result carries `dressing: true`.'
+    ),
 });
 
 export const EDIT_PREAMBLE =
@@ -163,6 +173,9 @@ export class EditImageTool {
           "result lands on the source's pixel grid (a whole-number upscale when the source is " +
           'small), is checked for drift against the source (a drifted render is redone once, ' +
           'then refused), and comes with a checkerboard image of source and result to eyeball. ' +
+          'A dressing pass (`dressing: true`, battlemaps only) adds furniture and props, which ' +
+          'the check reads as moved layout, so it renders once and reports drift without ' +
+          'retrying or refusing. ' +
           'Overland maps (kind "overland") repaint a regional or world map the same way, painted ' +
           'bare of every name, marker, road, compass rose and scale bar (letter them on ' +
           'afterwards), with a looser drift check that refuses only a grossly moved geography. ' +
@@ -178,6 +191,12 @@ export class EditImageTool {
       throw new Error(
         'anatomy is for kind "token" or "portrait" only: one creature counted against its ' +
           `description. Omit anatomy for a ${p.kind} edit.`
+      );
+    }
+    if (p.dressing && p.kind !== 'battlemap') {
+      throw new Error(
+        'dressing is for kind "battlemap" only: it makes the drift check advisory for a pass that ' +
+          `adds furniture and props to a bought map. Omit dressing for a ${p.kind} edit.`
       );
     }
     // Edits default to flash regardless of kind; the spike showed no gain from pro here.
@@ -230,6 +249,7 @@ export class EditImageTool {
       ...(p.creatureSize ? { creatureSize: p.creatureSize } : {}),
       ...(p.thinking ? { thinking: p.thinking } : {}),
       ...(p.anatomy ? { anatomy: p.anatomy } : {}),
+      ...(p.dressing ? { dressing: true } : {}),
       ...propFit,
     });
   }
