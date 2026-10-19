@@ -36,9 +36,10 @@ because the judge can be wrong and the reports do not survive an install.
 
 - **The batch** is what the user names: a section of the campaign's `art/SHELF.md` (one table of
   actors with a token and a portrait each), "everything approved since <date>", or a list of
-  actors. Pull the campaign repo, then read the shelf **in full**: the house style and its rules,
-  the batch's own section and its lessons, the standing finish, the superseded list. Work from the
-  shelf as it stands; a piece the shelf already records as fixed is skipped.
+  actors. Pull the campaign repo, then read the shelf's Part 1 (the rules: house style, the finish
+  table, the token rules, the superseded list) and the batch's own catalogue section; the batch's
+  history, if it has one, is under the same heading in the campaign's `art/lessons.md`. Work from
+  the shelf as it stands; a piece the shelf already records as fixed is skipped.
 - **The reference** for every count is the creature's 2024 Monster Manual text: the campaign
   repo's `compendia/monster-manual/content.md` (the flavour) and `actors.md` (the stat block) when
   the campaign exports them, else `get-compendium-entry`. A campaign rule on the shelf outranks the
@@ -127,8 +128,9 @@ because the judge can be wrong and the reports do not survive an install.
    modified time). Overwriting in place is why no actor and no placed token needs relinking.
 2. **The campaign repo.** For an edited piece: `git rm` the old art file, copy the result into
    `art/` under its new id, point the shelf's row at it, add the old id to the shelf's
-   "Superseded (never attach)" list with what was wrong, and add a lessons line to the batch's
-   section (what the audit found, how many edits, that the rest was clean). For a rotation:
+   "Superseded (never attach)" list with what was wrong, and add a dated lessons line under the
+   batch's heading in the campaign's `art/lessons.md` (what the audit found, how many edits, that
+   the rest was clean). For a rotation:
    overwrite the existing art file in place, same name, and say so in the section's lessons.
    Clear the audit's drafts and sheets from `art/staging/`.
 3. **The actor-art repo**, when there is one: `token.png` and `portrait.webp` (quality 92) into
