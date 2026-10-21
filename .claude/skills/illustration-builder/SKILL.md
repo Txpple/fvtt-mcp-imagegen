@@ -40,6 +40,11 @@ a first step. Where the two differ, this file wins.
    settles. A scene of a played event means the session record *and* a look at the battlemap it was
    fought on, armed for that session's loot, with only the PCs who were there. Where canon is
    silent, propose ("canon doesn't say; I'll go with …") and offer to write it back afterwards.
+   **A PC's look changes in play, and the shelf's identity anchor is only as current as the last
+   wrap**: before pasting an anchor's binding phrase, check it against the latest session record
+   (loot, gifts, gear changes) and the live portrait; a `character` crop is identity only, so a
+   stale phrase dresses the figure wrong however current the crop (the campaign's Tychon lost his
+   new robe this way, 2026-10-21). Update the anchor row before rendering, not after.
 4. **Pin the kind by the destination**; the kind picks the tool and the tier:
 
    | destination | kind | route |
