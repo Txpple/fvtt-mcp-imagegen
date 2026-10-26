@@ -236,6 +236,17 @@ the content check.
   dressing as moved layout, so pass `dressing: true` on a dressing pass: the check reports instead
   of refusing, and you judge the one render by drawing the pack's walls over it (they must sit on
   every rim). Tiles come after, only for a specific fix the pass got wrong.
+- **A pack's own tile layers get the map's restyle too** (owner, 2026-10-25): canopies, overhead
+  roofs, level tiles and any other painted layer the pack ships, so nothing on the table is in the
+  pack's old style beside the restyled map. Composite every layer over the *restyled* map, one
+  `battlemap` edit that names only the layers' things and keeps the ground ("repaint only the tree
+  canopies ... in exactly the same painted style, brushwork and palette as the ground around them
+  ... keep every tree exactly where it is, at exactly its size and outline ... keep the ground ...
+  untouched"), then cut each layer back out of the result with its **original** alpha. The outlines
+  stay the pack's, the paint is new, and the ground caught inside the alpha is the map's own, so it
+  can't show. If a re-theme changed what a layer should be (a seam map with blight on one side), first
+  split or recolour the layer to fit (each tree whole, by its centroid), then restyle. Upload under
+  new names (clients cache the old picture) and patch the tiles' `src` only.
 - **Closing a corridor is two steps**: the wall, then a fade pass on a crop beyond it (remove the
   leftover rims and the black block, give the new wall's outer side the same soft rock shoulder
   fading to black), blended only beyond the wall line. Look again at the whole map for a stub.
