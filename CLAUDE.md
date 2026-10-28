@@ -10,9 +10,9 @@ a small set of **Foundry-specific** tools so Claude can author prompts, generate
 them, and hand the winners to the Foundry pipeline (`upload-asset` → `set-actor-art` /
 `add-journal-image` in `fvtt-mcp-dnd5e`).
 
-**State (2026-10-19).** At **1.3.1**, released: the server key is `imagegen`, and `imagegen-status`
+**State (2026-10-28).** At **1.3.2**, released (`dist` built; live on a Claude Code restart): the server key is `imagegen`, and `imagegen-status`
 and `npm run doctor` check the setup; seven kinds (icon, token, prop, portrait, illustration,
-battlemap, overland), every one on flash by default. `main` carries, past 1.3.1: the
+battlemap, overland), every one on flash by default. 1.3.2 added: the
 `illustration-builder` skill's newer owner rules for maps, tiles and tokens, the `art-audit`
 skill (the batch-level second count of limbs, eyes, tendrils and token facing over an installed
 set, fixed in place), references of role `object`, `thinking` on both render tools (reported as
