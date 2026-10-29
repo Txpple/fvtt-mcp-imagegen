@@ -276,6 +276,18 @@ the content check.
   piece"), then a light lived-in pass. Draw the live walls over every result. Repaint the yard in its
   own words-only pass and join the two at the outer wall; repaint any canopy tiles with the
   layer recipe after.
+- **A net-new building map with walls** (owner, 2026-10-29): plan it on the grid in code first
+  (`Desktop/maplib-scripts/newhouse/plan.py`: rooms, wall lines, doors and windows in squares), which
+  draws a flat blockout (cream walls, brown door bars, pale blue window bars, a floor colour per room)
+  and writes the Foundry walls from the same lines (doors `door: 1`; windows block movement and sound,
+  not sight or light). Then `edit-image` kind `battlemap` with `dressing: true` on the blockout:
+  architecture first with every room empty ("the cream bands are walls … the brown bars are doors …
+  keep every wall, doorway, door and window exactly where the plan draws it"), then furnish room by
+  room, then a lived-in pass. The drift check fails on the first two passes by design (the blockout
+  has no texture); judge each by `newhouse/overlay.py`, which draws the plan's walls over the render.
+  Where the painter moves a wall, move the plan to the paint (a wall needn't sit on a grid line).
+  First pass painted every door as a loose panel lying on the floor: say "each doorway gap holds one
+  closed door set flush in the gap".
 - **Closing a corridor is two steps**: the wall, then a fade pass on a crop beyond it (remove the
   leftover rims and the black block, give the new wall's outer side the same soft rock shoulder
   fading to black), blended only beyond the wall line. Look again at the whole map for a stub.
