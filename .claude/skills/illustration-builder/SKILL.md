@@ -247,6 +247,14 @@ the content check.
   can't show. If a re-theme changed what a layer should be (a seam map with blight on one side), first
   split or recolour the layer to fit (each tree whole, by its centroid), then restyle. Upload under
   new names (clients cache the old picture) and patch the tiles' `src` only.
+- **A roof short of its walls on a v14 level map** (owner, 2026-10-29): packs often paint the outer
+  eaves and a bay's hip on the *upper-floor* tile, which v14 shows only on that level, so from the
+  ground the roof covers the middle of the house. Before any image call, view the scene per level.
+  Fix by hand, no render: repeat shingle courses beside the ridge until the eaves reach the painted
+  walls (`Desktop/maplib-scripts/village/stretch-roof.py` picks the band with the best seam), lift
+  the missing hip off the upper-floor tile, colour-transfer it to the roof's mean and spread, union
+  them into one tile, upload under a new name and set the tile's `src` *and* its rect to the new
+  picture (`set-tile.mjs`).
 - **Closing a corridor is two steps**: the wall, then a fade pass on a crop beyond it (remove the
   leftover rims and the black block, give the new wall's outer side the same soft rock shoulder
   fading to black), blended only beyond the wall line. Look again at the whole map for a stub.
