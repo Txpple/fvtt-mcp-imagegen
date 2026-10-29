@@ -267,6 +267,15 @@ the content check.
   everything else exactly"); it passes the drift check. Don't add a roof repaint to the same pass:
   new roof texture reads as drift. If such a render is refused, draw the pack's walls over the
   kept `-drifted` file and take it only if every wall sits.
+- **Raising a map's quality or changing what its rooms are** (owner, 2026-10-29): don't repaint over
+  the pack's furniture (it keeps the pack's ceiling) and don't attach a better map as `style` (it
+  turned scratchy). Empty the building first (`dressing: true`: "remove every piece of furniture …
+  leaving bare floors, the walls, doorways and windows exactly as they are"), then furnish it room by
+  room in words with the finish named ("bold clean dark ink outlines, smooth painterly shading, solid
+  chunky furniture drawn simply with few large readable pieces, a soft contact shadow under every
+  piece"), then a light lived-in pass. Draw the live walls over every result. Repaint the yard in its
+  own words-only pass and join the two at the outer wall; repaint any canopy tiles with the
+  layer recipe after.
 - **Closing a corridor is two steps**: the wall, then a fade pass on a crop beyond it (remove the
   leftover rims and the black block, give the new wall's outer side the same soft rock shoulder
   fading to black), blended only beyond the wall line. Look again at the whole map for a stub.
