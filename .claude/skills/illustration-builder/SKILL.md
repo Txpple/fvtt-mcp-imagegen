@@ -255,6 +255,18 @@ the content check.
   the missing hip off the upper-floor tile, colour-transfer it to the roof's mean and spread, union
   them into one tile, upload under a new name and set the tile's `src` *and* its rect to the new
   picture (`set-tile.mjs`).
+- **A glowing mark as a tile** (a sigil, a rune, chalk; owner, 2026-10-29): never kind `prop`, whose
+  chroma plate bleeds into the halo (a green glow round an orange sigil). `generate-image` kind
+  `icon`, the mark "glowing softly from within in <colour> … on a solid pure black background,
+  nothing else", then turn brightness into alpha and un-premultiply the colour
+  (`Desktop/maplib-scripts/village/glow-alpha.py`): the glow lies over any floor like light. For a
+  live tile, loop it with only the halo pulsing, 45% to 120%, 4 s at 24 fps, VP9 with alpha
+  (`glow-pulse.py`).
+- **Taking a painted glow off a restyled map** (owner, 2026-10-29): one words-only `battlemap` edit of
+  the restyled map naming the glow and what replaces it ("plain clear glass … plain pale oak … keep
+  everything else exactly"); it passes the drift check. Don't add a roof repaint to the same pass:
+  new roof texture reads as drift. If such a render is refused, draw the pack's walls over the
+  kept `-drifted` file and take it only if every wall sits.
 - **Closing a corridor is two steps**: the wall, then a fade pass on a crop beyond it (remove the
   leftover rims and the black block, give the new wall's outer side the same soft rock shoulder
   fading to black), blended only beyond the wall line. Look again at the whole map for a stub.
