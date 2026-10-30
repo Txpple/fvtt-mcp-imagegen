@@ -208,6 +208,16 @@ from a compendium folder, prompt each from its description and upload with `uplo
   cut over the edited map and compare tile by tile with the original, install the edited map as the
   background and each cut as an overhead tile (elevation 20, `occlusionMode` 1 Fade, `occlusionAlpha`
   0.25), and check with `screenshot-scene` `asToken` under a beam.
+  **Cut by difference instead of by hand** (owner, 2026-10-30): paint the feature out with a
+  `dressing: true` crop edit ("remove every … do not add anything"; one kind of feature per pass,
+  e.g. bunting first, then a tree crown on that result), then take the tile from the pixels that
+  differ between the map with it and without it: threshold the colour distance, open away specks,
+  keep only long thin pieces for strings and beams, keep only near-grey pixels for foliage (test
+  saturation, not hue: a pass tints hues), close, fill holes, dilate about 8 px, feather 2 px, keep
+  the WITH map's colour, trim to the bbox. A short run the difference misses is cut along a drawn
+  line from the original. Big passes shift the ground's colour a few per cent; pull the patch's
+  channel means back to the original's, measured outside the object. A headless screenshot may
+  show an overhead at the canvas centre faded (the pointer rests there); check with a token.
 
 ## Battlemaps
 
