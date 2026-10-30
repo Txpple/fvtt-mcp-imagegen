@@ -301,6 +301,19 @@ the content check.
   feathered), and shorten or delete stray windows; measure a window's painted glass in pixels before
   changing it, never by eye. Fix the plan, regenerate every wall from it (`newhouse/rewall.mjs`), and run
   the review once more on what is live.
+- **Net-new maps in a batch** (owner, 2026-10-29: thirteen village maps overnight, $5.19): write one
+  JSON spec per map for `Desktop/maplib-scripts/village13/plan.py` (paint boxes, outer/inner/fence walls,
+  doors, gates, windows, lights in squares), which writes the blockout, `walls.json` and the whole
+  `scene.json`. Fences block movement only; a gate is a door you can see through. Before install run
+  `precheck.sh` (the door and window review on the render from the plan's own walls), fix the spec, then
+  `install.sh <slug>` (Scene.create with the level repoint, then the review on what is live) and `same.py`
+  (live walls equal the plan). Expect, and fix in the review: front double doors painted standing in front
+  of the wall or lying outside it (patch-paint flush, whatever pass 1 said); a furnish pass adding a room or
+  shrinking a yard wall (measure the paint, move the plan); furniture, hearths and statues on planned
+  windows (delete the window); a planned door painted as glass or a window as a shutter. Name each still-
+  empty doorway by its two rooms in the lived-in pass and the painter fills it. Statues come out front-on;
+  "seen from directly overhead" in a patch only reached a high angle. Flash costs the same at 40×30 squares
+  as at 20×16.
 - **Closing a corridor is two steps**: the wall, then a fade pass on a crop beyond it (remove the
   leftover rims and the black block, give the new wall's outer side the same soft rock shoulder
   fading to black), blended only beyond the wall line. Look again at the whole map for a stub.
