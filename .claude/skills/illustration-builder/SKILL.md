@@ -288,6 +288,15 @@ the content check.
   Where the painter moves a wall, move the plan to the paint (a wall needn't sit on a grid line).
   First pass painted every door as a loose panel lying on the floor: say "each doorway gap holds one
   closed door set flush in the gap".
+  **Review after install, every time** (owner, 2026-10-29: "there are doors that do not line up or do
+  not make sense"): read the walls back off the live scene (`village/walls-out.mjs`) and run
+  `newhouse/review.py` with the map, which numbers every door D1.. and window W1.. over full-size tiles
+  and writes `key.json`; then cut a close-up sheet of every door and window, the bare paint beside the
+  marked line. Check each: a door sits on a painted door (the paint's brown bar in a wall gap), not on
+  solid wall; a painted door has a Foundry door on it; the doorway isn't blocked by painted furniture
+  on either side; every room has a painted way in; a window sits on painted glass, not on a hearth or a
+  decorative panel. Report to the owner, then fix: move a Foundry door to the painted one, or patch-paint
+  a door where the plan needs one (a crop `battlemap` edit), and shorten or delete stray windows.
 - **Closing a corridor is two steps**: the wall, then a fade pass on a crop beyond it (remove the
   leftover rims and the black block, give the new wall's outer side the same soft rock shoulder
   fading to black), blended only beyond the wall line. Look again at the whole map for a stub.
