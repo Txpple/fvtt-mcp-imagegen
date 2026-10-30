@@ -314,6 +314,36 @@ the content check.
   empty doorway by its two rooms in the lived-in pass and the painter fills it. Statues come out front-on;
   "seen from directly overhead" in a patch only reached a high angle. Flash costs the same at 40×30 squares
   as at 20×16.
+- **The Halruaan style** (owner, 2026-10-30, "the Halruaan House is well done, but the diligence veers off
+  on some maps"; Halruaan House is the standard). Walls: whitewashed limestone, a band of blue glazed tile,
+  drawn as flat bands. Floors, varied room by room: warm terracotta tiles, pale oak, limestone flags, blue-
+  and-white patterned tile; a blue-and-white tile border round a room's edge or a hearth; a blue-and-ochre
+  woven rug with a simple geometric rural motif; a tiled star or rosette in an entry or courtyard. Fabrics
+  blue, ochre, white. Outside: richly textured meadow grass, a lemon, olive or fig tree or two (lemon trees
+  are the signature, not on every map), lavender and rosemary, a short dry-stone or whitewashed wall,
+  flagstones at a door. Mediterranean and rural, magically learned, never grand. Every object straight
+  from above. Not everything in every map.
+- **After the three passes, five more, every map** (owner, 2026-10-30):
+  1. *Top-down sweep*: read each map at about 1800 px for anything drawn from the side (statues, hanging
+     cloaks, boots, banners, ladders, swings, presses, tool racks, shelves of bottles or jars, armour
+     stands, bookcases showing spines, tree trunks, lavender as stalks) and fix each by a crop `battlemap`
+     edit that names it and says how it looks from above; remove hanging cloaks (leave the peg rail).
+     **Statues and bookcases will not come out top-down from an edit**: paint them out, draw a `prop`
+     ("seen from directly overhead … no face visible"; a second try with the first prop as `pose`), and
+     composite with a soft shadow.
+  2. *Halruaan finish*: one whole-map `dressing` pass with two crops of Halruaan House as `style` (an
+     interior, its garden), "their look only, never their layout", listing per room the floor, border,
+     rug and motif, and outside the trees "drawn from directly above as round crowns with no trunk".
+     Check every door and window by a pixel diff (`village13/fin.py`); look at the flagged ones.
+  3. *Grass*: the painter leaves big flat green alone; `village13/grass.py` textures only the large flat
+     green areas with rotated splats of Halruaan House's meadow, objects untouched.
+  4. *Wall review on what is live*: a window behind furniture becomes wall in the paint
+     (`village13/winwall.py`) and in Foundry; any door, outside ones above all, drawn as a swinging or
+     loose leaf is redrawn as a flush top-down door bar (`object` reference: an interior door).
+  5. *Terrain walls* round every outdoor object (move blocked, sight/light/sound limited): read a labelled
+     grid over the map (`village13/grid.py`), write `terrain` (rect, circle, line) in the spec, check the
+     overlay (`terrain.py`), rebuild the walls (`rewall.mjs`) and read them back (`same.py`). Leave water
+     open.
 - **Closing a corridor is two steps**: the wall, then a fade pass on a crop beyond it (remove the
   leftover rims and the black block, give the new wall's outer side the same soft rock shoulder
   fading to black), blended only beyond the wall line. Look again at the whole map for a stub.
