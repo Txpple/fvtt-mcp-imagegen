@@ -296,7 +296,11 @@ the content check.
   solid wall; a painted door has a Foundry door on it; the doorway isn't blocked by painted furniture
   on either side; every room has a painted way in; a window sits on painted glass, not on a hearth or a
   decorative panel. Report to the owner, then fix: move a Foundry door to the painted one, or patch-paint
-  a door where the plan needs one (a crop `battlemap` edit), and shorten or delete stray windows.
+  a door where the plan needs one (a crop of the wall, `battlemap` edit with a painted door from the same
+  map as an `object` reference and the opening placed by fractions of the crop, scaled back and pasted
+  feathered), and shorten or delete stray windows; measure a window's painted glass in pixels before
+  changing it, never by eye. Fix the plan, regenerate every wall from it (`newhouse/rewall.mjs`), and run
+  the review once more on what is live.
 - **Closing a corridor is two steps**: the wall, then a fade pass on a crop beyond it (remove the
   leftover rims and the black block, give the new wall's outer side the same soft rock shoulder
   fading to black), blended only beyond the wall line. Look again at the whole map for a stub.
